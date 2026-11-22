@@ -1829,9 +1829,9 @@ const TOUR = [
   {sel:null, t:'¡Bienvenidas! Las queremos tanto 💛', x:'Hicimos este itinerario para acompañarlas y asegurarnos de que no se pierdan nada, pero también para ir despacio. Confíen: no está lleno de cosas, está hecho para disfrutar sin afán.<br><br>Disfruten, y sobre todo… ¡llévennos con ustedes! 😄'},
   {sel:'#fab-now', t:'Cero pensar: toquen la brújula', x:'Como sabemos que no quieren pensar mucho, esta burbuja 🧭 siempre está abajo a la derecha. Tóquenla cuando no sepan qué sigue: les muestra lo que toca en este momento y lo que viene después. ¡Miren! Y si tocan 📍 Cómo llegar, Google Maps las lleva caminando.'},
   {sel:'.map-box', t:'Un día para cada zona', x:'Este es el mapa de Roma. Para no desgastarlas, le dedicamos un día a cada zona. Así que sáquenle el máximo provecho… ¡porque no van a volver! Jaja… a menos que la moneda de Trevi funcione. 😉'},
-  {sel:'#chaps', t:'Sus tres aventuras', x:'Cada capítulo es un día: Centro histórico, Coliseo, Vaticano y el epílogo para despedirse. Adentro está el plan hora por hora, los lugares, sus historias y sus secretos.'},
-  {sel:null, t:'Cuando lleguen a un lugar', x:'✓ Toquen «¿Ya estuvieron aquí?» para marcarlo: así sabemos por dónde van.<br>🔑 Busquen su secreto, que siempre hay uno.<br>📖 Si les provoca, lean su historia; si no, sigan caminando, que también vale.<br>📷 ¡Súbannos fotos! Aquí en casa las estamos esperando.'},
-  {sel:null, t:'Antes de dormir', x:'🎯 Las misiones de Rafita, con espacio para escribirle.<br>💌 Una carta nuestra para cada noche.<br>📔 Un diario para contarnos lo mejor del día.<br>🔔 Y los recordatorios para el día siguiente, para que no se les olvide nada.'},
+  {sel:'#chaps', t:'Sus tres aventuras', x:'Cada capítulo es un día: Centro histórico, Coliseo, Vaticano y el epílogo para despedirse. Todos tienen el mismo orden:<br>📋 El resumen del día y los momentos importantes.<br>🗺️ El mapa con la lista de paradas y los minutos caminando.<br>🚆 Traslados y comidas, que se abren al tocarlos.<br>📍 El recorrido detallado, parada por parada.'},
+  {sel:null, t:'Cuando lleguen a un lugar', x:'✓ Toquen «¿Ya fueron?» para marcarlo: así sabemos por dónde van.<br>🔑 Toquen la pastilla «Secreto» y búsquenlo.<br>🔍 En «Qué no debemos perdernos», toquen las fotos para saber qué buscar.<br>📖 «Seguir leyendo aquí» abre la historia ahí mismo; si no les provoca, sigan caminando, que también vale.<br>💡 Los consejos se abren con «ver».'},
+  {sel:null, t:'Antes de dormir', x:'🎯 Dos misiones de Rafita, con espacio para escribirle.<br>💌 Una carta nuestra para cada noche.<br>📸 Suban las fotos del día al álbum para la familia: aquí en casa las estamos esperando.<br>📔 Una sola pregunta en el diario: lo mejor del día.<br>🔔 Y los recordatorios para mañana.'},
   {sel:'.tabs', t:'Siempre a la mano', x:'Abajo están el Inicio, el Recorrido completo y el Álbum con todas sus fotos. Arriba, SOS tiene los números de emergencia, y con «?» vuelven a ver esta guía cuando quieran.<br><br>¡A disfrutar Roma! Las amamos. ❤️ Naty, Estefa y Rafita'}
 ];
 let tourI = 0, tourEl = null;
@@ -1842,9 +1842,9 @@ function tourShow(){
   $('#t-next').textContent = tourI === TOUR.length - 1 ? '¡A disfrutar Roma!' : 'Siguiente →';
   $('#tour').classList.toggle('dim', !tourEl);
 }
-function tour(force){ if(!force && store.get('tour-v2', false)) return; go('inicio'); tourI = 0; $('#tour').classList.add('on'); setTimeout(tourShow, 80); }
+function tour(force){ if(!force && store.get('tour-v3', false)) return; go('inicio'); tourI = 0; $('#tour').classList.add('on'); setTimeout(tourShow, 80); }
 function tourNext(){ if(tourI >= TOUR.length - 1) return tourEnd(); tourI++; tourShow(); }
-function tourEnd(){ $('#tour').classList.remove('on','dim'); if(tourEl) tourEl.classList.remove('tour-hl'); tourEl = null; store.set('tour-v2', true); window.scrollTo(0,0); }
+function tourEnd(){ $('#tour').classList.remove('on','dim'); if(tourEl) tourEl.classList.remove('tour-hl'); tourEl = null; store.set('tour-v3', true); window.scrollTo(0,0); }
 Object.assign(window, {go, jump, show, setFound, toggleVisit, share, store, subir, renderRecuerdo, tour, tourNext, tourEnd});
 
 /* checklists del manual: estado local y compartido */
