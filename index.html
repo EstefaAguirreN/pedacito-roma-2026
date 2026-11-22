@@ -387,6 +387,19 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
 #tour .ttext{font-size:.95rem;line-height:1.55}
 #tour .tacts{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
 .tour-hl{position:relative;z-index:85;box-shadow:0 0 0 4px var(--yellow),0 0 0 9999px rgba(15,20,26,.6)!important;border-radius:16px}
+.photo-idea{display:flex;align-items:center;gap:12px;width:100%;margin-top:8px;padding:10px 14px;min-height:56px;border:0;border-radius:14px;background:linear-gradient(135deg,#283B4D,#3E5268);color:#fff;cursor:pointer;text-align:left}
+.photo-idea>span:first-child{font-size:1.5rem}
+.photo-idea b{display:block;font-size:1rem}.photo-idea small{display:block;font-size:.78rem;opacity:.8}
+.photo-idea .pi-arr{margin-left:auto;font-size:1.5rem}
+#idea{position:fixed;inset:0;z-index:95;background:rgba(15,20,26,.75);display:none;align-items:flex-end;justify-content:center;padding:16px}
+#idea.on{display:flex}
+#idea .ic{width:100%;max-width:520px;background:#FFFDF8;border-radius:20px;overflow:hidden;margin-bottom:70px}
+#idea .ib{position:relative;aspect-ratio:4/5;max-height:62vh;background-size:cover;background-position:center}
+#idea .ib::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,40,0) 30%,rgba(20,30,40,.85))}
+#idea .it{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:18px;color:#fff}
+#idea .ik{font-size:.74rem;font-weight:700;letter-spacing:.08em;color:#F3DFA6}
+#idea .ix{font-family:'DM Serif Display',serif;font-size:1.35rem;line-height:1.3;margin-top:6px}
+#idea .ia{display:flex;gap:10px;padding:14px;flex-wrap:wrap}
 #lightbox{position:fixed;inset:0;z-index:100;background:rgba(15,20,26,.92);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
 #lightbox.on{display:flex}#lightbox img{max-height:80vh;border-radius:12px}#lightbox p{color:#fff;font-size:.9rem;text-align:center;margin:0}
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:.9rem;opacity:0;transition:opacity .3s;z-index:120;pointer-events:none}
@@ -640,6 +653,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
   <button data-v="album" onclick="go('album')"><span>📸</span>Álbum</button>
 </nav>
 <div id="tour" role="dialog" aria-modal="true"><div class="tcard"><div class="tstep" id="t-step"></div><div class="ttitle" id="t-title"></div><div class="ttext" id="t-text"></div><div class="tacts"><button class="btn soft" id="t-skip" onclick="tourEnd()">Saltar</button><button class="btn coral" id="t-next" onclick="tourNext()">Siguiente →</button></div></div></div>
+<div id="idea" onclick="this.classList.remove('on')"></div>
 <div id="lightbox" onclick="this.classList.remove('on')"></div>
 <div id="toast" role="status"></div>
 
@@ -1244,7 +1258,6 @@ function renderChapter(id){
         ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${s.look.map(sectionHTML).join('')}</div>` : ''}
         ${secretBox(s)}
         <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts">${s.q ? `<a class="btn coral" href="${mapsDir(s.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}</div>${tips(s)}${cont}</div>
-        <div class="step memo"><div class="st">NUESTRO RECUERDO</div><div id="rec-${c.id}"></div></div>
       </div></article>`;
     } else {
       const img = c.pts.map(p => imgFor(p.name)).find(Boolean);
@@ -1267,7 +1280,6 @@ function renderChapter(id){
             ${story(p)}
           </div></div>`).join('')}
         <div class="step">${cont}</div>
-        <div class="step memo"><div class="st">NUESTRO RECUERDO DE ESTE RECORRIDO</div><div id="rec-${c.id}"></div></div>
       </div></article>`;
     }
   });
@@ -1294,7 +1306,7 @@ function renderChapter(id){
   if(d.budget){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>💶 Presupuesto del día · ${d.budget.total}</summary><div class="in"><table class="bt">${d.budget.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${d.budget.total}</td></tr></table>${d.budget.extra ? `<p class="small" style="white-space:normal;margin-top:8px">${d.budget.extra}</p>` : ''}${d.budget.note ? `<p class="small" style="white-space:normal">${d.budget.note}</p>` : ''}</div></details></div>`;
   }
-  h += `<div class="sec" id="album-dia"><div class="box"><div class="eyebrow">📸 NUESTRO ÁLBUM DEL DÍA</div><div class="muted" style="font-size:.9rem;margin:4px 0 10px">Aquí van los mejores momentos de ${c.dest}. Para añadir fotos, toquen «Subir fotos» en cada lugar.</div>${album(fotos.filter(f => f.dia === id))}</div></div>`;
+  h += `<div class="sec" id="album-dia"><div class="box torn"><div class="eyebrow">📸 NUESTRO ÁLBUM DEL DÍA</div><div class="muted" style="font-size:.9rem;margin:4px 0 10px">Al final del día, suban aquí las fotos que quieran compartir de ${c.dest}. Nosotras las vemos desde casa. ❤️</div><div id="rec-dia-${id}"></div></div></div>`;
   // diario del día (se comparte con la familia)
   { const jr = (k, q, tall) => { const key = `diario-${id}-${k}`; return `<div class="j-q">${q}</div><textarea class="journal${tall ? ' tall' : ''}" oninput="store.set('n:${key}',this.value);clearTimeout(window.__jt);window.__jt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(store.get('n:' + key, ''))}</textarea>`; };
     h += `<div class="sec"><div class="diary"><div class="d-h"><span>📔</span><div><div class="d-k">PARA ESCRIBIR AL FINAL DEL DÍA</div><div class="d-t">Diario del día</div></div></div>${jr('a', 'Lo mejor del día fue…', true)}${jr('b', 'Una palabra para este día:', false)}${jr('c', 'Algo que nos hizo reír:', false)}</div></div>`; }
@@ -1316,7 +1328,7 @@ function renderChapter(id){
       const hint = s.parentElement.querySelector('.swipe-hint');
       setTimeout(() => s.addEventListener('scroll', () => { if(hint) hint.style.opacity = 0; }, {once:true}), 600);
     } }
-  (window.__CARDS || []).forEach(c => renderRecuerdo({id:c.id, name: c.type === 'major' ? c.s.name : (c.title || c.pts.map(p => p.name).join(' · '))}, id));
+  renderRecuerdo({id:'dia-' + id, name: c.dest}, id);
 }
 const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','El Palatino','El Coliseo','Basílica de San Pedro','Museos Vaticanos'];
 function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length; return [nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : '', nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''].filter(Boolean).join(' · '); }
@@ -1324,7 +1336,21 @@ function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
 function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
 function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="story-d"><summary><span>📖 Descubrir su historia</span><span class="sh">toquen para leer ↓</span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><div class="secret"><div class="sk">🔑 EL SECRETO DE ESTE LUGAR</div><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></div></div>` : ''; }
-function tips(s){ return s.tips.map(t => `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${t.text || ''}${t.items ? t.items.join(' · ') : ''}</div>`).join(''); }
+function tips(s){
+  return s.tips.map((t, k) => {
+    const txt = (t.text || '') + (t.items ? t.items.join(' · ') : '');
+    if(/foto/i.test(t.lbl)){ window.__IDEAS = window.__IDEAS || {}; const key = s.id + '-' + k; window.__IDEAS[key] = {name:s.name, txt, img: imgFor(s.name) || (CHAPTERS[+s.id.split('-')[0]] || {}).img}; return `<button class="photo-idea" onclick="idea('${key}')"><span>📸</span><span><b>Idea de foto</b><small>toquen para verla</small></span><span class="pi-arr">›</span></button>`; }
+    return `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${txt}</div>`;
+  }).join('');
+}
+function idea(key){
+  const x = (window.__IDEAS || {})[key]; if(!x) return;
+  const q = 'https://www.pinterest.com/search/pins/?q=' + encodeURIComponent(x.name.split(' · ')[0] + ' Roma foto ideas');
+  const o = document.getElementById('idea');
+  o.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ib" style="background-image:url('${x.img}')"><div class="it"><div class="ik">📸 IDEA DE FOTO · ${esc(x.name.split(' · ')[0]).toUpperCase()}</div><div class="ix">${x.txt}</div></div></div><div class="ia"><a class="btn coral" href="${q}" target="_blank" rel="noopener">Ver más ideas en Pinterest</a><button class="btn soft" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div></div>`;
+  o.classList.add('on');
+}
+window.idea = idea;
 function visitBtn(s){ const on = visited(s.id); return `<button class="visit${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}"><span class="vc">✓</span><span class="vt">${on ? '¡Ya estuvimos aquí!' : '¿Ya estuvieron aquí?'}<small>${on ? 'toquen para desmarcar' : 'toquen para marcarlo'}</small></span></button>`; }
 function renderAlbumView(){
   const box = $('#album-full'); if(!box) return;
@@ -1347,12 +1373,12 @@ function renderRecuerdo(s, dia){
   const box = document.getElementById('rec-' + s.id); if(!box) return;
   const nota = store.get('n:' + s.id, '');
   if(!sb){ box.innerHTML = `<div class="off">Aquí aparecerán las fotos que suban Sofi y mamá (en la versión publicada de la guía).</div>`; return; }
-  const mine = fotos.filter(f => f.ruta.indexOf(`dia-${dia}/${s.id}/`) === 0);
+  const mine = fotos.filter(f => f.dia === dia);
   const q = store.get('quien', '');
-  box.innerHTML = `    <label class="up"><input type="file" accept="image/*" multiple hidden onchange="subir(this.files,'${s.id}',${dia})">📷 Subir fotos de ${esc(s.name)}</label>
+  box.innerHTML = `    <label class="up"><input type="file" accept="image/*" multiple hidden onchange="subir(this.files,'${s.id}',${dia})">📷 Subir fotos del día</label>
     <div class="status" id="st-${s.id}"></div>
     ${mine.length ? `<div class="album" style="margin-bottom:10px">${mine.map(f => { const u = pub(f.ruta); return `<button onclick="show('${esc(u)}','${esc(f.autor || '')}')"><img src="${esc(u)}" loading="lazy" alt="Foto de ${esc(s.name)}"><span>${esc(f.autor || '')}</span></button>`; }).join('')}</div>` : ''}
-    <textarea placeholder="Una anécdota de este lugar…" oninput="store.set('n:${s.id}',this.value);clearTimeout(window.__nt);window.__nt=setTimeout(()=>share('nota:${s.id}',this.value),900)">${esc(nota)}</textarea>`;
+    <textarea placeholder="Una anécdota del día…" oninput="store.set('n:${s.id}',this.value);clearTimeout(window.__nt);window.__nt=setTimeout(()=>share('nota:${s.id}',this.value),900)">${esc(nota)}</textarea>`;
   window.__S = window.__S || {}; window.__S[s.id] = s;
 }
 async function shrink(file){
