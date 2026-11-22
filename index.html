@@ -179,6 +179,20 @@ details.more .in p{margin:0 0 10px}
 .facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:.82rem;font-weight:600;white-space:nowrap}
 .chip.warm{background:#FBEFD2;border-color:#EFD9A2}
+.dash{margin-top:12px;background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--sh)}
+.dash-h{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:10px}
+.dash-tag{font-size:.72rem;font-weight:700;letter-spacing:.06em;background:#F3DFA6;border-radius:999px;padding:3px 10px}
+.dash-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:560px){.dash-g{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.dt{background:#F6F0E5;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:1px}
+.dt .di{font-size:1.15rem}
+.dt b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.45rem;line-height:1.1}
+.dt small{font-size:.76rem;color:var(--ink-2);line-height:1.25}
+.dash-k{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.dk-t{width:100%;font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--coral-d)}
+.dk{font-size:.82rem;background:#FFFDF8;border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.dk b{color:var(--ink)}
+.dash-n{margin-top:10px;font-size:.84rem;color:var(--ink-2)}
 .infobox{margin-top:12px;background:var(--card);border-radius:12px;padding:12px 14px;display:grid;gap:6px;font-size:.92rem;box-shadow:var(--sh);border-left:4px solid var(--yellow)}
 .capnav{display:flex;gap:8px;overflow-x:auto;margin-top:12px;padding-bottom:4px}
 .capnav a{flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:.86rem;text-decoration:none}
@@ -1290,8 +1304,13 @@ function renderChapter(id){
   const vv = stops.filter(x => visited(x.id)).length, sf = secrets.filter(x => found(x.id)).length;
   let h = `<div class="dayprog" onclick="jump('pl-top')"><div class="dp-t"><b>✓ ${vv} de ${stops.length} lugares</b>${secrets.length ? ` · 🔑 ${sf} de ${secrets.length} secretos` : ''}</div><div class="bar"><i style="width:${stops.length ? Math.round(vv/stops.length*100) : 0}%"></i></div></div>
   <div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
-    <div class="infobox"><div>📅 <b>${d.date.replace(/^./, x => x.toUpperCase())}</b></div><div>🚶 Recorrido a pie · ${placesLabel(stops)}</div>${(() => { const ts = it.filter(x => mins(x.time) != null && x.kind !== 'log'); if(ts.length < 2) return ''; const a = mins(ts[0].time), z = Math.max(...ts.map(x => mins(x.end) ?? mins(x.time))); const hh = Math.round((z - a)/60); return `<div>⏱ Duración: unas ${hh} horas de paseo</div>`; })()}<div>📶 Nivel: ${NIVEL[id]}</div>${w ? `<div>${w.icon} ${w.temp} · ${w.desc}</div>` : ''}</div>
-    <div class="facts">${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}</div>
+    ${(() => { const ts = it.filter(x => mins(x.time) != null && x.kind !== 'log'); let hrs = ''; if(ts.length > 1){ const a = mins(ts[0].time), z = Math.max(...ts.map(x => mins(x.end) ?? mins(x.time))); hrs = '~' + Math.round((z - a)/60) + ' h'; }
+      const nk = stops.filter(x => isKey(x.name)).length, lv = NIVEL[id].split(' · ');
+      const tile = (ic, v, l) => `<div class="dt"><span class="di">${ic}</span><b>${v}</b><small>${l}</small></div>`;
+      return `<div class="dash"><div class="dash-h"><span>📅 ${d.date.replace(/^./, c => c.toUpperCase())}</span><span class="dash-tag">${c.short}</span></div>
+        <div class="dash-g">${tile('📍', stops.length + ' lugares', nk + ' imprescindibles')}${hrs ? tile('⏱', hrs, 'de paseo a pie') : ''}${tile('📶', lv[0], lv[1] || '')}${w ? tile(w.icon, w.temp.replace('°C','°'), w.desc.split(' · ')[0]) : ''}</div>
+        ${(d.quickStats||[]).length ? `<div class="dash-k"><span class="dk-t">HORAS CLAVE</span>${d.quickStats.map(s => `<span class="dk"><b>${esc(s.val.split(' · ')[0])}</b> ${esc(s.lbl)}</span>`).join('')}</div>` : ''}
+        ${w && /oscurece/.test(w.desc) ? `<div class="dash-n">🌅 ${w.desc.split(' · ').find(x => /oscurece/.test(x)).replace(/^o/,'O')}: los planes al aire libre, mejor antes.</div>` : ''}</div>`; })()}
     ${tripDay() === id ? '<div id="ahora-cap" style="margin-top:14px"></div>' : ''}`;
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
