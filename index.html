@@ -591,8 +591,6 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
     <div class="sign">Con todo nuestro amor, Naty, Estefa y Rafita ❤️</div>
   </div></div>
 
-  <div class="sec" id="tablero-sec"><div class="box torn"><div class="eyebrow">ASÍ VA LA AVENTURA</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Lugares visitados, secretos encontrados y fotos. Se actualiza solo.</div><div id="tablero"></div></div></div>
-
   <div class="sec"><div class="box">
     <div class="eyebrow">LAS PROTAGONISTAS DE ESTA HISTORIA</div>
     <div class="names"><div class="row" id="n1"></div><div class="amp">&amp;</div><div class="row" id="n2"></div></div>
@@ -1267,6 +1265,7 @@ function renderNow(target, inCap){
     ${inCap ? '' : `<div class="acts" style="margin-top:12px"><button class="btn ghost" onclick="go('capitulo-${td}')">Abrir el capítulo de hoy →</button></div>`}</div>`;
 }
 function renderBoard(){
+  if(!document.getElementById('tablero')) return;
   $('#tablero').innerHTML = DAYS.map(d => {
     const it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
     const sc = st.filter(x => x.secret), f = sc.filter(x => found(x.id)).length, ph = fotos.filter(x => x.dia === d.id).length;
