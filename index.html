@@ -653,6 +653,8 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .sec-chip.ok{background:#E3EADF;border-color:var(--sage);color:var(--ink)}
 .sec-x{font-size:1rem;line-height:1.55;margin-top:8px;color:var(--ink)}
 .sec-l{display:flex;align-items:center;gap:8px;padding:4px 14px 12px;font-weight:600;cursor:pointer}.sec-l input{width:20px;height:20px;accent-color:var(--sage)}
+.mission .mq{margin:10px 0 0 38px;font-size:.92rem}
+.mission .mq+textarea{margin-left:38px;width:calc(100% - 38px)}
 </style>
 </head>
 <body>
@@ -1601,9 +1603,9 @@ function renderChapter(id){
   if(d.mission){
     const tx = (k, q, ph) => { const key = `mision-${id}-${k}`, v = store.get('n:' + key, ''); return `<div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${v ? 'checked' : ''} disabled><span>${q}</span></label><textarea placeholder="${ph}" oninput="store.set('n:${key}',this.value);this.closest('.mtask').querySelector('input').checked=!!this.value.trim();clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea></div>`; };
     h += `<div class="sec" id="mision"><div class="mission"><div class="mk">🎯 LAS MISIONES DE RAFITA</div>
-      <div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"><span><b>${d.mission.title}</b><br><span class="mdesc">${d.mission.body}</span></span></label></div>
-      ${tx('favorito', '<b>Un mensaje para Rafita:</b> ¿cuál fue su lugar favorito de hoy y por qué?', 'Rafita, hoy nuestro lugar favorito fue…')}
-      ${tx('juntas', '<b>Para Naty y Estefa:</b> ¿a qué lugar de hoy quieren que volvamos todas juntas algún día?', 'Queremos volver con ustedes a…')}
+      <div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"><span><b>1 · ${d.mission.title}</b><br><span class="mdesc">${d.mission.body}</span></span></label>
+        ${(() => { const key = `mision-${id}-favorito`, v = store.get('n:' + key, ''); return `<div class="mq">✍️ <b>Y escríbanle a Rafita:</b> ¿cuál fue su lugar favorito de hoy y por qué?</div><textarea placeholder="Rafita, hoy nuestro lugar favorito fue…" oninput="store.set('n:${key}',this.value);clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea>`; })()}</div>
+      ${tx('juntas', '<b>2 · Para Naty y Estefa:</b> ¿a qué lugar de hoy quieren que volvamos todas juntas algún día?', 'Queremos volver con ustedes a…')}
       <div class="small" style="white-space:normal;margin-top:6px">Lo que escriban aquí lo leemos desde casa. ❤️</div>
     </div></div>`;
   }
