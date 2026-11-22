@@ -582,6 +582,12 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 #nowsheet .ns-in{position:relative;width:100%;max-width:560px;max-height:85vh;overflow:auto;padding:14px 12px calc(16px + env(safe-area-inset-bottom));background:var(--ivory);border-radius:22px 22px 0 0;animation:nsup .25s ease}
 @keyframes nsup{from{transform:translateY(40px);opacity:.4}}
 #nowsheet .ns-x{position:absolute;right:16px;top:14px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:.9rem;cursor:pointer}
+.tipd>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tipd>summary::-webkit-details-marker{display:none}
+.tipd .lx{flex:none;font-size:.75rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:4px 10px}
+.tipd .lx i{font-style:normal;display:inline-block;transition:transform .2s}
+.tipd[open] .lx i{transform:rotate(180deg)}
+.tipd .tipx{padding-top:6px}
 </style>
 </head>
 <body>
@@ -1625,7 +1631,7 @@ function tips(s){
   return s.tips.filter(t => !/foto/i.test(t.lbl)).map((t, k) => {
     const txt = (t.text || '') + (t.items ? t.items.join(' · ') : '');
     if(/foto/i.test(t.lbl)){ window.__IDEAS = window.__IDEAS || {}; const key = s.id + '-' + k; window.__IDEAS[key] = {name:s.name, txt, img: imgFor(s.name) || (CHAPTERS[+s.id.split('-')[0]] || {}).img}; return `<button class="photo-idea" onclick="idea('${key}')"><span>📸</span><span><b>Idea de foto</b><small>toquen para verla</small></span><span class="pi-arr">›</span></button>`; }
-    return `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${txt}</div>`;
+    return `<details class="tipbox tipd"><summary><b>💡 ${esc(t.lbl)}</b><span class="lx">ver <i>⌄</i></span></summary><div class="tipx">${txt}</div></details>`;
   }).join('');
 }
 const PINS = {"Campo de' Fiori":'5136987071575001', 'Un gelato':'1025554146411510219', 'Piazza Navona':'704461566734962299', 'El Panteón':'256001560058265669', 'Fontana di Trevi':'723461127688150076', 'El Campidoglio':'1149966086152379780', 'El Coliseo':'704461566730111476', 'Plaza de San Pedro':'530439662390350639'};
