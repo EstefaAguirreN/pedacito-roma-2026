@@ -59,7 +59,7 @@ body{padding-bottom:76px}
 .chap .explore{display:inline-flex;margin-top:10px;background:var(--coral);color:#fff;border-radius:999px;padding:8px 16px;font-weight:700;font-size:.88rem}
 .map-box .map-wrap{margin:10px 0 6px;border-radius:14px;overflow:hidden;background:#EAE0CC}
 .map-box svg{display:block;width:100%;height:auto}
-.map-box .city-pin{cursor:pointer}
+.chapmap .zona{cursor:pointer}
 .family{display:grid;gap:14px}
 .polaroid{margin:0;background:#fff;padding:10px 10px 14px;border-radius:6px;box-shadow:var(--sh);transform:rotate(-2deg);max-width:340px;justify-self:center}
 .polaroid img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:3px}
@@ -67,7 +67,7 @@ body{padding-bottom:76px}
 .letter.note .lt{font-family:Caveat,cursive;font-size:1.7rem;color:var(--ink)}
 .letter.note .btn{margin-top:8px}
 .now .dname span{color:var(--yellow)}
-.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(255,253,248,.97);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:rgba(255,253,248,.97);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;background:none;border:0;border-radius:12px;font-size:.72rem;font-weight:600;color:var(--ink-2);cursor:pointer}
 .tabs button span{font-size:1.2rem}
 .tabs button.on{color:var(--coral-d);background:#FBEFD2}
@@ -285,6 +285,53 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
 #lightbox.on{display:flex}#lightbox img{max-height:80vh;border-radius:12px}#lightbox p{color:#fff;font-size:.9rem;text-align:center;margin:0}
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:.9rem;opacity:0;transition:opacity .3s;z-index:120;pointer-events:none}
 #toast.on{opacity:1}
+
+/* ===== recortes de revista ===== */
+body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.torn{-webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M0 0H120V4L114 7L108 3L101 8L95 4L88 9L82 5L75 8L69 3L62 7L56 4L49 9L43 5L36 8L30 3L23 7L17 4L10 8L5 5L0 7Z'/></svg>") bottom/120px 10px repeat-x;mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M0 0H120V4L114 7L108 3L101 8L95 4L88 9L82 5L75 8L69 3L62 7L56 4L49 9L43 5L36 8L30 3L23 7L17 4L10 8L5 5L0 7Z'/></svg>") bottom/120px 10px repeat-x;padding-bottom:9px}
+.tape{position:relative}
+.tape::before{content:'';position:absolute;z-index:3;top:-11px;left:50%;width:96px;height:24px;background:rgba(240,214,150,.78);transform:translateX(-50%) rotate(-4deg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.strip{display:inline-block;position:relative;font-family:Caveat,cursive;font-weight:700;font-size:clamp(1.7rem,7vw,2.2rem);line-height:1.1;color:var(--ink);background:#F3DFA6;padding:6px 18px 8px;transform:rotate(-1.5deg);box-shadow:0 2px 4px rgba(40,59,77,.1)}
+.strip::before,.strip::after{content:'✦';position:absolute;top:50%;transform:translateY(-50%);color:var(--yellow);font-size:1rem}
+.strip::before{left:-22px}.strip::after{right:-22px}
+.sec-head.center .strip{margin-bottom:8px}
+.intro .tag{transform:rotate(-2deg);box-shadow:0 1px 3px rgba(40,59,77,.12)}
+.intro h1 em{position:relative;display:inline-block}
+.intro h1 em::after{content:'';position:absolute;left:4%;right:-2%;bottom:-.06em;height:.28em;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'><path d='M2 14 C 50 4, 120 4, 198 10' stroke='%23C8735C' stroke-width='4' fill='none' stroke-linecap='round'/></svg>") no-repeat center/100% 100%}
+.intro-ph{position:relative;overflow:visible;border:8px solid #fff;border-bottom-width:8px}
+.intro-ph img{border-radius:4px}
+.intro-ph::before{content:'';position:absolute;z-index:3;top:-12px;left:22px;width:90px;height:24px;background:rgba(240,214,150,.8);transform:rotate(-6deg)}
+.stamp{position:absolute;z-index:3;right:-6px;top:-14px;width:86px;height:86px;border-radius:50%;border:2px dashed var(--coral-d);background:rgba(255,253,248,.92);color:var(--coral-d);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(10deg);font-weight:700;font-size:.72rem;letter-spacing:.08em;line-height:1.15;text-align:center}
+.stamp b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.25rem;letter-spacing:.04em}
+.now{position:relative;background:#FFFDF8;color:var(--ink);border:1px solid var(--line)}
+.now .ban{display:inline-block;margin:-4px 0 10px -6px;background:var(--coral);color:#fff;font-family:Caveat,cursive;font-weight:700;font-size:1.75rem;line-height:1;padding:8px 18px 10px;transform:rotate(-1.5deg);clip-path:polygon(0 6%,100% 0,98% 100%,2% 94%)}
+.now .eyebrow{display:none}
+.now .dname{color:var(--ink)}.now .dname span{color:var(--coral-d)}
+.now .slot{background:#F3EAD8}.now .slot.next{border-color:var(--line);background:#FFFDF8}
+.now .t,.now .lbl{color:var(--ink-2);opacity:1}
+.now .btn.ghost{color:var(--ink)}
+.chap{position:relative;overflow:visible;background:transparent;box-shadow:none}
+.chap .ph{border-radius:14px 14px 0 0}
+.chap .bd{background:var(--card)}
+.chap .num{display:none}
+.chap .date{font-size:.76rem;font-weight:700;letter-spacing:.06em;color:var(--ink-2);margin-bottom:2px}
+.stk{position:absolute;z-index:4;left:-6px;top:-12px;padding:4px 14px 6px;transform:rotate(-5deg);box-shadow:0 2px 4px rgba(40,59,77,.15);text-align:center;line-height:1}
+.stk small{display:block;font-family:Caveat,cursive;font-size:1.15rem;font-weight:700}
+.stk b{font-family:'DM Serif Display',serif;font-weight:400;font-size:2rem}
+.stk1{background:#CFE0E4}.stk2{background:#F1CDBF}.stk3{background:#D8E0D2}.stk4{background:#F3DFA6}
+.chaps{gap:26px;padding-top:10px}
+.box{border-radius:6px}
+.map-box,.letter,.secrets-day,.mission{position:relative}
+.map-box .lbl-hand{font-family:Caveat,cursive;font-weight:700;font-size:1.6rem;line-height:1.1;color:var(--ink)}
+.letter.note{background:#FFFBF3}
+.polaroid{position:relative}
+.polaroid::before{content:'';position:absolute;z-index:3;top:-10px;left:50%;width:80px;height:22px;background:rgba(240,214,150,.8);transform:translateX(-50%) rotate(3deg)}
+.hero{overflow:visible}
+.hero img{border-radius:22px}
+.hero .stk{left:10px;top:-12px}
+.stop-card .ph{position:relative}
+.stop-card .k .eyebrow{background:#F3DFA6;color:var(--ink);padding:2px 8px;transform:rotate(-1deg);display:inline-block}
+.tabs button.on{background:#F3DFA6;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#toast{transition:none}}
 </style>
 </head>
@@ -302,39 +349,32 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
     <h1>Un pedacito de nosotras en <em>Roma</em></h1>
     <p class="sub">Tres días para descubrir, aprender, caminar y crear recuerdos juntas.</p>
     <span class="chip warm">📅 22 – 25 de noviembre de 2026</span>
-    <div class="intro-ph"><img src="Fotos/navona.webp" alt="Piazza Navona al amanecer"></div>
+    <div class="intro-ph"><img src="Fotos/navona.webp" alt="Piazza Navona al amanecer"><div class="stamp"><b>ROMA</b>ITALIA<br>2026</div></div>
   </div>
   <div id="ahora"></div>
 
-  <div class="sec"><div class="sec-head center"><div class="h2">Las tres aventuras de nuestro viaje</div><div class="muted">Y un epílogo para despedirse de Roma.</div></div>
+  <div class="sec"><div class="box map-box torn tape"><div class="lbl-hand">♡ Mapa general del viaje</div><div class="muted">El recorrido completo de nuestros tres días en Roma.</div><div class="map-wrap"><svg viewBox="0 0 580 400" class="chapmap" role="img" aria-label="Mapa de los tres capítulos del viaje en Roma">
+  <defs><pattern id="dt" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(40,59,77,.08)"/></pattern></defs>
+  <rect width="580" height="400" fill="#EFE6D3"/><rect width="580" height="400" fill="url(#dt)"/>
+  <path d="M300 -10 Q 268 70 236 128 Q 214 170 236 212 Q 252 250 296 280 Q 336 308 332 350 Q 326 380 300 410" fill="none" stroke="#C9DCE2" stroke-width="30" stroke-linecap="round"/>
+  <text x="196" y="96" font-family="Caveat" font-size="20" fill="#7EA7B5" transform="rotate(-62 196 96)">río Tíber</text>
+  <g class="zona" onclick="go('capitulo-3')"><ellipse cx="118" cy="150" rx="92" ry="62" fill="#D8E0D2" opacity=".9"/><text x="118" y="140" text-anchor="middle" font-size="34">⛪</text></g>
+  <g class="zona" onclick="go('capitulo-1')"><ellipse cx="350" cy="190" rx="104" ry="64" fill="#CFE0E4" opacity=".9"/><text x="350" y="178" text-anchor="middle" font-size="30">⛲</text></g>
+  <g class="zona" onclick="go('capitulo-2')"><ellipse cx="470" cy="318" rx="92" ry="60" fill="#F1CDBF" opacity=".9"/><text x="470" y="306" text-anchor="middle" font-size="34">🏟</text></g>
+  <g fill="none" stroke="#283B4D" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round" opacity=".75">
+    <path d="M268 236 Q 200 200 150 170"/><path d="M284 228 Q 310 205 330 200"/><path d="M290 246 Q 380 280 440 304"/>
+  </g>
+  <g><circle cx="276" cy="238" r="20" fill="#283B4D" stroke="#E4BD63" stroke-width="4"/><text x="276" y="245" text-anchor="middle" font-size="18">🏠</text>
+  <text x="276" y="276" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="24" fill="#283B4D">nuestra casa</text></g>
+  <g class="zona" onclick="go('capitulo-3')" transform="translate(30 172) rotate(-4)"><rect width="170" height="60" fill="#FFFDF8" stroke="#8C9D86" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Capítulo 03</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Vaticano</text></g>
+  <g class="zona" onclick="go('capitulo-1')" transform="translate(300 196) rotate(3)"><rect width="230" height="60" fill="#FFFDF8" stroke="#7EA7B5" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Capítulo 01 · y epílogo</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Centro histórico</text></g>
+  <g class="zona" onclick="go('capitulo-2')" transform="translate(380 330) rotate(-3)"><rect width="170" height="60" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Capítulo 02</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Coliseo</text></g>
+  <g transform="translate(540 44)"><circle r="20" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><path d="M0 -15 L5 0 L0 15 L-5 0 Z" fill="#C8735C"/><text y="-24" text-anchor="middle" font-size="11" font-weight="700" fill="#283B4D">N</text></g>
+</svg></div><div class="muted" style="font-size:.85rem">Toquen una zona para abrir su capítulo. Todo sale de nuestra casa en Campo de&#39; Fiori.</div></div></div>
+
+  <div class="sec"><div class="sec-head center"><div class="strip">Las tres aventuras de nuestro viaje</div><div class="muted">Y un epílogo para despedirse de Roma.</div></div>
     <div class="chaps" id="chaps"></div>
   </div>
-
-  <div class="sec"><div class="box map-box"><div class="eyebrow">MAPA GENERAL DEL VIAJE</div><div class="h2" style="font-size:1.3rem">El recorrido completo de nuestros tres días en Roma</div><div class="map-wrap"><svg viewBox="0 170 580 410" class="map-svg" xmlns="http://www.w3.org/2000/svg">
-        <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(44,58,82,0.08)"/></pattern></defs>
-        <rect x="0" y="170" width="580" height="410" fill="#ede4cf"/>
-        <rect x="0" y="170" width="580" height="410" fill="url(#dots)"/>
-        <path d="M 290,160 Q 268,230 236,288 Q 214,330 236,372 Q 252,410 296,440 Q 336,468 332,510 Q 326,550 300,590" fill="none" stroke="#b9d4dd" stroke-width="26" stroke-linecap="round"/>
-        <text x="200" y="250" font-family="Caveat" font-size="18" fill="#7ea7b5" transform="rotate(-62 200 250)">río Tíber</text>
-        <g fill="none" stroke="#2c3a52" stroke-width="3" stroke-dasharray="3 8" stroke-linecap="round" opacity="0.8">
-          <path d="M 274,397 Q 280,375 295,359 Q 312,360 330,367 Q 360,350 388,336"/>
-          <path d="M 274,397 Q 250,350 233,307 Q 170,312 115,319"/>
-          <path d="M 274,397 Q 268,440 263,485"/>
-          <path d="M 330,367 Q 400,420 469,477"/>
-          
-        </g>
-        <g class="city-pins">
-          <g class="city-pin" data-city="Vaticano" onclick="goDay(3)"><g transform="translate(115,319)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">⛪</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Vaticano</text></g></g>
-          <g class="city-pin" data-city="Castel" onclick="goDay(3)"><g transform="translate(233,307)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏰</text></g></g>
-          <g class="city-pin" data-city="Navona" onclick="goDay(1)"><g transform="translate(295,357)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">⛲</text></g></g>
-          <g class="city-pin" data-city="Pantheon" onclick="goDay(1)"><g transform="translate(333,370)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">🏛</text><text x="16" y="22" font-family="Permanent Marker" font-size="11" fill="#2c3a52">Pantheon</text></g></g>
-          <g class="city-pin" data-city="Trevi" onclick="goDay(1)"><g transform="translate(388,336)"><circle r="13" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">💧</text><text x="18" y="5" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trevi</text></g></g>
-          <g class="city-pin" data-city="Coliseo" onclick="goDay(2)"><g transform="translate(469,477)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">🏟</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Coliseo</text></g></g>
-          <g class="city-pin" data-city="Trastevere" onclick="goDay(2)"><g transform="translate(263,487)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏘</text><text y="30" text-anchor="middle" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trastevere</text></g></g>
-          <g class="city-pin" data-city="Roma" onclick="goDay(1)"><g transform="translate(274,397)"><circle r="16" fill="#2c3a52" stroke="#f3c84d" stroke-width="3"/><text y="6" text-anchor="middle" font-size="15">🏠</text><text x="-22" y="6" text-anchor="end" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Campo de' Fiori</text></g></g>
-        </g>
-        <g id="hereMarker" class="here-marker" style="display:none;pointer-events:none"></g>
-      </svg></div><div class="muted" style="font-size:.85rem">Toquen un lugar del mapa para abrir su capítulo.</div></div></div>
 
   <div class="sec"><div class="tools">
     <button class="tool" onclick="go('manual')"><span>📋</span>Manual</button>
@@ -344,15 +384,25 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
 
   <div class="sec"><div class="family">
     <figure class="polaroid" id="familia"><img src="Fotos/familia.jpg" alt="Nuestra familia" onerror="this.closest('figure').style.display='none'"><figcaption>Nosotras ❤️</figcaption></figure>
-    <div class="letter note">
+    <div class="letter note torn">
       <div class="lt">Una notita de Naty y Estefa</div>
       <p>Mamá y Sofi,</p>
       <p>Aquí van nuestras cartas del viaje: pequeños mensajes, ideas, retos y mucho cariño para acompañarlas en cada paso de esta aventura. ¡Disfrútenla, vayan a su ritmo y cuéntennos todo a la vuelta!</p>
-      <button class="btn coral" onclick="go('cartas')">💌 Cartas del viaje</button>
+      <p style="margin-top:6px">En cada capítulo encontrarán su carta, para leer al terminar el día. 💌</p>
     </div>
   </div></div>
 
-  <div class="sec" id="tablero-sec"><div class="box"><div class="eyebrow">ASÍ VA LA AVENTURA</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Lugares visitados, secretos encontrados y fotos. Se actualiza solo.</div><div id="tablero"></div></div></div>
+  <div class="sec"><div class="letter torn">
+    <div class="when">ANTES DE ABRIR EL PRIMER CAPÍTULO</div><div class="lt">Una dedicatoria para ustedes</div>
+    <p>Ma, Sofi:</p>
+    <p>Preparamos esta guía pensando en todo lo que les gusta: la historia, los museos, las calles bonitas, las historias detrás de cada monumento y, por supuesto, comer algo rico en el camino.</p>
+    <p>Queremos que disfruten cada lugar, pero también que tengan tiempo de sentarse en una plaza, tomarse un café, conversar y vivir Roma a su manera.</p>
+    <p>No tienen que conocerlo todo. Lo importante es que disfruten esta oportunidad de estar juntas.</p>
+    <p>Y cuando vean algo que les emocione, acuérdense de contárnoslo. Nosotras estaremos esperando cada foto y cada historia.</p>
+    <div class="sign">Con todo nuestro amor, Naty, Estefa y Rafita ❤️</div>
+  </div></div>
+
+  <div class="sec" id="tablero-sec"><div class="box torn"><div class="eyebrow">ASÍ VA LA AVENTURA</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Lugares visitados, secretos encontrados y fotos. Se actualiza solo.</div><div id="tablero"></div></div></div>
 
   <div class="sec"><div class="box">
     <div class="eyebrow">LAS PROTAGONISTAS DE ESTA HISTORIA</div>
@@ -375,31 +425,24 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
   </div></div>
 </div></section>
 
-<section class="view" id="v-recorrido"><div class="wrap sec"><div class="eyebrow">EL RECORRIDO</div><div class="h2">Nuestros tres días en Roma</div><div class="box map-box" style="margin:10px 0 16px"><div class="map-wrap"><svg viewBox="0 170 580 410" class="map-svg" xmlns="http://www.w3.org/2000/svg">
-        <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(44,58,82,0.08)"/></pattern></defs>
-        <rect x="0" y="170" width="580" height="410" fill="#ede4cf"/>
-        <rect x="0" y="170" width="580" height="410" fill="url(#dots)"/>
-        <path d="M 290,160 Q 268,230 236,288 Q 214,330 236,372 Q 252,410 296,440 Q 336,468 332,510 Q 326,550 300,590" fill="none" stroke="#b9d4dd" stroke-width="26" stroke-linecap="round"/>
-        <text x="200" y="250" font-family="Caveat" font-size="18" fill="#7ea7b5" transform="rotate(-62 200 250)">río Tíber</text>
-        <g fill="none" stroke="#2c3a52" stroke-width="3" stroke-dasharray="3 8" stroke-linecap="round" opacity="0.8">
-          <path d="M 274,397 Q 280,375 295,359 Q 312,360 330,367 Q 360,350 388,336"/>
-          <path d="M 274,397 Q 250,350 233,307 Q 170,312 115,319"/>
-          <path d="M 274,397 Q 268,440 263,485"/>
-          <path d="M 330,367 Q 400,420 469,477"/>
-          
-        </g>
-        <g class="city-pins">
-          <g class="city-pin" data-city="Vaticano" onclick="goDay(3)"><g transform="translate(115,319)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">⛪</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Vaticano</text></g></g>
-          <g class="city-pin" data-city="Castel" onclick="goDay(3)"><g transform="translate(233,307)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏰</text></g></g>
-          <g class="city-pin" data-city="Navona" onclick="goDay(1)"><g transform="translate(295,357)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">⛲</text></g></g>
-          <g class="city-pin" data-city="Pantheon" onclick="goDay(1)"><g transform="translate(333,370)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">🏛</text><text x="16" y="22" font-family="Permanent Marker" font-size="11" fill="#2c3a52">Pantheon</text></g></g>
-          <g class="city-pin" data-city="Trevi" onclick="goDay(1)"><g transform="translate(388,336)"><circle r="13" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">💧</text><text x="18" y="5" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trevi</text></g></g>
-          <g class="city-pin" data-city="Coliseo" onclick="goDay(2)"><g transform="translate(469,477)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">🏟</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Coliseo</text></g></g>
-          <g class="city-pin" data-city="Trastevere" onclick="goDay(2)"><g transform="translate(263,487)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏘</text><text y="30" text-anchor="middle" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trastevere</text></g></g>
-          <g class="city-pin" data-city="Roma" onclick="goDay(1)"><g transform="translate(274,397)"><circle r="16" fill="#2c3a52" stroke="#f3c84d" stroke-width="3"/><text y="6" text-anchor="middle" font-size="15">🏠</text><text x="-22" y="6" text-anchor="end" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Campo de' Fiori</text></g></g>
-        </g>
-        <g id="hereMarker" class="here-marker" style="display:none;pointer-events:none"></g>
-      </svg></div></div><div class="chaps" id="chaps2"></div></div></section>
+<section class="view" id="v-recorrido"><div class="wrap sec"><div class="eyebrow">EL RECORRIDO</div><div class="h2">Nuestros tres días en Roma</div><div class="box map-box" style="margin:10px 0 16px"><div class="map-wrap"><svg viewBox="0 0 580 400" class="chapmap" role="img" aria-label="Mapa de los tres capítulos del viaje en Roma">
+  <defs><pattern id="dt" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(40,59,77,.08)"/></pattern></defs>
+  <rect width="580" height="400" fill="#EFE6D3"/><rect width="580" height="400" fill="url(#dt)"/>
+  <path d="M300 -10 Q 268 70 236 128 Q 214 170 236 212 Q 252 250 296 280 Q 336 308 332 350 Q 326 380 300 410" fill="none" stroke="#C9DCE2" stroke-width="30" stroke-linecap="round"/>
+  <text x="196" y="96" font-family="Caveat" font-size="20" fill="#7EA7B5" transform="rotate(-62 196 96)">río Tíber</text>
+  <g class="zona" onclick="go('capitulo-3')"><ellipse cx="118" cy="150" rx="92" ry="62" fill="#D8E0D2" opacity=".9"/><text x="118" y="140" text-anchor="middle" font-size="34">⛪</text></g>
+  <g class="zona" onclick="go('capitulo-1')"><ellipse cx="350" cy="190" rx="104" ry="64" fill="#CFE0E4" opacity=".9"/><text x="350" y="178" text-anchor="middle" font-size="30">⛲</text></g>
+  <g class="zona" onclick="go('capitulo-2')"><ellipse cx="470" cy="318" rx="92" ry="60" fill="#F1CDBF" opacity=".9"/><text x="470" y="306" text-anchor="middle" font-size="34">🏟</text></g>
+  <g fill="none" stroke="#283B4D" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round" opacity=".75">
+    <path d="M268 236 Q 200 200 150 170"/><path d="M284 228 Q 310 205 330 200"/><path d="M290 246 Q 380 280 440 304"/>
+  </g>
+  <g><circle cx="276" cy="238" r="20" fill="#283B4D" stroke="#E4BD63" stroke-width="4"/><text x="276" y="245" text-anchor="middle" font-size="18">🏠</text>
+  <text x="276" y="276" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="24" fill="#283B4D">nuestra casa</text></g>
+  <g class="zona" onclick="go('capitulo-3')" transform="translate(30 172) rotate(-4)"><rect width="170" height="60" fill="#FFFDF8" stroke="#8C9D86" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Capítulo 03</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Vaticano</text></g>
+  <g class="zona" onclick="go('capitulo-1')" transform="translate(300 196) rotate(3)"><rect width="230" height="60" fill="#FFFDF8" stroke="#7EA7B5" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Capítulo 01 · y epílogo</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Centro histórico</text></g>
+  <g class="zona" onclick="go('capitulo-2')" transform="translate(380 330) rotate(-3)"><rect width="170" height="60" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Capítulo 02</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Coliseo</text></g>
+  <g transform="translate(540 44)"><circle r="20" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><path d="M0 -15 L5 0 L0 15 L-5 0 Z" fill="#C8735C"/><text y="-24" text-anchor="middle" font-size="11" font-weight="700" fill="#283B4D">N</text></g>
+</svg></div></div><div class="chaps" id="chaps2"></div></div></section>
 <section class="view" id="v-album"><div class="wrap sec"><div class="eyebrow">NUESTRO ÁLBUM</div><div class="h2">La Roma que vivimos</div><div class="muted">Las fotos que suben Sofi y mamá en cada lugar. Para subir, abran la ficha del lugar dentro de su capítulo.</div><div id="album-full"></div></div></section>
 <section class="view" id="v-cartas"><div class="wrap sec"><div class="eyebrow">CARTAS DEL VIAJE</div><div class="h2">Cartas desde casa</div><div class="muted" style="margin-bottom:12px">Una para empezar y una para cada noche.</div><div id="cartas"></div></div></section>
 <section class="view" id="v-secretos"><div class="wrap sec"><div class="eyebrow">TIPS SECRETOS</div><div class="h2">Los secretos de Roma</div><div class="muted" style="margin-bottom:12px">Pequeños descubrimientos para ir encontrando. Márquenlos cuando los vean.</div><div id="secretos"></div></div></section>
@@ -471,8 +514,6 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
   <button data-v="inicio" onclick="go('inicio')"><span>🏠</span>Inicio</button>
   <button data-v="recorrido" onclick="go('recorrido')"><span>🗺</span>Recorrido</button>
   <button data-v="album" onclick="go('album')"><span>📸</span>Álbum</button>
-  <button data-v="cartas" onclick="go('cartas')"><span>💌</span>Cartas</button>
-  <button data-v="secretos" onclick="go('secretos')"><span>🔑</span>Secretos</button>
 </nav>
 <div id="lightbox" onclick="this.classList.remove('on')"></div>
 <div id="toast" role="status"></div>
@@ -942,8 +983,8 @@ function renderHome(){
     const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
     const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length;
     return `<button class="chap" onclick="go('capitulo-${d.id}')">
-      <div class="ph"><img src="${c.img}" alt="" loading="lazy"><span class="num">${c.num}${td === d.id ? ' · HOY' : ''}</span></div>
-      <div class="bd"><div class="dest">${c.dest}</div><div class="obj">${c.obj}</div>
+      <span class="stk stk${d.id}"><small>${d.id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${d.id < 4 ? '0' + d.id : '✦'}</b></span><div class="ph"><img src="${c.img}" alt="" loading="lazy"></div>
+      <div class="bd torn"><div class="date">${c.num.replace(/^\d+ · |^EPÍLOGO · /,'')}${td === d.id ? ' · HOY' : ''}</div><div class="dest">${c.dest}</div><div class="obj">${c.obj}</div>
       <div class="places">📍 ${c.places}</div>
       <div class="meta">${c.meta}</div>
       <span class="explore">Explorar capítulo →</span>
@@ -969,7 +1010,7 @@ function renderNow(){
   const dest = x => x.kind === 'log' ? (x.b.place || x.b.to) : x.kind === 'group' ? null : x.q;
   const slot = (x, cls, lbl) => x ? `<div class="slot ${cls}"><div class="lbl">${lbl}</div><div class="what">${esc(label(x))}</div><div class="t">${esc(x.time)}${x.end && x.end !== x.time ? ' – ' + esc(x.end) : ''}</div>
       <div class="acts">${dest(x) ? `<a class="btn coral" href="${mapsDir(dest(x))}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${x.kind === 'stop' ? `<button class="btn ghost" onclick="go('capitulo-${td}','p-${x.id}')">Ver la parada</button>` : ''}</div></div>` : '';
-  box.innerHTML = `<div class="now"><div class="eyebrow">🧭 ¿QUÉ HACEMOS AHORA?</div><div class="dname">Hoy · ${d.date} · <span>${c.dest}</span></div>
+  box.innerHTML = `<div class="now torn"><div class="ban">🧭 ¿Qué hacemos ahora?</div><div class="eyebrow">🧭 ¿QUÉ HACEMOS AHORA?</div><div class="dname">Hoy · ${d.date} · <span>${c.dest}</span></div>
     ${slot(cur, '', 'AHORA MISMO')}${slot(nxt, 'next', cur ? 'DESPUÉS' : 'LO PRÓXIMO')}
     ${!cur && !nxt ? '<div class="t">El plan de hoy ya terminó. ¡A descansar! 💛</div>' : ''}
     <div class="acts" style="margin-top:12px"><button class="btn ghost" onclick="go('capitulo-${td}')">Abrir el capítulo de hoy →</button></div></div>`;
@@ -991,7 +1032,7 @@ function album(list){
 function renderChapter(id){
   const d = DAYS.find(x => x.id === id), c = CHAPTERS[id], it = built(d), w = (typeof WEATHER !== 'undefined' && WEATHER[id]) || null;
   const stops = it.filter(x => x.kind === 'stop'), secrets = stops.filter(x => x.secret);
-  let h = `<div class="hero"><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
+  let h = `<div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
     <div class="facts"><span class="chip warm">${placesLabel(stops)}</span>${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}${w ? `<span class="chip">${w.icon} ${w.temp}</span>` : ''}</div>`;
   (d.notices||[]).forEach(n => { h += `<div class="notice ${n.type}"><b class="t">${n.title}</b>${n.body}</div>`; });
   if(d.narrative && d.narrative.body){
