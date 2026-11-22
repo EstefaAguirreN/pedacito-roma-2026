@@ -184,6 +184,14 @@ details.more .in p{margin:0 0 10px}
 .plan .nowrow{background:#FBEFD2;border-radius:10px}
 .nowtag{display:inline-block;font-style:normal;font-size:.7rem;font-weight:800;background:var(--yellow);color:var(--ink);border-radius:4px;padding:1px 6px;margin-left:4px;transform:rotate(-2deg)}
 #secretos-dia,#mision,#album-dia,#lugares{scroll-margin-top:110px}
+.whyday{margin-top:16px;background:#FFFBF3;border:1px solid var(--line);border-left:5px solid var(--coral);border-radius:14px;padding:18px 18px 12px}
+.whyday .wk{font-size:.76rem;font-weight:700;letter-spacing:.08em;color:var(--coral-d)}
+.whyday .wt{font-family:'DM Serif Display',serif;font-size:1.45rem;line-height:1.15;margin:4px 0 10px}
+.whyday p{margin:0 0 10px;font-size:1rem;line-height:1.6}
+.whyday .nr-sub{font-weight:700;color:var(--coral-d)}
+.whyday .wmore>summary{list-style:none;cursor:pointer;font-weight:700;color:var(--coral-d);padding:4px 0 8px}
+.whyday .wmore>summary::-webkit-details-marker{display:none}
+.whyday .wmore[open]>summary{display:none}
 .timechars{margin-top:12px;font-size:.92rem;color:var(--ink-2);display:grid;gap:4px}
 .timechars b{color:var(--ink)}
 .notice{border-radius:14px;padding:12px 14px;margin-top:10px;font-size:.93rem;background:var(--card);border-left:4px solid var(--sage)}
@@ -1280,11 +1288,11 @@ function renderChapter(id){
   <div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
     <div class="infobox"><div>📅 <b>${d.date.replace(/^./, x => x.toUpperCase())}</b></div><div>🚶 Recorrido a pie · ${placesLabel(stops)}</div>${(() => { const ts = it.filter(x => mins(x.time) != null && x.kind !== 'log'); if(ts.length < 2) return ''; const a = mins(ts[0].time), z = Math.max(...ts.map(x => mins(x.end) ?? mins(x.time))); const hh = Math.round((z - a)/60); return `<div>⏱ Duración: unas ${hh} horas de paseo</div>`; })()}<div>📶 Nivel: ${NIVEL[id]}</div>${w ? `<div>${w.icon} ${w.temp} · ${w.desc}</div>` : ''}</div>
     <div class="facts">${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}</div>
-    <nav class="capnav"><a href="#" onclick="jump('pl-top');return false">📋 Plan</a><a href="#" onclick="jump('lugares');return false">📍 Lugares</a>${secrets.length ? `<a href="#" onclick="jump('secretos-dia');return false">🔑 Secretos</a>` : ''}${d.mission ? `<a href="#" onclick="jump('mision');return false">🎯 Rafita</a>` : ''}<a href="#" onclick="jump('album-dia');return false">📸 Fotos para la familia</a></nav>
     ${tripDay() === id ? '<div id="ahora-cap" style="margin-top:14px"></div>' : ''}`;
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
-    h += `<details class="story-d prologo" style="margin-top:16px"><summary><span>📖 La historia de este capítulo<small>${esc(d.narrative.title)}</small></span><span class="sh">toquen para leer ↓</span></summary><div class="in">${d.narrative.body}</div></details>`;
+    { const ps = d.narrative.body.match(/<p[^>]*>[\s\S]*?<\/p>/g) || [d.narrative.body]; const vis = ps.slice(0, 4).join(''), rest = ps.slice(4).join('');
+    h += `<section class="whyday"><div class="wk">📖 POR QUÉ ESTAMOS AQUÍ HOY</div><div class="wt">${esc(d.narrative.title.replace(/^Prólogo · /,''))}</div>${vis}${rest ? `<details class="wmore"><summary>Seguir leyendo ↓</summary>${rest}</details>` : ''}</section>`; }
   }
   // plan del día
   window.__nextK = null;
