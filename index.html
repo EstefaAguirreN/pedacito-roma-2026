@@ -616,6 +616,26 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .strip.sm{font-size:clamp(1.65rem,7.2vw,2rem);margin:6px 0 6px 22px;padding:4px 14px 6px}
 .sec-head .strip.sm{display:inline-block}
 .stop-card,.route-card{position:relative}
+
+/* compacto */
+.mision{gap:10px;padding:10px 12px 14px;margin-top:10px}
+.ms-ph{flex:0 0 62px;height:62px;border-width:2px}
+.ms-tx{padding-left:10px}
+.ms-k{font-size:.66rem}
+.ms-t{font-size:1.06rem;margin:2px 0 3px}
+.ms-s{font-size:.76rem;line-height:1.35}
+.mcells{margin-top:8px;padding:8px 2px;border-radius:14px}
+.mc{flex-direction:row;align-items:center;text-align:left;gap:6px;padding:0 6px}
+.mc .mi{font-size:1.05rem}
+.mc b{font-size:1rem}
+.mc small{font-size:.68rem;line-height:1.2}
+.mom-k{margin:10px 0 6px;padding-top:0;border-top:0;font-size:.68rem}
+.moms{gap:10px}
+.mom{padding:6px 4px;border-radius:10px}
+.mom+.mom::before{left:-10px;width:10px}
+.mom .mi{display:inline;font-size:.85rem}
+.mom b{display:inline;font-size:.92rem;margin:0 0 0 2px}
+.mom small{font-size:.68rem;margin-top:1px}
 </style>
 </head>
 <body>
@@ -1449,11 +1469,11 @@ function renderChapter(id){
       const MI = MISION[id], ico = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
       const cell = (ic, v, l) => `<div class="mc"><span class="mi">${ic}</span><div><b>${v}</b><small>${l}</small></div></div>`;
       return `${MI ? `<div class="mision"><div class="ms-ph"><img src="${MI.img}" alt=""></div><div class="ms-tx"><div class="ms-k">LA MISIÓN DE HOY</div><div class="ms-t">${MI.t}</div><div class="ms-s">${MI.s}</div></div></div>` : ''}
-        <div class="mcells">${cell('📍', stops.length + (stops.length === 1 ? ' parada' : ' paradas'), nk + (nk === 1 ? ' imprescindible' : ' imprescindibles'))}${hrs ? cell('👣', hrs, 'de paseo a pie · ' + lv[0].toLowerCase()) : cell('📶', lv[0], lv[1] || '')}${w ? cell(w.icon, w.temp.replace('-', ' – '), w.desc.split(' · ')[0]) : ''}</div>
-        ${(d.quickStats||[]).length ? `<div class="mom-k">LOS MOMENTOS IMPORTANTES</div><div class="moms">${d.quickStats.map(s => `<div class="mom"><span class="mi">${ico(s.lbl)}</span><b>${esc(s.val.split(' · ')[0])}</b><small>${esc(s.lbl)}${s.val.split(' · ')[1] ? ' · ' + esc(s.val.split(' · ')[1]) : ''}</small></div>`).join('')}</div>` : ''}
-        ${w && /oscurece/.test(w.desc) ? `<div class="mom-n"><span>ⓘ</span>${w.desc.split(' · ').find(x => /oscurece/.test(x)).replace(/^o/,'O')}: los planes al aire libre, mejor antes.</div>` : ''}`; })()}
+        <div class="mcells">${cell('📍', stops.length + (stops.length === 1 ? ' parada' : ' paradas'), nk + (nk === 1 ? ' imprescindible' : ' imprescindibles'))}${hrs ? cell('👣', hrs, 'de paseo a pie · ' + lv[0].toLowerCase()) : cell('📶', lv[0], lv[1] || '')}${w ? cell(w.icon, w.temp.replace('-', '–'), /oscurece/.test(w.desc) ? w.desc.split(' · ').find(x => /oscurece/.test(x)) : w.desc.split(' · ')[0]) : ''}</div>
+        ${(d.quickStats||[]).length ? `<div class="mom-k">LOS MOMENTOS IMPORTANTES</div><div class="moms">${d.quickStats.map(s => `<div class="mom"><span class="mi">${ico(s.lbl)}</span><b>${esc((v => v.includes(' – ') ? v.split(' – ')[0] + (/[AP]M$/.test(v) && !/[AP]M/.test(v.split(' – ')[0]) ? ' ' + v.slice(-2) : '') : v)(s.val.split(' · ')[0]))}</b><small>${esc(s.lbl)}${s.val.split(' · ')[1] ? ' · ' + esc(s.val.split(' · ')[1]) : ''}</small></div>`).join('')}</div>` : ''}
+        `; })()}
 `;
-  { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
+  { const tc = TIME_CHARS[id]; if(tc && !DAY_CHARS[id]) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
     { const ps = d.narrative.body.match(/<p[^>]*>[\s\S]*?<\/p>/g) || [d.narrative.body]; const vis = ps.slice(0, 4).join(''), rest = ps.slice(4).join('');
     h += `<section class="whyday"><div class="wk">📖 POR QUÉ ESTAMOS AQUÍ HOY</div><div class="wt">${esc(d.narrative.title.replace(/^Prólogo · /,''))}</div>${vis}${rest ? `<details class="wmore"><summary>Seguir leyendo aquí ⌄</summary>${rest}</details>` : ''}${DAY_CHARS[id] ? `<div class="chars"><div class="wk">🎭 LOS PERSONAJES DE HOY</div><div class="chars-row">${DAY_CHARS[id].map(k => `<div class="char"><img src="Fotos/personajes/${k}.jpg" alt="${esc(CHARS[k].n)}" loading="lazy"><b>${esc(CHARS[k].n)}</b><small>${CHARS[k].y}</small><p>${esc(CHARS[k].t)}</p></div>`).join('')}</div><div class="muted" style="font-size:.8rem">desliza → · Los irán encontrando en cada lugar.</div></div>` : ''}</section>`; }
