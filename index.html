@@ -282,6 +282,28 @@ details.more .in p{margin:0 0 10px}
 .dayprog{position:sticky;top:56px;z-index:40;margin:0 -16px;padding:8px 16px 9px;background:rgba(246,240,229,.96);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line);cursor:pointer}
 .dayprog .dp-t{font-size:.86rem;margin-bottom:5px}
 .dayprog .bar{height:6px}
+.stop-card .ph.ov{position:relative}
+.stop-card .ph.ov::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,40,.15) 0,rgba(20,30,40,0) 30%,rgba(20,30,40,.2) 50%,rgba(20,30,40,.85))}
+.stop-card .ph-t{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:14px 16px;color:#fff}
+.stop-card .ph-t .eyebrow{background:#F3DFA6;color:var(--ink);padding:2px 8px;display:inline-block;transform:rotate(-1deg)}
+.stop-card .ph-t h3{color:#fff;margin:6px 0 2px}
+.stop-card .ph-t .line{color:#fff;opacity:.92;margin:0}
+.stop-card .ph.short{aspect-ratio:16/9}
+.vcorner{position:absolute;z-index:2;top:10px;right:10px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border:0;border-radius:14px;background:rgba(255,253,248,.95);box-shadow:var(--sh);cursor:pointer}
+.vcorner .vc{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--coral);color:transparent;font-weight:800;display:flex;align-items:center;justify-content:center}
+.vcorner small{font-size:.68rem;font-weight:700;color:var(--ink)}
+.vcorner.on{background:var(--sage)}.vcorner.on .vc{background:#fff;border-color:#fff;color:var(--sage)}.vcorner.on small{color:#fff}
+.k .vcorner,.pt-h .vcorner{position:static;flex:none;box-shadow:none;border:1px solid var(--line)}
+.pt-h{align-items:center}
+details.secret-d{background:#EFE4CF;border-radius:14px;margin:4px 0}
+details.secret-d>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:50px;padding:0 14px;font-weight:700;color:#7A5B2E}
+details.secret-d>summary::-webkit-details-marker{display:none}
+details.secret-d .sh{font-size:.78rem;font-weight:600}
+details.secret-d[open] .sh{font-size:0}
+details.secret-d .sx{font-family:'DM Serif Display',serif;font-size:1.06rem;line-height:1.35;padding:0 14px}
+details.secret-d label{display:flex;align-items:center;gap:8px;padding:10px 14px 14px;font-size:.88rem;font-weight:600;cursor:pointer}
+details.secret-d input{width:20px;height:20px;accent-color:var(--sage)}
+details.secret-d.ok{background:#E3EADF}details.secret-d.ok>summary{color:var(--ink)}
 /* misión y secretos del día */
 .mission{background:#FBEFD2;border-radius:var(--r);padding:18px}
 .mission .mk{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:#8A6416}
@@ -1249,11 +1271,9 @@ function renderChapter(id){
     const cont = next ? `<div class="nextstop">Siguiente: <a href="#" onclick="jump('p-${next.id}');return false">${esc(nextName)} →</a></div>` : '';
     if(c.type === 'major'){
       const s = c.s, img = imgFor(s.name);
-      h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph"><img src="${img}" alt="" loading="lazy"></div>` : ''}<div class="bd">
-        <div class="k"><span class="eyebrow">⭐ IMPRESCINDIBLE</span>${visited(s.id) ? '<span class="okbadge">✓ visitado</span>' : ''}</div>
-        <h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>
+      h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph ov"><img src="${img}" alt="" loading="lazy">${visitCorner(s)}<div class="ph-t"><span class="eyebrow">⭐ IMPRESCINDIBLE</span><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p></div></div>` : ''}<div class="bd">
+        ${img ? '' : `<div class="k"><span class="eyebrow">⭐ IMPRESCINDIBLE</span>${visitCorner(s)}</div><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>`}
         <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>
-        ${visitBtn(s)}
         ${story(s)}
         ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${s.look.map(sectionHTML).join('')}</div>` : ''}
         ${secretBox(s)}
@@ -1264,15 +1284,14 @@ function renderChapter(id){
       const title = c.title || c.pts.map(p => p.name).join(' · ');
       const qs = c.pts.map(p => p.q).filter(Boolean);
       const route = qs.length > 1 ? 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(mq(qs[0])) + '&destination=' + encodeURIComponent(mq(qs[qs.length-1])) + (qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).map(q => encodeURIComponent(mq(q))).join('|') : '') + '&travelmode=walking' : (qs[0] ? mapsDir(qs[0]) : '');
-      h += `<article class="stop-card route" id="p-${c.id}">${img ? `<div class="ph short"><img src="${img}" alt="" loading="lazy"></div>` : ''}<div class="bd">
-        <div class="k"><span class="eyebrow">🚶 RECORRIDO${c.pts.length > 1 ? ' · ' + c.pts.length + ' PUNTOS' : ''}</span>${c.pts[0].optional ? '<span class="opt">OPCIONAL</span>' : ''}</div>
-        <h3 class="sm">${esc(title)}</h3>${c.sub ? `<p class="line">${c.sub}</p>` : ''}
+      const rhead = `<span class="eyebrow">🚶 RECORRIDO${c.pts.length > 1 ? ' · ' + c.pts.length + ' PUNTOS' : ''}${c.pts[0].optional ? ' · OPCIONAL' : ''}</span><h3 class="sm">${esc(title)}</h3>${c.sub ? `<p class="line">${c.sub}</p>` : ''}`;
+      h += `<article class="stop-card route" id="p-${c.id}">${img ? `<div class="ph short ov"><img src="${img}" alt="" loading="lazy"><div class="ph-t">${rhead}</div></div>` : ''}<div class="bd">
+        ${img ? '' : rhead}
         ${route ? `<div class="acts" style="margin-bottom:6px"><a class="btn coral" href="${route}" target="_blank" rel="noopener">🗺 ${qs.length > 1 ? 'Ruta a pie completa' : 'Cómo llegar'}</a></div>` : ''}
         ${c.pts.map((p, j) => `<div class="pt" id="p-${p.id}">
-          <div class="pt-h"><span class="pt-n">${j+1}</span><div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? esc(p.time) + ' · ' : ''}${p.line || ''}</div></div></div>
+          <div class="pt-h"><span class="pt-n">${j+1}</span><div style="flex:1"><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? esc(p.time) + ' · ' : ''}${p.line || ''}</div></div>${visitCorner(p)}</div>
           ${p.chips.length ? `<div class="facts" style="margin:6px 0 0 34px">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
           <div class="pt-b">
-            ${visitBtn(p)}
             ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${p.look.map(sectionHTML).join('')}</div>` : ''}
             ${secretBox(p, true)}
             <div class="acts" style="margin-top:8px">${p.q ? `<a class="btn soft" href="${mapsDir(p.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}</div>
@@ -1335,7 +1354,7 @@ function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = 
 function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
 function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
 function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="story-d"><summary><span>📖 Descubrir su historia</span><span class="sh">toquen para leer ↓</span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
-function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><div class="secret"><div class="sk">🔑 EL SECRETO DE ESTE LUGAR</div><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></div></div>` : ''; }
+function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><details class="secret-d${found(s.id) ? ' ok' : ''}"><summary><span>🔑 Secreto${found(s.id) ? ' · ¡encontrado!' : ''}</span><span class="sh">toquen para descubrirlo</span></summary><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></details></div>` : ''; }
 function tips(s){
   return s.tips.map((t, k) => {
     const txt = (t.text || '') + (t.items ? t.items.join(' · ') : '');
@@ -1351,6 +1370,7 @@ function idea(key){
   o.classList.add('on');
 }
 window.idea = idea;
+function visitCorner(s){ const on = visited(s.id); return `<button class="vcorner${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}" aria-label="${on ? 'Desmarcar visitado' : 'Marcar como visitado'}"><span class="vc">✓</span><small>${on ? 'Visitado' : '¿Ya fueron?'}</small></button>`; }
 function visitBtn(s){ const on = visited(s.id); return `<button class="visit${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}"><span class="vc">✓</span><span class="vt">${on ? '¡Ya estuvimos aquí!' : '¿Ya estuvieron aquí?'}<small>${on ? 'toquen para desmarcar' : 'toquen para marcarlo'}</small></span></button>`; }
 function renderAlbumView(){
   const box = $('#album-full'); if(!box) return;
