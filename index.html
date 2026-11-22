@@ -558,6 +558,30 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .chap .ph-txt .dest{color:#fff;font-size:1.9rem}
 .chap .bd .obj{margin-top:0}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#toast{transition:none}}
+.lk-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 4px;margin:6px 0 0;-webkit-overflow-scrolling:touch}
+.lk{flex:0 0 46%;max-width:200px;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:0 0 8px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+.lk-ph{position:relative;display:block}
+.lk-ph img{width:100%;height:110px;object-fit:cover;display:block}
+.lk-z{position:absolute;right:6px;bottom:6px;background:rgba(255,255,255,.9);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.lk b{display:block;font-size:.86rem;line-height:1.25;padding:7px 9px 0}
+.lk small{display:block;font-size:.76rem;line-height:1.35;color:var(--ink-2);padding:3px 9px 0}
+.lk-t{padding:10px;font-size:.8rem;cursor:default}
+.lk-hint{font-size:.76rem;color:var(--ink-2);margin:2px 0 4px}
+.pt-look .lk-row{margin-top:4px}
+.lk-big{display:block;width:100%;max-height:62vh;object-fit:contain;background:#1d1d1d}
+.lk-d{padding:10px 14px 0;font-size:.92rem;line-height:1.5}
+.lk-cr{padding:6px 14px 0;font-size:.72rem;color:var(--ink-2)}.lk-cr a{color:inherit}
+.chap.flash{animation:flash 1.6s ease}
+@keyframes flash{0%,60%{box-shadow:0 0 0 4px var(--yellow)}100%{box-shadow:none}}
+#fab-now{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:70;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;background:var(--coral);color:#fff;padding:10px 16px 10px 12px;font:inherit;font-weight:700;font-size:.78rem;line-height:1.1;text-align:left;box-shadow:0 6px 18px rgba(0,0,0,.22);cursor:pointer;animation:fabin .4s ease}
+#fab-now[hidden]{display:none}
+#fab-now .fn-i{font-size:1.5rem;line-height:1}
+@keyframes fabin{from{transform:scale(.6);opacity:0}}
+#nowsheet{position:fixed;inset:0;z-index:90;background:rgba(20,28,38,.45);display:none;align-items:flex-end;justify-content:center}
+#nowsheet.on{display:flex}
+#nowsheet .ns-in{position:relative;width:100%;max-width:560px;max-height:85vh;overflow:auto;padding:14px 12px calc(16px + env(safe-area-inset-bottom));background:var(--ivory);border-radius:22px 22px 0 0;animation:nsup .25s ease}
+@keyframes nsup{from{transform:translateY(40px);opacity:.4}}
+#nowsheet .ns-x{position:absolute;right:16px;top:14px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:.9rem;cursor:pointer}
 </style>
 </head>
 <body>
@@ -580,24 +604,23 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
       <span class="date">📅 22 – 25 de noviembre de 2026</span>
     </div>
   </div>
-  <div id="ahora"></div>
 
   <div class="sec"><div class="box map-box torn tape"><div class="lbl-hand">♡ Mapa general del viaje</div><div class="muted">Este es el mapa de Roma. Cada zona de color es un capítulo, un día del viaje, y todo sale de nuestro Airbnb en Campo de&#39; Fiori.</div><div class="map-wrap"><svg viewBox="0 0 580 400" class="chapmap" role="img" aria-label="Mapa de los tres capítulos del viaje en Roma">
   <defs><pattern id="dt" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(40,59,77,.08)"/></pattern></defs>
   <rect width="580" height="400" fill="#EFE6D3"/><rect width="580" height="400" fill="url(#dt)"/>
   <path d="M300 -10 Q 268 70 236 128 Q 214 170 236 212 Q 252 250 296 280 Q 336 308 332 350 Q 326 380 300 410" fill="none" stroke="#C9DCE2" stroke-width="30" stroke-linecap="round"/>
   <text x="196" y="96" font-family="Caveat" font-size="20" fill="#7EA7B5" transform="rotate(-62 196 96)">río Tíber</text>
-  <g class="zona" onclick="go('capitulo-3')"><ellipse cx="118" cy="150" rx="92" ry="62" fill="#D8E0D2" opacity=".9"/><text x="118" y="140" text-anchor="middle" font-size="34">⛪</text></g>
-  <g class="zona" onclick="go('capitulo-1')"><ellipse cx="350" cy="190" rx="104" ry="64" fill="#CFE0E4" opacity=".9"/><text x="350" y="178" text-anchor="middle" font-size="30">⛲</text></g>
-  <g class="zona" onclick="go('capitulo-2')"><ellipse cx="470" cy="318" rx="92" ry="60" fill="#F1CDBF" opacity=".9"/><text x="470" y="306" text-anchor="middle" font-size="34">🏟</text></g>
+  <g class="zona" onclick="toChap(3)"><ellipse cx="118" cy="150" rx="92" ry="62" fill="#D8E0D2" opacity=".9"/><text x="118" y="140" text-anchor="middle" font-size="34">⛪</text></g>
+  <g class="zona" onclick="toChap(1)"><ellipse cx="350" cy="190" rx="104" ry="64" fill="#CFE0E4" opacity=".9"/><text x="350" y="178" text-anchor="middle" font-size="30">⛲</text></g>
+  <g class="zona" onclick="toChap(2)"><ellipse cx="470" cy="318" rx="92" ry="60" fill="#F1CDBF" opacity=".9"/><text x="470" y="306" text-anchor="middle" font-size="34">🏟</text></g>
   <g fill="none" stroke="#283B4D" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round" opacity=".75">
     <path d="M268 236 Q 200 200 150 170"/><path d="M284 228 Q 310 205 330 200"/><path d="M290 246 Q 380 280 440 304"/>
   </g>
   <g><circle cx="276" cy="238" r="20" fill="#283B4D" stroke="#E4BD63" stroke-width="4"/><text x="276" y="245" text-anchor="middle" font-size="18">🏠</text>
   <rect x="196" y="282" width="128" height="28" rx="6" fill="#FFFDF8" opacity=".92"/><text x="260" y="303" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="24" fill="#283B4D">nuestro Airbnb</text></g>
-  <g class="zona" onclick="go('capitulo-3')" transform="translate(24 172) rotate(-4)"><rect width="222" height="60" fill="#FFFDF8" stroke="#8C9D86" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Martes 24 · Capítulo 03</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Vaticano</text></g>
-  <g class="zona" onclick="go('capitulo-1')" transform="translate(300 192) rotate(3)"><rect width="240" height="80" fill="#FFFDF8" stroke="#7EA7B5" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Domingo 22 · Capítulo 01</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Centro histórico</text><text x="12" y="72" font-family="Caveat" font-weight="700" font-size="19" fill="#A85A45">+ miércoles 25: epílogo en Trevi</text></g>
-  <g class="zona" onclick="go('capitulo-2')" transform="translate(352 330) rotate(-3)"><rect width="212" height="60" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Lunes 23 · Capítulo 02</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Coliseo</text></g>
+  <g class="zona" onclick="toChap(3)" transform="translate(24 172) rotate(-4)"><rect width="222" height="60" fill="#FFFDF8" stroke="#8C9D86" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Martes 24 · Capítulo 03</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Vaticano</text></g>
+  <g class="zona" onclick="toChap(1)" transform="translate(300 192) rotate(3)"><rect width="240" height="80" fill="#FFFDF8" stroke="#7EA7B5" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Domingo 22 · Capítulo 01</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Centro histórico</text><text x="12" y="72" font-family="Caveat" font-weight="700" font-size="19" fill="#A85A45">+ miércoles 25: epílogo en Trevi</text></g>
+  <g class="zona" onclick="toChap(2)" transform="translate(352 330) rotate(-3)"><rect width="212" height="60" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Lunes 23 · Capítulo 02</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Coliseo</text></g>
   <g transform="translate(540 44)"><circle r="20" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><path d="M0 -15 L5 0 L0 15 L-5 0 Z" fill="#C8735C"/><text y="-24" text-anchor="middle" font-size="11" font-weight="700" fill="#283B4D">N</text></g>
 </svg></div><div class="muted" style="font-size:.85rem">Toquen una zona para abrir el capítulo de ese día.</div></div></div>
 
@@ -739,6 +762,8 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 </nav>
 <div id="tour" role="dialog" aria-modal="true"><div class="tcard"><div class="tstep" id="t-step"></div><div class="ttitle" id="t-title"></div><div class="ttext" id="t-text"></div><div class="tacts"><button class="btn soft" id="t-skip" onclick="tourEnd()">Saltar</button><button class="btn coral" id="t-next" onclick="tourNext()">Siguiente →</button></div></div></div>
 <div id="idea" onclick="this.classList.remove('on')"></div>
+<button id="fab-now" onclick="openNow()" aria-label="¿Qué hacemos ahora?" hidden><span class="fn-i">🧭</span><span class="fn-t">¿Qué hacemos<br>ahora?</span></button>
+<div id="nowsheet" onclick="if(event.target===this||event.target.closest('a,button'))closeNow()"><div class="ns-in"><button class="ns-x" aria-label="Cerrar">✕</button><div id="ahora"></div></div></div>
 <div id="lightbox" onclick="this.classList.remove('on')"></div>
 <div id="toast" role="status"></div>
 
@@ -1217,6 +1242,52 @@ function show(u, cap){ const l = $('#lightbox'); l.innerHTML = `<img src="${esc(
 const RX_SECRET = /secreto|curiosidad|^el detalle/i;
 const RX_LOOK = /qué buscar|qué ver|cuatro|tres detalles|lo mejor|qué pedir|^qué buscar dentro/i;
 const RX_TIP = /foto|entrada|horario|vale la pena|llegar|consejo|cómo recorrer|vestido|hoy domingo|^ojo|ruta/i;
+const LOOKPICS = [
+  {k:'Templo de Saturno', i:'buscar/foro-saturno.jpg', f:'Temple of Saturn, Rome.jpg'},
+  {k:'Templo de Julio César', i:'buscar/foro-cesar.jpg', f:'Temple of Iulius Caesar - Rome, Italy - DSC01573.jpg'},
+  {k:'Curia Julia', i:'buscar/foro-curia.jpg', f:'Curia Julia, Roman Forum (46346859172).jpg'},
+  {k:'Arco de Tito', i:'buscar/foro-tito.jpg', f:'Spoils from Jerusalem - Arch of Titus - Rome 2008.jpg'},
+  {k:'La arena', i:'buscar/col-arena.jpg', f:'Colosseum Interior 1 (15005911295).jpg'},
+  {k:'El hipogeo', i:'buscar/col-hipogeo.jpg', f:'Colosseum hypogeum.JPG'},
+  {k:'Las gradas', i:'buscar/col-gradas.jpg', f:'Rome - Interior of the Colosseum (5178248349).jpg'},
+  {k:'La Piedad', i:'paradas/la-piedad.jpg'},
+  {k:'Baldaquino', i:'buscar/sp-baldaquino.jpg', f:'Baldaquin Bernin Saint-Pierre Vatican.jpg'},
+  {k:'La cúpula de Miguel', i:'buscar/sp-cupula.jpg', f:'S. Pietro May 2022-15.jpg'},
+  {k:'estatua de San Pedro', i:'buscar/sp-estatua.jpg', f:'Statue of Saint Peter by Arnolfo di Cambio 02.jpg'},
+  {k:'Laocoonte', i:'buscar/mv-laocoonte.jpg', f:'Laocoön and his sons group.jpg'},
+  {k:'Galería de los Mapas', i:'buscar/mv-mapas.jpg', f:'Galleria delle carte geografiche (Vatican Museums) September 2015-5.jpg'},
+  {k:'Escuela de Atenas', i:'buscar/mv-atenas.jpg', f:'The School of Athens by Raffaello Sanzio da Urbino.jpg'},
+  {k:'Capilla Sixtina', i:'paradas/capilla-sixtina.jpg'}
+];
+const LOOKTEXT = {'Pante': [
+  {n:'La cúpula', i:'buscar/pan-cupula.jpg', f:'Rome Pantheon interior coffers.jpg'},
+  {n:'El óculo', i:'buscar/pan-oculo.jpg', f:'Rome - Pantheon - Oculus Sunbeam 0627.jpg'},
+  {n:'Las enormes columnas', i:'buscar/pan-columnas.jpg', f:'The Pantheon, Rome (14995115321).jpg'},
+  {n:'La tumba de Rafael', i:'buscar/pan-rafael.jpg', f:"Rome Pantheon 2020 P07 Raphael's grave.jpg"}
+]};
+window.__LK = [];
+function lookTile(o){ const k = window.__LK.push(o) - 1; return `<button class="lk" onclick="verFoto(${k})"><span class="lk-ph"><img src="Fotos/${o.i}" alt="" loading="lazy"><span class="lk-z">🔍</span></span><b>${esc(o.n)}</b>${o.d ? `<small>${o.d}</small>` : ''}</button>`; }
+function lookHTML(s){
+  return s.look.map(x => {
+    if(x.items){
+      const tiles = x.items.map(it => { const pic = LOOKPICS.find(p => it.includes(p.k)); if(!pic) return null; const m = it.match(/^<strong>([\s\S]*?):?<\/strong>:?\s*([\s\S]*)$/); return {n: m ? m[1].replace(/:$/,'') : pic.k, d: m ? m[2] : '', i: pic.i, f: pic.f}; });
+      if(tiles.some(Boolean)) return `<div class="lk-row">${tiles.map((o, j) => o ? lookTile(o) : `<div class="lk lk-t">${x.items[j]}</div>`).join('')}</div><div class="lk-hint">Toquen cada foto para verla en grande · desliza →</div>`;
+    }
+    const key = Object.keys(LOOKTEXT).find(k => s.name.includes(k));
+    if(x.text && key) return `<p>${x.text}</p><div class="lk-row">${LOOKTEXT[key].map(lookTile).join('')}</div><div class="lk-hint">Toquen cada foto para verla en grande · desliza →</div>`;
+    return sectionHTML(x);
+  }).join('');
+}
+function verFoto(k){ const o = window.__LK[k]; if(!o) return; const el = document.getElementById('idea');
+  el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">🔍 QUÉ BUSCAR · ${esc(o.n).toUpperCase()}</div></div><img class="lk-big" src="Fotos/${o.i}" alt="${esc(o.n)}">${o.d ? `<div class="lk-d">${o.d}</div>` : ''}${o.f ? `<div class="lk-cr">Foto: <a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(o.f)}" target="_blank" rel="noopener">Wikimedia Commons</a></div>` : ''}<button class="btn ghost" style="margin:10px 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
+  el.classList.add('on'); }
+window.verFoto = verFoto;
+function openNow(){ renderNow(); document.getElementById('nowsheet').classList.add('on'); }
+function closeNow(){ setTimeout(() => document.getElementById('nowsheet').classList.remove('on'), 50); }
+function fabNow(){ const f = document.getElementById('fab-now'); if(f) f.hidden = !tripDay(); }
+window.openNow = openNow; window.closeNow = closeNow;
+function toChap(n){ const e = document.getElementById('chapcard-' + n); if(!e) return go('capitulo-' + n); e.scrollIntoView({behavior:'smooth', block:'center'}); e.classList.remove('flash'); void e.offsetWidth; e.classList.add('flash'); }
+window.toChap = toChap;
 function sectionHTML(s){ return (s.text ? `<p>${s.text}</p>` : '') + (s.items ? `<ul>${s.items.map(i => `<li>${i}</li>`).join('')}</ul>` : ''); }
 function splitTitle(t){ const m = t.match(/^(.+?)(?::|, )\s*(.+)$/); return m && m[1].length < 40 ? [m[1], m[2]] : [t, '']; }
 function buildDay(d){
@@ -1276,7 +1347,7 @@ function renderHome(){
   const chapHTML = DAYS.map(d => {
     const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
     const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length;
-    return `<button class="chap" onclick="go('capitulo-${d.id}')">
+    return `<button class="chap" id="chapcard-${d.id}" onclick="go('capitulo-${d.id}')">
       <span class="stk stk${d.id}"><small>${d.id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${d.id < 4 ? '0' + d.id : '✦'}</b></span><div class="ph"><img src="${c.img}" alt="" loading="lazy"><div class="ph-txt"><div class="date">${c.num.replace(/^\d+ · |^EPÍLOGO · /,'')}${td === d.id ? ' · HOY' : ''}</div><div class="dest">${c.dest}</div></div></div>
       <div class="bd torn"><div class="obj">${c.obj}</div>
       <div class="places">📍 ${c.places}</div>
@@ -1339,7 +1410,7 @@ function renderChapter(id){
         <div class="dash-g">${tile('📍', stops.length + ' lugares', nk + ' imprescindibles')}${hrs ? tile('⏱', hrs, 'de paseo a pie') : ''}${tile('📶', lv[0], lv[1] || '')}${w ? tile(w.icon, w.temp.replace('°C','°'), w.desc.split(' · ')[0]) : ''}</div>
         ${(d.quickStats||[]).length ? `<div class="dash-k"><span class="dk-t">HORAS CLAVE</span>${d.quickStats.map(s => `<span class="dk"><b>${esc(s.val.split(' · ')[0])}</b> ${esc(s.lbl)}</span>`).join('')}</div>` : ''}
         ${w && /oscurece/.test(w.desc) ? `<div class="dash-n">🌅 ${w.desc.split(' · ').find(x => /oscurece/.test(x)).replace(/^o/,'O')}: los planes al aire libre, mejor antes.</div>` : ''}</div>`; })()}
-    ${tripDay() === id ? '<div id="ahora-cap" style="margin-top:14px"></div>' : ''}`;
+`;
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
     { const ps = d.narrative.body.match(/<p[^>]*>[\s\S]*?<\/p>/g) || [d.narrative.body]; const vis = ps.slice(0, 4).join(''), rest = ps.slice(4).join('');
@@ -1399,7 +1470,7 @@ function renderChapter(id){
         ${img ? '' : `<div class="k"><span class="eyebrow">⭐ IMPRESCINDIBLE</span>${visitCorner(s)}</div><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>`}
         <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>
         ${story(s)}
-        ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${s.look.map(sectionHTML).join('')}</div>` : ''}
+        ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${lookHTML(s)}</div>` : ''}
         ${secretBox(s)}
         <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts arow">${s.q ? `<a class="btn ink" href="${mapsDir(s.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${ideaBtn(s)}</div>${tips(s)}${cont}</div>
       </div></article>`;
@@ -1416,7 +1487,7 @@ function renderChapter(id){
           <div class="pt-h"><span class="pt-n">${j+1}</span><div style="flex:1"><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? esc(p.time) + ' · ' : ''}${p.line || ''}</div></div>${visitCorner(p)}</div>
           ${p.chips.length ? `<div class="facts" style="margin:6px 0 0 34px">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
           <div class="pt-b">
-            ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${p.look.map(sectionHTML).join('')}</div>` : ''}
+            ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${lookHTML(p)}</div>` : ''}
             ${secretBox(p, true)}
             <div class="acts arow" style="margin-top:8px">${p.q ? `<a class="btn ink" href="${mapsDir(p.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${ideaBtn(p)}</div>
             ${tips(p)}
@@ -1458,7 +1529,6 @@ function renderChapter(id){
   h += nd ? `<button class="nextchap" onclick="go('capitulo-${nd.id}')"><span><small>SIGUIENTE</small><b>${CHAPTERS[nd.id].short} · ${CHAPTERS[nd.id].dest}</b></span><span aria-hidden="true">→</span></button>`
           : `<button class="nextchap" onclick="go('inicio')"><span><small>FIN DEL VIAJE</small><b>Volver al inicio</b></span><span aria-hidden="true">🏠</span></button>`;
   $('#capitulo').innerHTML = h;
-  renderNow('ahora-cap', true);
   { const s = document.getElementById('strip-d');
     if(s){
       let c = s.querySelector(`[data-k="${window.__curK}"]`);
@@ -1505,14 +1575,18 @@ function dayMap(stops, did){
     placed.push(best);
     return `<rect x="${best.x}" y="${best.y}" width="${w}" height="${hh}" rx="6" fill="#FFFDF8" stroke="#E2D7C3" opacity=".96"/><text x="${best.x + 7}" y="${best.y + 15}" font-family="Inter" font-size="11.5" font-weight="600" fill="#283B4D">${esc(txt)}</text>`;
   };
-  return `<div class="dm-cap">🚶 Salen del Airbnb y recorren <b>${pts.length} ${pts.length === 1 ? 'lugar' : 'lugares'} a pie</b> · ${WALK[did] ? `≈ <b>${WALK[did]} caminando</b> en total según Google Maps, sin contar el tiempo en cada parada.` : `unos <b>${dist.toFixed(1).replace('.', ',')} km</b> en total.`}</div>
+  const legs = pts.length > 6 ? '' : route.slice(1).map((c, i) => { const a = P(route[i]), b = P(c), m = Math.max(2, Math.round(km(route[i], c) * 1.3 / 4.5 * 60));
+    if(Math.hypot(b[0]-a[0], b[1]-a[1]) < 46) return '';
+    const w = 50, r = {x: (a[0]+b[0])/2 - w/2, y: (a[1]+b[1])/2 - 9, w, h: 18}; placed.push(r);
+    return `<rect x="${r.x}" y="${r.y}" width="${w}" height="18" rx="9" fill="#F3DFA6"/><text x="${r.x + w/2}" y="${r.y + 12.5}" text-anchor="middle" font-family="Inter" font-size="10" font-weight="700" fill="#283B4D">🚶${m} min</text>`; }).join('');
+  return `<div class="dm-cap">🚶 Salen del Airbnb y recorren <b>${pts.length} ${pts.length === 1 ? 'lugar' : 'lugares'} a pie</b> · ${WALK[did] ? `≈ <b>${WALK[did]} caminando</b> en total según Google Maps, sin contar el tiempo en cada parada. Las cifras amarillas son el tramo aproximado entre una parada y otra.` : `unos <b>${dist.toFixed(1).replace('.', ',')} km</b> en total.`}</div>
   <svg class="dm" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de Roma con los lugares del día">
     <defs><clipPath id="dmclip"><rect width="${W}" height="${H}" rx="12"/></clipPath><pattern id="dmdots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(40,59,77,.08)"/></pattern></defs>
     <g clip-path="url(#dmclip)"><rect width="${W}" height="${H}" fill="#EFE6D3"/><rect width="${W}" height="${H}" fill="url(#dmdots)"/>
     <path d="${river}" fill="none" stroke="#C9DCE2" stroke-width="${Math.max(10, Math.min(26, sc*0.0009))}" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="${rmid[0] - 8}" y="${rmid[1]}" font-family="Caveat" font-size="15" fill="#7EA7B5" text-anchor="end">río Tíber</text>
     <path d="${path}" fill="none" stroke="#283B4D" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>
-    ${lbl(hp, '🏠 Airbnb')}${pts.map(p => (pts.length <= 6 || isKey(p.s.name)) ? `<g class="dmp" onclick="jump('p-${p.s.id}')">${lbl(P(p.c), emoFor(p.s.name) + ' ' + shortName(p.s.name))}</g>` : '').join('')}
+    ${legs}${lbl(hp, '🏠 Airbnb')}${pts.map(p => (pts.length <= 6 || isKey(p.s.name)) ? `<g class="dmp" onclick="jump('p-${p.s.id}')">${lbl(P(p.c), emoFor(p.s.name) + ' ' + shortName(p.s.name))}</g>` : '').join('')}
     <g><circle cx="${hp[0]}" cy="${hp[1]}" r="14" fill="#283B4D" stroke="#E4BD63" stroke-width="3"/><text x="${hp[0]}" y="${hp[1]+5}" text-anchor="middle" font-size="13">🏠</text></g>
     ${pts.map(p => { const q = P(p.c), key = isKey(p.s.name), on = visited(p.s.id); return `<g class="dmp" onclick="jump('p-${p.s.id}')"><circle cx="${q[0]}" cy="${q[1]}" r="14" fill="${on ? '#8C9D86' : key ? '#C8735C' : '#F3DFA6'}" stroke="#fff" stroke-width="2.5"/><text x="${q[0]}" y="${q[1]+4.5}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="12" fill="${on || key ? '#fff' : '#283B4D'}">${on ? '✓' : p.n}</text></g>`; }).join('')}
     <g transform="translate(${W - 24} 26)"><circle r="15" fill="#FFFDF8" stroke="#C8735C" stroke-width="1.5"/><path d="M0 -11 L4 0 L0 11 L-4 0 Z" fill="#C8735C"/><text y="-17" text-anchor="middle" font-size="9" font-weight="700" fill="#283B4D">N</text></g>
@@ -1644,7 +1718,7 @@ window.addEventListener('popstate', () => { VIEW = null; route(); window.scrollT
 /* ================= recorrido de bienvenida ================= */
 const TOUR = [
   {sel:null, t:'¡Bienvenidas! Las queremos tanto 💛', x:'Hicimos este itinerario para acompañarlas y asegurarnos de que no se pierdan nada, pero también para ir despacio. Confíen: no está lleno de cosas, está hecho para disfrutar sin afán.<br><br>Disfruten, y sobre todo… ¡llévennos con ustedes! 😄'},
-  {sel:'#ahora', t:'Cero pensar, solo mirar aquí', x:'Como sabemos que no quieren pensar mucho, aquí les dejamos lo que toca en este momento y lo que sigue. ¡Miren! Y si tocan 📍 Cómo llegar, Google Maps las lleva caminando.'},
+  {sel:'#fab-now', t:'Cero pensar: toquen la brújula', x:'Como sabemos que no quieren pensar mucho, esta burbuja 🧭 siempre está abajo a la derecha. Tóquenla cuando no sepan qué sigue: les muestra lo que toca en este momento y lo que viene después. ¡Miren! Y si tocan 📍 Cómo llegar, Google Maps las lleva caminando.'},
   {sel:'.map-box', t:'Un día para cada zona', x:'Este es el mapa de Roma. Para no desgastarlas, le dedicamos un día a cada zona. Así que sáquenle el máximo provecho… ¡porque no van a volver! Jaja… a menos que la moneda de Trevi funcione. 😉'},
   {sel:'#chaps', t:'Sus tres aventuras', x:'Cada capítulo es un día: Centro histórico, Coliseo, Vaticano y el epílogo para despedirse. Adentro está el plan hora por hora, los lugares, sus historias y sus secretos.'},
   {sel:null, t:'Cuando lleguen a un lugar', x:'✓ Toquen «¿Ya estuvieron aquí?» para marcarlo: así sabemos por dónde van.<br>🔑 Busquen su secreto, que siempre hay uno.<br>📖 Si les provoca, lean su historia; si no, sigan caminando, que también vale.<br>📷 ¡Súbannos fotos! Aquí en casa las estamos esperando.'},
@@ -1685,7 +1759,8 @@ if(window.supabase && SUPA_URL.indexOf('/*') !== 0 && SUPA_URL.indexOf('http') =
   route(true);
 }
 setTimeout(() => tour(false), 700);
-setInterval(() => { if(!document.hidden && (location.hash || '#inicio') === '#inicio') renderNow(); }, 60000);
+setInterval(() => { fabNow(); if(!document.hidden && document.getElementById('nowsheet').classList.contains('on')) renderNow(); }, 60000);
+fabNow();
 }
 </script>
 </body>
