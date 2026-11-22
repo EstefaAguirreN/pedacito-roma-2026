@@ -175,7 +175,11 @@ details.more .in p{margin:0 0 10px}
 .pill-d b{font-size:.78rem;color:var(--coral-d)}
 .pill-d .pl{font-size:.74rem;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pill-d.st{background:#FBEFD2;border-color:#EFD9A2}
+.pill-d.key{background:var(--coral);border-color:var(--coral)}
+.pill-d.key b,.pill-d.key .pl{color:#fff;font-weight:700}
 .pill-d.ok{background:#E3EADF;border-color:var(--sage)}
+.pill-d.ok b{color:var(--ink-2)}
+.pill-d.key.ok .pl{color:var(--ink-2)}
 .pill-d.ok .pl{text-decoration:line-through;color:var(--ink-2)}
 .pill-d.now{outline:3px solid var(--coral);outline-offset:1px}
 .pill-d.now::after{content:'AHORA';font-size:.6rem;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--coral);border-radius:99px;padding:1px 6px;margin-top:2px}
@@ -233,6 +237,16 @@ details.more .in p{margin:0 0 10px}
 .pt-line{font-size:.88rem;color:var(--ink-2)}
 .pt-b{margin-left:34px}
 .pt-look{font-size:.92rem;margin-top:6px}.pt-look p{display:inline}
+.visit{display:flex;align-items:center;gap:12px;width:100%;margin:8px 0 4px;padding:10px 14px;min-height:56px;border-radius:14px;border:2px dashed var(--coral);background:#fff;cursor:pointer;text-align:left}
+.visit .vc{flex:none;width:32px;height:32px;border-radius:50%;border:2px solid var(--coral);color:transparent;font-weight:800;display:flex;align-items:center;justify-content:center}
+.visit .vt{font-weight:700;font-size:1rem;line-height:1.2}
+.visit small{display:block;font-weight:500;font-size:.78rem;color:var(--ink-2)}
+.visit.on{border-style:solid;border-color:var(--sage);background:#E3EADF}
+.visit.on .vc{background:var(--sage);border-color:var(--sage);color:#fff}
+.okbadge{font-size:.72rem;font-weight:800;color:#fff;background:var(--sage);border-radius:99px;padding:3px 9px}
+.dayprog{position:sticky;top:56px;z-index:40;margin:0 -16px;padding:8px 16px 9px;background:rgba(246,240,229,.96);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line);cursor:pointer}
+.dayprog .dp-t{font-size:.86rem;margin-bottom:5px}
+.dayprog .bar{height:6px}
 /* misión y secretos del día */
 .mission{background:#FBEFD2;border-radius:var(--r);padding:18px}
 .mission .mk{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:#8A6416}
@@ -1077,7 +1091,9 @@ function album(list){
 function renderChapter(id){
   const d = DAYS.find(x => x.id === id), c = CHAPTERS[id], it = built(d), w = (typeof WEATHER !== 'undefined' && WEATHER[id]) || null;
   const stops = it.filter(x => x.kind === 'stop'), secrets = stops.filter(x => x.secret);
-  let h = `<div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
+  const vv = stops.filter(x => visited(x.id)).length, sf = secrets.filter(x => found(x.id)).length;
+  let h = `<div class="dayprog" onclick="jump('pl-top')"><div class="dp-t"><b>✓ ${vv} de ${stops.length} lugares</b>${secrets.length ? ` · 🔑 ${sf} de ${secrets.length} secretos` : ''}</div><div class="bar"><i style="width:${stops.length ? Math.round(vv/stops.length*100) : 0}%"></i></div></div>
+  <div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
     <div class="facts"><span class="chip warm">${placesLabel(stops)}</span>${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}${w ? `<span class="chip">${w.icon} ${w.temp}</span>` : ''}</div>`;
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
@@ -1094,12 +1110,12 @@ function renderChapter(id){
       const lbl = x.kind === 'log' ? x.b.title : x.kind === 'group' ? x.title : x.name;
       const ic = x.kind === 'stop' ? (isKey(x.name) ? '⭐' : '📍') : (ICON[x.kind === 'group' ? 'group' : x.b.type] || '•');
       const tgt = x.kind === 'stop' ? 'p-' + x.id : 'pl-' + k;
-      return `<button class="pill-d${x.kind === 'stop' ? ' st' : ''}${x.kind === 'stop' && visited(x.id) ? ' ok' : ''}" data-k="${k}" onclick="jump('${tgt}')"><span class="pi">${ic}</span><b>${esc(String(x.time||'').replace(/\s/g,''))}</b><span class="pl">${esc(String(lbl).split(/ · |: |, /)[0])}</span></button>`;
+      return `<button class="pill-d${x.kind === 'stop' ? (isKey(x.name) ? ' key' : ' st') : ''}${x.kind === 'stop' && visited(x.id) ? ' ok' : ''}" data-k="${k}" onclick="jump('${tgt}')"><span class="pi">${ic}</span><b>${esc(String(x.time||'').replace(/\s/g,''))}</b><span class="pl">${esc(String(lbl).split(/ · |: |, /)[0])}</span></button>`;
     }).join('');
     h += `<div class="sec glance"><div class="eyebrow">EL DÍA EN UN VISTAZO</div><div class="muted" style="font-size:.85rem">Deslicen con el dedo · toquen un momento para ir a él</div><div class="strip-d" id="strip-d">${pills}</div></div>`;
     window.__curK = curK;
   }
-  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2">El plan del día</div><div class="muted">Toquen una parada para ir a su ficha.</div></div><div class="box"><ul class="plan">`;
+  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2" id="pl-top">El plan del día</div><div class="muted">Toquen una parada para ir a su ficha.</div></div><div class="box"><ul class="plan">`;
   it.forEach((x, k) => {
     if(x.kind === 'log'){
       const b = x.b, link = b.from && b.to ? mapsTransit(b.from, b.to) : (b.place ? mapsDir(b.place) : '');
@@ -1131,13 +1147,14 @@ function renderChapter(id){
     if(c.type === 'major'){
       const s = c.s, img = imgFor(s.name);
       h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph"><img src="${img}" alt="" loading="lazy"></div>` : ''}<div class="bd">
-        <div class="k"><span class="eyebrow">LUGAR ${String(c.n).padStart(2,'0')} DE ${tot} · IMPRESCINDIBLE</span></div>
+        <div class="k"><span class="eyebrow">⭐ IMPRESCINDIBLE</span>${visited(s.id) ? '<span class="okbadge">✓ visitado</span>' : ''}</div>
         <h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>
         <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>
+        ${visitBtn(s)}
         ${story(s)}
         ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${s.look.map(sectionHTML).join('')}</div>` : ''}
         ${secretBox(s)}
-        <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts">${s.q ? `<a class="btn coral" href="${mapsDir(s.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${visitBtn(s)}</div>${tips(s)}${cont}</div>
+        <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts">${s.q ? `<a class="btn coral" href="${mapsDir(s.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}</div>${tips(s)}${cont}</div>
         <div class="step memo"><div class="st">NUESTRO RECUERDO</div><div id="rec-${c.id}"></div></div>
       </div></article>`;
     } else {
@@ -1146,16 +1163,17 @@ function renderChapter(id){
       const qs = c.pts.map(p => p.q).filter(Boolean);
       const route = qs.length > 1 ? 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(mq(qs[0])) + '&destination=' + encodeURIComponent(mq(qs[qs.length-1])) + (qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).map(q => encodeURIComponent(mq(q))).join('|') : '') + '&travelmode=walking' : (qs[0] ? mapsDir(qs[0]) : '');
       h += `<article class="stop-card route" id="p-${c.id}">${img ? `<div class="ph short"><img src="${img}" alt="" loading="lazy"></div>` : ''}<div class="bd">
-        <div class="k"><span class="eyebrow">LUGAR ${String(c.n).padStart(2,'0')} DE ${tot} · RECORRIDO${c.pts.length > 1 ? ' · ' + c.pts.length + ' PUNTOS' : ''}</span>${c.pts[0].optional ? '<span class="opt">OPCIONAL</span>' : ''}</div>
+        <div class="k"><span class="eyebrow">🚶 RECORRIDO${c.pts.length > 1 ? ' · ' + c.pts.length + ' PUNTOS' : ''}</span>${c.pts[0].optional ? '<span class="opt">OPCIONAL</span>' : ''}</div>
         <h3 class="sm">${esc(title)}</h3>${c.sub ? `<p class="line">${c.sub}</p>` : ''}
         ${route ? `<div class="acts" style="margin-bottom:6px"><a class="btn coral" href="${route}" target="_blank" rel="noopener">🗺 ${qs.length > 1 ? 'Ruta a pie completa' : 'Cómo llegar'}</a></div>` : ''}
         ${c.pts.map((p, j) => `<div class="pt" id="p-${p.id}">
           <div class="pt-h"><span class="pt-n">${j+1}</span><div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? esc(p.time) + ' · ' : ''}${p.line || ''}</div></div></div>
           ${p.chips.length ? `<div class="facts" style="margin:6px 0 0 34px">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
           <div class="pt-b">
+            ${visitBtn(p)}
             ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${p.look.map(sectionHTML).join('')}</div>` : ''}
             ${secretBox(p, true)}
-            <div class="acts" style="margin-top:8px">${p.q ? `<a class="btn soft" href="${mapsDir(p.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${visitBtn(p)}</div>
+            <div class="acts" style="margin-top:8px">${p.q ? `<a class="btn soft" href="${mapsDir(p.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}</div>
             ${tips(p)}
             ${story(p)}
           </div></div>`).join('')}
@@ -1200,7 +1218,7 @@ function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.in
 function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="more"><summary>📖 Descubrir su historia</summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><div class="secret"><div class="sk">🔑 EL SECRETO DE ESTE LUGAR</div><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></div></div>` : ''; }
 function tips(s){ return s.tips.map(t => `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${t.text || ''}${t.items ? t.items.join(' · ') : ''}</div>`).join(''); }
-function visitBtn(s){ return `<button class="btn ${visited(s.id) ? 'done' : 'soft'}" onclick="toggleVisit('${s.id}')">${visited(s.id) ? '✓ Visitada' : 'Marcar visitada'}</button>`; }
+function visitBtn(s){ const on = visited(s.id); return `<button class="visit${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}"><span class="vc">✓</span><span class="vt">${on ? '¡Ya estuvimos aquí!' : '¿Ya estuvieron aquí?'}<small>${on ? 'toquen para desmarcar' : 'toquen para marcarlo'}</small></span></button>`; }
 function renderAlbumView(){
   const box = $('#album-full'); if(!box) return;
   if(!sb){ box.innerHTML = '<p class="empty">El álbum compartido funciona en la versión publicada de la guía.</p>'; return; }
