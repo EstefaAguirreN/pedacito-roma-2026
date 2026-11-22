@@ -134,12 +134,15 @@ body{padding-bottom:76px}
 .letter .end{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);text-align:center;font-family:'DM Serif Display',serif;font-style:italic}
 
 details.more{border-top:1px solid var(--line)}
-details.story-d{margin:10px 0 4px;border:1.5px solid var(--ink);border-radius:14px;background:#FFFDF8}
-details.story-d>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:52px;padding:0 14px;font-weight:700}
+details.story-d{margin:10px 0 4px;border:0;border-left:4px solid var(--coral);border-radius:14px;background:linear-gradient(135deg,#FBF1DE,#F6E6D9);box-shadow:var(--sh)}
+details.story-d>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;font-weight:700}
+details.story-d .sk2{font-size:.72rem;letter-spacing:.08em;color:var(--coral-d)}
+details.story-d .hook{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.08rem;line-height:1.35;color:var(--ink)}
+details.story-d.prologo summary small{display:block}
 details.story-d>summary::-webkit-details-marker{display:none}
-details.story-d .sh{font-size:.8rem;font-weight:600;color:var(--coral-d);white-space:nowrap}
+details.story-d .sh{font-size:.84rem;font-weight:700;color:#fff;background:var(--coral);border-radius:999px;padding:6px 12px;margin-top:4px}
 details.story-d[open]>summary{border-bottom:1px solid var(--line);background:#F3EAD8;border-radius:12px 12px 0 0}
-details.story-d[open] .sh{font-size:0}details.story-d[open] .sh::after{content:'cerrar ↑';font-size:.8rem}
+details.story-d[open] .sh{font-size:0;background:none;padding:0}details.story-d[open] .sh::after{content:'cerrar ↑';font-size:.8rem;color:var(--coral-d)}details.story-d[open] .hook{display:none}
 details.story-d .in{padding:12px 14px 4px}
 details.story-d.prologo{background:#FBF6EA;border-color:var(--coral)}
 details.story-d.prologo summary small{display:block;font-weight:500;font-size:.85rem;color:var(--ink-2)}
@@ -202,6 +205,7 @@ details.more .in p{margin:0 0 10px}
 /* plan del día */
 .daymap .dm{display:block;width:100%;height:auto}
 .dmp{cursor:pointer}
+.dm-cap{font-size:.92rem;margin-bottom:10px;line-height:1.4}
 .dm-ley{display:flex;flex-wrap:wrap;gap:10px;font-size:.76rem;color:var(--ink-2);margin-top:6px}
 .dm-ley i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
 .dlist{list-style:none;margin:12px 0 0;padding:0}
@@ -1379,9 +1383,6 @@ function renderChapter(id){
   if((d.notices||[]).length){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>🧭 Por si acaso · avisos y planes B</summary><div class="in">${d.notices.map(n => `<div class="notice ${n.type}" style="margin-top:8px"><b class="t">${n.title.replace(/^[★!✅]\s*/,'')}</b>${n.body}</div>`).join('')}</div></details></div>`;
   }
-  if(secrets.length){
-    h += `<div class="sec" id="secretos-dia"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || (s.secret.items||[]).join(' ')).replace(/<[^>]+>/g,''))}</span></label>`).join('')}</div></div>`;
-  }
   if(d.mission){
     const tx = (k, q, ph) => { const key = `mision-${id}-${k}`, v = store.get('n:' + key, ''); return `<div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${v ? 'checked' : ''} disabled><span>${q}</span></label><textarea placeholder="${ph}" oninput="store.set('n:${key}',this.value);this.closest('.mtask').querySelector('input').checked=!!this.value.trim();clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea></div>`; };
     h += `<div class="sec" id="mision"><div class="mission"><div class="mk">🎯 LAS MISIONES DE RAFITA</div>
@@ -1422,28 +1423,49 @@ function renderChapter(id){
   renderRecuerdo({id:'dia-' + id, name: c.dest}, id);
 }
 const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','El Palatino','El Coliseo','Basílica de San Pedro','Museos Vaticanos'];
+const EMO = [["Campo de' Fiori",'🌸'],['Un gelato','🍦'],['Piazza Navona','⛲'],['El Panteón','🏛'],['Fontana di Trevi','💧'],['Fuente de las Tortugas','🐢'],['Pasticceria Boccione','🍰'],['Pórtico de Octavia','🏛'],['Teatro de Marcelo','🎭'],['El Campidoglio','🏛'],['La Columna de Trajano','🗿'],['El Foro Romano','🏺'],['Un ángulo diferente','📸'],['El Palatino','👑'],['El Coliseo','🏟'],['El Arco de Constantino','🏛'],['Plaza de San Pedro','⛪'],['Basílica de San Pedro','⛪'],['Museos Vaticanos','🎨'],["Castel Sant'Angelo",'🏰'],["Ponte Sant'Angelo",'🌉']];
+const emoFor = n => (EMO.find(e => n.indexOf(e[0]) === 0) || [0,'📍'])[1];
+const shortName = n => n.replace(/^(El|La|Un|Los|Las) /,'').replace(/ y Capilla Sixtina| y Templo de Apolo| diferente del Coliseo| en una calle de película.*$/,'').replace(/^ángulo$/,'Foto del Coliseo').split(' · ')[0];
+const TIBER = [[41.9200,12.4700],[41.9130,12.4720],[41.9085,12.4738],[41.9055,12.4722],[41.9030,12.4690],[41.9018,12.4662],[41.9000,12.4643],[41.8975,12.4638],[41.8950,12.4660],[41.8925,12.4703],[41.8907,12.4760],[41.8893,12.4800],[41.8860,12.4790],[41.8800,12.4745],[41.8740,12.4700]];
+function km(a, b){ const R = 6371, t = x => x*Math.PI/180, dl = t(b[0]-a[0]), dn = t(b[1]-a[1]); const q = Math.sin(dl/2)**2 + Math.cos(t(a[0]))*Math.cos(t(b[0]))*Math.sin(dn/2)**2; return 2*R*Math.asin(Math.sqrt(q)); }
 function dayMap(stops){
   const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {};
   const home = C['Via dei Cappellari 35 Roma'];
   const pts = stops.map((s, n) => ({s, n: n+1, c: C[s.q]})).filter(p => p.c);
   if(!pts.length || !home) return '';
   const all = [home].concat(pts.map(p => p.c));
-  const k = Math.cos(41.9 * Math.PI/180);
+  const k = Math.cos(41.9 * Math.PI/180), W = 360, H = pts.length > 6 ? 380 : 320, pad = 50;
   let x0 = Math.min(...all.map(c => c[1]*k)), x1 = Math.max(...all.map(c => c[1]*k)), y0 = Math.min(...all.map(c => c[0])), y1 = Math.max(...all.map(c => c[0]));
-  const span = Math.max(x1 - x0, y1 - y0, .006), W = 340, H = 250, pad = 28, sc = Math.min((W - 2*pad)/Math.max(x1 - x0, .002), (H - 2*pad)/Math.max(y1 - y0, .002));
+  const sc = Math.min((W - 2*pad)/Math.max(x1 - x0, .003), (H - 2*pad)/Math.max(y1 - y0, .003));
   const cx = (x0 + x1)/2, cy = (y0 + y1)/2;
   const P = c => [W/2 + (c[1]*k - cx)*sc, H/2 - (c[0] - cy)*sc];
-  const hp = P(home), path = [hp].concat(pts.map(p => P(p.c))).map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' ');
-  return `<svg class="dm" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de los lugares del día">
-    <rect width="${W}" height="${H}" rx="12" fill="#EFE6D3"/><path d="${path}" fill="none" stroke="#283B4D" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>
-    <g><circle cx="${hp[0]}" cy="${hp[1]}" r="13" fill="#283B4D" stroke="#E4BD63" stroke-width="3"/><text x="${hp[0]}" y="${hp[1]+5}" text-anchor="middle" font-size="13">🏠</text></g>
-    ${pts.map(p => { const q = P(p.c), key = isKey(p.s.name), on = visited(p.s.id); return `<g class="dmp" onclick="jump('p-${p.s.id}')"><circle cx="${q[0]}" cy="${q[1]}" r="13" fill="${on ? '#8C9D86' : key ? '#C8735C' : '#F3DFA6'}" stroke="#fff" stroke-width="2.5"/><text x="${q[0]}" y="${q[1]+4.5}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="12" fill="${on || key ? '#fff' : '#283B4D'}">${on ? '✓' : p.n}</text></g>`; }).join('')}
-  </svg><div class="dm-ley"><span><i style="background:#C8735C"></i>imprescindible</span><span><i style="background:#F3DFA6"></i>de paso</span><span><i style="background:#8C9D86"></i>visitado</span><span>🏠 Airbnb</span></div>`;
+  const hp = P(home), route = [home].concat(pts.map(p => p.c));
+  const dist = route.slice(1).reduce((a, c, i) => a + km(route[i], c), 0) * 1.3;
+  const path = route.map(P).map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' ');
+  const river = TIBER.map(P).map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' ');
+  const rmid = P(TIBER[6]);
+  const lbl = (q, txt, left) => { const w = Math.min(150, 14 + txt.length * 6.4); const x = left ? q[0] - 17 - w : q[0] + 17; return `<rect x="${x}" y="${q[1] - 11}" width="${w}" height="22" rx="6" fill="#FFFDF8" opacity=".93"/><text x="${x + 7}" y="${q[1] + 4}" font-family="Inter" font-size="11.5" font-weight="600" fill="#283B4D">${esc(txt)}</text>`; };
+  return `<div class="dm-cap">🚶 Salen del Airbnb y recorren <b>${pts.length} ${pts.length === 1 ? 'lugar' : 'lugares'} a pie</b> · unos <b>${dist.toFixed(1).replace('.', ',')} km</b> en total.</div>
+  <svg class="dm" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de Roma con los lugares del día">
+    <defs><clipPath id="dmclip"><rect width="${W}" height="${H}" rx="12"/></clipPath><pattern id="dmdots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(40,59,77,.08)"/></pattern></defs>
+    <g clip-path="url(#dmclip)"><rect width="${W}" height="${H}" fill="#EFE6D3"/><rect width="${W}" height="${H}" fill="url(#dmdots)"/>
+    <path d="${river}" fill="none" stroke="#C9DCE2" stroke-width="${Math.max(10, Math.min(26, sc*0.0009))}" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="${rmid[0] - 8}" y="${rmid[1]}" font-family="Caveat" font-size="15" fill="#7EA7B5" text-anchor="end">río Tíber</text>
+    <path d="${path}" fill="none" stroke="#283B4D" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>
+    <g><circle cx="${hp[0]}" cy="${hp[1]}" r="14" fill="#283B4D" stroke="#E4BD63" stroke-width="3"/><text x="${hp[0]}" y="${hp[1]+5}" text-anchor="middle" font-size="13">🏠</text>${lbl(hp, 'Airbnb', hp[0] > W*0.62)}</g>
+    ${pts.map(p => { const q = P(p.c), key = isKey(p.s.name), on = visited(p.s.id); return `<g class="dmp" onclick="jump('p-${p.s.id}')"><circle cx="${q[0]}" cy="${q[1]}" r="14" fill="${on ? '#8C9D86' : key ? '#C8735C' : '#F3DFA6'}" stroke="#fff" stroke-width="2.5"/><text x="${q[0]}" y="${q[1]+4.5}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="12" fill="${on || key ? '#fff' : '#283B4D'}">${on ? '✓' : p.n}</text>${(pts.length <= 6 || key) ? lbl(q, emoFor(p.s.name) + ' ' + shortName(p.s.name), q[0] > W*0.6) : ''}</g>`; }).join('')}
+    <g transform="translate(${W - 24} 26)"><circle r="15" fill="#FFFDF8" stroke="#C8735C" stroke-width="1.5"/><path d="M0 -11 L4 0 L0 11 L-4 0 Z" fill="#C8735C"/><text y="-17" text-anchor="middle" font-size="9" font-weight="700" fill="#283B4D">N</text></g>
+    </g>
+  </svg>${pts.length > 6 ? '<div class="dm-cap" style="margin:8px 0 0;font-size:.85rem">En el mapa van con nombre los imprescindibles; los demás números están en la lista de abajo.</div>' : ''}<div class="dm-ley"><span><i style="background:#C8735C"></i>imprescindible</span><span><i style="background:#F3DFA6"></i>de paso</span><span><i style="background:#8C9D86"></i>visitado</span><span>🏠 nuestro Airbnb</span></div>`;
 }
 function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length; return [nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : '', nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''].filter(Boolean).join(' · '); }
 function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
 function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
-function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="story-d"><summary><span>📖 Descubrir su historia</span><span class="sh">toquen para leer ↓</span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
+function story(s){ const st = s.story.filter(x => x.text || x.items); if(!st.length) return '';
+  const plain = st.map(x => (x.text || '') + ' ' + (x.items || []).join(' ')).join(' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+  const words = plain.split(' ').length, mn = Math.max(1, Math.round(words/180));
+  let hook = plain.split(/(?<=[.!?])\s/)[0]; if(hook.length > 130) hook = hook.slice(0, 127).replace(/\s\S*$/,'') + '…';
+  return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span><span class="hook">“${esc(hook)}”</span><span class="sh">Leer la historia completa →</span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><details class="secret-d${found(s.id) ? ' ok' : ''}"><summary><span>🔑 Secreto${found(s.id) ? ' · ¡encontrado!' : ''}</span><span class="sh">toquen para descubrirlo</span></summary><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></details></div>` : ''; }
 function tips(s){
   return s.tips.map((t, k) => {
