@@ -172,8 +172,10 @@ details.more .in p{margin:0 0 10px}
 .plan .ti small{display:block;font-weight:400;color:var(--ink-2);font-size:.85rem}
 .plan .go{background:none;border:0;padding:0;text-align:left;cursor:pointer;width:100%}
 .plan .stop .ti{color:var(--ink)}
-.plan .stop .ti::before{content:'●';color:var(--coral);font-size:.7rem;margin-right:6px;vertical-align:2px}
-.plan .ok .ti{color:var(--sage);text-decoration:line-through}
+.plan .row-ck{display:flex;gap:10px;align-items:flex-start}
+.tick{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--coral);background:#fff;color:transparent;font-weight:800;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tick.on{background:var(--sage);border-color:var(--sage);color:#fff}
+.plan .ok .ti{color:var(--ink-2);text-decoration:line-through}
 .plan details>summary{list-style:none;cursor:pointer}
 .plan details>summary::-webkit-details-marker{display:none}
 .plan .logx{font-size:.9rem;color:var(--ink-2);padding-top:6px}
@@ -1009,6 +1011,7 @@ function renderHome(){
       <div class="bd torn"><div class="obj">${c.obj}</div>
       <div class="places">📍 ${c.places}</div>
       <div class="meta">${c.meta}</div>
+      <div class="small" style="margin-top:8px;white-space:normal">✓ ${v} de ${st.length} lugares visitados</div>
       <span class="explore">Explorar capítulo →</span>
       ${v ? `<div class="prog"><i style="width:${Math.round(v/st.length*100)}%"></i></div>` : ''}</div></button>`;
   }).join('');
@@ -1070,7 +1073,7 @@ function renderChapter(id){
     } else if(x.kind === 'group'){
       h += `<li><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
     } else {
-      h += `<li class="stop${visited(x.id) ? ' ok' : ''}"><span class="tm">${esc(x.time)}</span><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></li>`;
+      h += `<li class="stop${visited(x.id) ? ' ok' : ''}"><span class="tm">${esc(x.time)}</span><span class="row-ck"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="${visited(x.id) ? 'Desmarcar' : 'Marcar'} ${esc(x.name)} como visitado">✓</button><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></span></li>`;
     }
   });
   h += `</ul></div></div>`;
