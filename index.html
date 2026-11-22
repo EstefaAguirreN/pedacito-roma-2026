@@ -677,6 +677,18 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .pstamp b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.5rem}
 .pt-ph{position:relative}.pstamp.sm{width:54px;height:54px;left:10px;top:10px}.pstamp.sm b{font-size:1.2rem}
 .sec-chip.mi{background:#FBE3E3;border-color:#E9A3A3;color:#9A3B3B}
+/* pestañas por día */
+.tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+.tabs button{font-size:.62rem;padding:0 2px}
+.tabs .dtab b{display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:1.3rem;line-height:1;color:var(--ink)}
+.tabs .dtab.hoy{position:relative}.tabs .dtab.hoy::after{content:"HOY";position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:.5rem;font-weight:800;color:#fff;background:var(--coral);border-radius:6px;padding:1px 4px}
+/* resumen de la experiencia */
+.res-day{background:var(--card);border-radius:16px;box-shadow:var(--sh);padding:14px 16px;margin-top:14px}
+.res-h .res-dk{display:block;font-family:Caveat,cursive;font-size:1.2rem;color:var(--coral-d)}
+.res-h b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.4rem}
+.res-r{display:flex;gap:8px;margin-top:8px;font-size:.92rem;line-height:1.45}
+.res-q{margin-top:10px;background:#FBF4E6;border-left:3px solid var(--yellow);border-radius:8px;padding:8px 10px;font-family:Caveat,cursive;font-size:1.25rem;line-height:1.3}
+.res-q small{display:block;font-family:Inter,sans-serif;font-size:.7rem;font-weight:700;color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -783,7 +795,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
   <g class="zona" onclick="go('capitulo-2')" transform="translate(352 330) rotate(-3)"><rect width="212" height="60" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><text x="12" y="25" font-family="Caveat" font-weight="700" font-size="23" fill="#5C6B78">Lunes 23 · Capítulo 02</text><text x="12" y="50" font-family="DM Serif Display" font-size="24" fill="#283B4D">Coliseo</text></g>
   <g transform="translate(540 44)"><circle r="20" fill="#FFFDF8" stroke="#C8735C" stroke-width="2"/><path d="M0 -15 L5 0 L0 15 L-5 0 Z" fill="#C8735C"/><text y="-24" text-anchor="middle" font-size="11" font-weight="700" fill="#283B4D">N</text></g>
 </svg></div></div><div class="chaps" id="chaps2"></div></div></section>
-<section class="view" id="v-album"><div class="wrap sec"><div class="eyebrow">NUESTRO ÁLBUM</div><div class="h2">La Roma que vivimos</div><div class="muted">Las fotos que suben Sofi y mamá en cada lugar. Para subir, abran la ficha del lugar dentro de su capítulo.</div><div id="album-full"></div></div></section>
+<section class="view" id="v-album"><div class="wrap sec"><div class="strip sm">Resumen de la experiencia</div><div class="muted">Lo que Sofi y mamá van viviendo, día por día: dónde estuvieron, qué descubrieron, sus fotos y lo que nos escribieron.</div><div id="album-full"></div></div></section>
 <section class="view" id="v-cartas"><div class="wrap sec"><div class="eyebrow">CARTAS DEL VIAJE</div><div class="h2">Cartas desde casa</div><div class="muted" style="margin-bottom:12px">Una para empezar y una para cada noche.</div><div id="cartas"></div></div></section>
 <section class="view" id="v-secretos"><div class="wrap sec"><div class="eyebrow">TIPS SECRETOS</div><div class="h2">Los secretos de Roma</div><div class="muted" style="margin-bottom:12px">Pequeños descubrimientos para ir encontrando. Márquenlos cuando los vean.</div><div id="secretos"></div></div></section>
 <section class="view" id="v-capitulo"><div class="wrap" id="capitulo"></div></section>
@@ -852,8 +864,11 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 
 <nav class="tabs" aria-label="Secciones">
   <button data-v="inicio" onclick="go('inicio')"><span>🏠</span>Inicio</button>
-  <button data-v="recorrido" onclick="go('recorrido')"><span>🗺</span>Recorrido</button>
-  <button data-v="album" onclick="go('album')"><span>📸</span>Álbum</button>
+  <button data-v="capitulo-1" onclick="go('capitulo-1')" class="dtab"><b>22</b>nov · dom</button>
+  <button data-v="capitulo-2" onclick="go('capitulo-2')" class="dtab"><b>23</b>nov · lun</button>
+  <button data-v="capitulo-3" onclick="go('capitulo-3')" class="dtab"><b>24</b>nov · mar</button>
+  <button data-v="capitulo-4" onclick="go('capitulo-4')" class="dtab"><b>25</b>nov · mié</button>
+  <button data-v="album" onclick="go('album')"><span>📖</span>Resumen</button>
 </nav>
 <div id="tour" role="dialog" aria-modal="true"><div class="tcard"><div class="tstep" id="t-step"></div><div class="ttitle" id="t-title"></div><div class="ttext" id="t-text"></div><div class="tacts"><button class="btn soft" id="t-skip" onclick="tourEnd()">Saltar</button><button class="btn coral" id="t-next" onclick="tourNext()">Siguiente →</button></div></div></div>
 <div id="idea" onclick="this.classList.remove('on')"></div>
@@ -1805,8 +1820,19 @@ function visitCorner(s){ const on = visited(s.id); return `<button class="vcorne
 function visitBtn(s){ const on = visited(s.id); return `<button class="visit${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}"><span class="vc">✓</span><span class="vt">${on ? '¡Ya estuvimos aquí!' : '¿Ya estuvieron aquí?'}<small>${on ? 'toquen para desmarcar' : 'toquen para marcarlo'}</small></span></button>`; }
 function renderAlbumView(){
   const box = $('#album-full'); if(!box) return;
-  if(!sb){ box.innerHTML = '<p class="empty">El álbum compartido funciona en la versión publicada de la guía.</p>'; return; }
-  box.innerHTML = DAYS.map(d => { const l = fotos.filter(f => f.dia === d.id); return `<div class="sec"><div class="eyebrow">${CHAPTERS[d.id].short.toUpperCase()} · ${CHAPTERS[d.id].dest}</div>${album(l)}</div>`; }).join('');
+  const note = k => (store.get('n:' + k, '') || '').trim();
+  box.innerHTML = DAYS.map(d => { const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop');
+    const fu = st.filter(x => visited(x.id)), se = st.filter(x => x.secret && found(x.id)), l = sb ? fotos.filter(f => f.dia === d.id) : [];
+    const said = [[`mision-${d.id}-favorito`, d.mission && d.mission.postal ? 'En la postal para Rafita' : 'Para Rafita'], [`mision-${d.id}-juntas`, 'Para Naty y Estefa'], [`diario-${d.id}-a`, 'Lo mejor del día']].map(([k, lb]) => [lb, note(k)]).filter(x => x[1]);
+    const empty = !fu.length && !se.length && !l.length && !said.length && !store.get('m:' + d.id, false);
+    return `<div class="res-day"><div class="res-h"><span class="res-dk">${d.id < 4 ? "Capítulo 0" + d.id : "Epílogo"} · ${esc(d.date)}</span><b>${esc(c.dest)}</b></div>
+      ${empty ? `<p class="muted" style="margin:6px 0 0">Todavía no hay nada de este día. Aquí irá apareciendo todo lo que vivan. ✨</p>` : `
+      ${fu.length ? `<div class="res-r"><span>📍</span><div><b>Fueron a</b> ${fu.map(x => esc(x.name.split(' · ')[0])).join(', ')}.</div></div>` : ''}
+      ${se.length ? `<div class="res-r"><span>🔑</span><div><b>Descubrieron</b> ${se.map(x => (/misión/i.test(x.secret.lbl || '') ? 'la misión de amor de ' : 'el secreto de ') + esc(x.name.split(' · ')[0])).join(', ')}.</div></div>` : ''}
+      ${store.get('m:' + d.id, false) && d.mission ? `<div class="res-r"><span>🎯</span><div><b>Cumplieron la misión</b> «${esc(d.mission.title)}».</div></div>` : ''}
+      ${said.map(([lb, v]) => `<div class="res-q"><small>✍️ ${lb}</small>“${esc(v)}”</div>`).join('')}
+      ${l.length ? `<div class="res-r"><span>📸</span><div><b>${l.length} ${l.length === 1 ? 'foto' : 'fotos'}</b></div></div>${album(l)}` : ''}`}
+      <button class="btn ghost" style="margin-top:10px" onclick="go('capitulo-${d.id}')">Ver el día →</button></div>`; }).join('');
 }
 function renderCartas(){
   const ded = `<div class="letter"><div class="when">ANTES DE ABRIR EL PRIMER CAPÍTULO</div><div class="lt">Una dedicatoria para ustedes</div><p>Ma, Sofi:</p><p>Preparamos esta guía pensando en todo lo que les gusta: la historia, los museos, las calles bonitas, las historias detrás de cada monumento y, por supuesto, comer algo rico en el camino.</p><p>Queremos que disfruten cada lugar, pero también que tengan tiempo de sentarse en una plaza, tomarse un café, conversar y vivir Roma a su manera.</p><p>No tienen que conocerlo todo. Lo importante es que disfruten esta oportunidad de estar juntas.</p><p>Y cuando vean algo que les emocione, acuérdense de contárnoslo. Nosotras estaremos esperando cada foto y cada historia.</p><div class="sign">Con todo nuestro amor, Naty, Estefa y Rafita ❤️</div></div>`;
@@ -1874,7 +1900,7 @@ function route(keep){
   else if(h === 'cartas'){ $('#v-cartas').classList.add('on'); renderCartas(); }
   else if(h === 'secretos'){ $('#v-secretos').classList.add('on'); renderSecretos(); }
   else { $('#v-inicio').classList.add('on'); renderHome(); }
-  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === h || (h.indexOf('capitulo') === 0 && b.dataset.v === 'recorrido')));
+  document.querySelectorAll('.tabs button').forEach(b => { b.classList.toggle('on', b.dataset.v === h); b.classList.toggle('hoy', b.dataset.v === 'capitulo-' + tripDay()); });
   if(keep) window.scrollTo(0, y);
 }
 window.addEventListener('popstate', () => { VIEW = null; route(); window.scrollTo(0,0); });
@@ -1891,7 +1917,7 @@ const TOUR = [
   {cap:true, sel:'#traslados .plan li', pre:() => { const d = document.getElementById('traslados'); if(d){ d.open = true; const r = d.querySelector('.plan li details'); if(r) r.open = true; } }, t:'Cada fila se despliega', x:'Toquen «ver detalle ⌄» en cualquier fila: adentro está el paso a paso y el botón 📍 para abrirlo en Google Maps.'},
   {cap:true, sel:'.stop-card', t:'Cuando lleguen a un lugar', x:'✓ «¿Ya fueron?» para marcarlo: así sabemos por dónde van.<br>🔑 Toquen la pastilla «Secreto» y búsquenlo.<br>📍 Cada lugar tiene su botón «Cómo llegar», que abre Google Maps caminando.<br>📖 «Seguir leyendo aquí» abre la historia ahí mismo; si no les provoca, sigan caminando, que también vale.<br>💡 Los consejos se abren con «ver».'},
   {cap:true, sel:'#mision', t:'Antes de dormir', x:'🎯 Dos misiones de Rafita, con espacio para escribirle.<br>💌 Una carta nuestra para cada noche.<br>📸 Suban las fotos del día al álbum para la familia: aquí en casa las estamos esperando.<br>📔 Una sola pregunta en el diario: lo mejor del día.'},
-  {sel:'.tabs', t:'Siempre a la mano', x:'Abajo están el Inicio, el Recorrido completo y el Álbum con todas sus fotos. Arriba, SOS tiene los números de emergencia, y con «?» vuelven a ver esta guía cuando quieran.<br><br>¡A disfrutar Roma! Las amamos. ❤️ Naty, Estefa y Rafita'}
+  {sel:'.tabs', t:'Siempre a la mano', x:'Abajo tienen el Inicio, un botón para cada día (22, 23, 24 y 25 de noviembre) y el Resumen, donde se va guardando todo lo que vivan: dónde estuvieron, qué descubrieron, sus fotos y lo que nos escribieron. Arriba, SOS tiene los números de emergencia, y con «?» vuelven a ver esta guía cuando quieran.<br><br>¡A disfrutar Roma! Las amamos. ❤️ Naty, Estefa y Rafita'}
 ];
 let tourI = 0, tourEl = null;
 function tourShow(){
