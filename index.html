@@ -1349,8 +1349,7 @@ function renderRecuerdo(s, dia){
   if(!sb){ box.innerHTML = `<div class="off">Aquí aparecerán las fotos que suban Sofi y mamá (en la versión publicada de la guía).</div>`; return; }
   const mine = fotos.filter(f => f.ruta.indexOf(`dia-${dia}/${s.id}/`) === 0);
   const q = store.get('quien', '');
-  box.innerHTML = `<div class="who"><span>¿Quién sube?</span>${['Ma','Sofi'].map(n => `<button type="button" class="${q === n ? 'on' : ''}" onclick="store.set('quien','${n}');renderRecuerdo(window.__S['${s.id}'],${dia})">${n}</button>`).join('')}</div>
-    <label class="up"><input type="file" accept="image/*" multiple hidden onchange="subir(this.files,'${s.id}',${dia})">📷 Subir fotos de ${esc(s.name)}</label>
+  box.innerHTML = `    <label class="up"><input type="file" accept="image/*" multiple hidden onchange="subir(this.files,'${s.id}',${dia})">📷 Subir fotos de ${esc(s.name)}</label>
     <div class="status" id="st-${s.id}"></div>
     ${mine.length ? `<div class="album" style="margin-bottom:10px">${mine.map(f => { const u = pub(f.ruta); return `<button onclick="show('${esc(u)}','${esc(f.autor || '')}')"><img src="${esc(u)}" loading="lazy" alt="Foto de ${esc(s.name)}"><span>${esc(f.autor || '')}</span></button>`; }).join('')}</div>` : ''}
     <textarea placeholder="Una anécdota de este lugar…" oninput="store.set('n:${s.id}',this.value);clearTimeout(window.__nt);window.__nt=setTimeout(()=>share('nota:${s.id}',this.value),900)">${esc(nota)}</textarea>`;
@@ -1367,7 +1366,6 @@ async function shrink(file){
 }
 async function subir(files, sid, dia){
   const st = document.getElementById('st-' + sid), s = window.__S[sid];
-  if(!store.get('quien', '')){ st.textContent = 'Primero toquen quién está subiendo: Ma o Sofi.'; return; }
   const list = [...files]; let ok = 0;
   for(const f of list){
     st.textContent = `Subiendo ${ok+1} de ${list.length}…`;
