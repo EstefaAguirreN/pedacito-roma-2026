@@ -656,6 +656,8 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .mission .mq{margin:10px 0 0 38px;font-size:.92rem}
 .mission .mq+textarea{margin-left:38px;width:calc(100% - 38px)}
 .sec-chip .sc-v{margin-left:4px;font-size:.72rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:2px 8px}
+.letter .lt-ph{display:block;margin:16px auto 12px;transform:rotate(2deg);max-width:300px;position:relative}
+.letter .lt-ph img{aspect-ratio:auto;max-height:420px;object-fit:cover}
 </style>
 </head>
 <body>
@@ -1027,7 +1029,7 @@ const DAYS = [
         meta: ['💶 €20–25 las dos', '🕙 hasta las 22:00'] }
     ],
     budget: { rows: [['Tren FL1 desde Fiumicino','€16'],['Transporte urbano hasta el centro','€3'],['Almuerzo sencillo','€12–20'],['Gelatos','€6–10'],['Cena económica','€12–20'],['Supermercado para varios días','€20–25'],['Plazas, fuentes y paseos exteriores','Gratis']], total: '€69–94', extra: 'Opcional: Panteón +€14 · perímetro de Trevi +€4', note: 'Para las dos. Sin vuelos ni alojamiento. Precios orientativos.' },
-    mission: { title: 'Una postal para alguien que todavía no conoce Roma', body: 'Hoy tienen una misión pequeña: encontrar una postal de Roma que les guste. Puede ser del Panteón, de la Fontana di Trevi o de una calle bonita. Lo importante es que la escojan juntas.' },
+    mission: { title: 'Una postal para Rafita', body: 'Hoy tienen una misión pequeña: encontrar una postal de Roma para Rafita. Puede ser del Panteón, de la Fontana di Trevi o de una calle bonita. Escójanla juntas y escríbanle por detrás cuál fue su lugar favorito de hoy y por qué. Algún día se la daremos.', postal: true },
     letter: { when: 'Para leer al terminar el primer día', title: 'Bienvenidas a Roma', body: '<p class="lt-hi">Ma, Sofi:</p><p>¡Ya están en Roma!</p><p>Nos hace muy felices imaginarlas caminando juntas por esas calles, descubriendo lugares y encontrando historias que después nos van a contar.</p><p>Disfruten mucho estos días. Coman rico, tómense mil fotos, ríanse y no se preocupen por verlo todo. Lo más bonito es que están viviendo esta aventura juntas.</p><p>Las amamos muchísimo.</p>', sign: 'Naty, Estefa y Rafita ❤️' },
     tomorrowReminder: {
       intro: 'Mañana conocerán la Roma del Imperio: el Foro, el Palatino y el Coliseo. Antes de dormir:',
@@ -1288,6 +1290,7 @@ const shortDesc = x => { const m = SHORT.find(([k]) => x.name.includes(k)); if(m
 const legMin = (stops, n) => { const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {}; const a = n ? C[stops[n-1].q] : C['Via dei Cappellari 35 Roma'], b = C[stops[n].q]; return a && b ? Math.max(2, Math.round(km(a, b) * 1.3 / 4.5 * 60)) : 0; };
 const icoMom = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
 const cleanLine = l => (l || '').split(' · ').filter(x => !/^\s*(~?\d+\s*(min|h)\b|gratis|.*€|parada \d+)/i.test(x.replace(/<[^>]+>/g,''))).join(' · ');
+const LT_CAP = {1:'Las cuatro, siempre juntas ♡', 2:'Ya extrañamos estos días ♡', 3:'Nuestra mesa de cuatro ♡', 4:'Nuestras diosas romanas ✨'};
 const MISION = {
   1:{t:'Descubrir las muchas Romas que viven dentro de una misma ciudad.', s:'De Campo de’ Fiori a la Fontana di Trevi, entre historias antiguas y arte barroco.', img:'Fotos/paradas/trevi.jpg'},
   2:{t:'Caminar por el lugar donde se decidía el destino de un imperio.', s:'Del Campidoglio al Coliseo, entre templos, palacios y gladiadores.', img:'Fotos/paradas/coliseo.jpg'},
@@ -1606,13 +1609,13 @@ function renderChapter(id){
     const tx = (k, q, ph) => { const key = `mision-${id}-${k}`, v = store.get('n:' + key, ''); return `<div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${v ? 'checked' : ''} disabled><span>${q}</span></label><textarea placeholder="${ph}" oninput="store.set('n:${key}',this.value);this.closest('.mtask').querySelector('input').checked=!!this.value.trim();clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea></div>`; };
     h += `<div class="sec" id="mision"><div class="mission"><div class="mk">🎯 LAS MISIONES DE RAFITA</div>
       <div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"><span><b>1 · ${d.mission.title}</b><br><span class="mdesc">${d.mission.body}</span></span></label>
-        ${(() => { const key = `mision-${id}-favorito`, v = store.get('n:' + key, ''); return `<div class="mq">✍️ <b>Y escríbanle a Rafita:</b> ¿cuál fue su lugar favorito de hoy y por qué?</div><textarea placeholder="Rafita, hoy nuestro lugar favorito fue…" oninput="store.set('n:${key}',this.value);clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea>`; })()}</div>
+        ${(() => { const key = `mision-${id}-favorito`, v = store.get('n:' + key, ''); return `<div class="mq">${d.mission.postal ? '✍️ <b>Copien aquí lo que le escribieron en la postal</b>, para leerlo desde casa:' : '✍️ <b>Y escríbanle a Rafita:</b> ¿cuál fue su lugar favorito de hoy y por qué?'}</div><textarea placeholder="Rafita, hoy nuestro lugar favorito fue…" oninput="store.set('n:${key}',this.value);clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea>`; })()}</div>
       ${tx('juntas', '<b>2 · Para Naty y Estefa:</b> ¿a qué lugar de hoy quieren que volvamos todas juntas algún día?', 'Queremos volver con ustedes a…')}
       <div class="small" style="white-space:normal;margin-top:6px">Lo que escriban aquí lo leemos desde casa. ❤️</div>
     </div></div>`;
   }
   if(d.letter){
-    h += `<div class="sec"><div class="letter"><div class="when">💌 ${esc((d.letter.when || 'Una carta desde casa').toUpperCase())}</div><div class="lt">${d.letter.title}</div>${d.letter.body.replace(/ class="lt-hi"/g,'')}<div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div>`;
+    h += `<div class="sec"><div class="letter"><div class="when">💌 ${esc((d.letter.when || 'Una carta desde casa').toUpperCase())}</div><div class="lt">${d.letter.title}</div>${d.letter.body.replace(/ class="lt-hi"/g,'')}<figure class="polaroid lt-ph"><img src="Fotos/cartas/dia${id}.jpg" alt="Las cuatro juntas" loading="lazy"><figcaption>${LT_CAP[id] || 'Las cuatro ♡'}</figcaption></figure><div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div>`;
   }
   if(d.budget){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>💶 Presupuesto del día · ${d.budget.total}</summary><div class="in"><table class="bt">${d.budget.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${d.budget.total}</td></tr></table>${d.budget.extra ? `<p class="small" style="white-space:normal;margin-top:8px">${d.budget.extra}</p>` : ''}${d.budget.note ? `<p class="small" style="white-space:normal">${d.budget.note}</p>` : ''}</div></details></div>`;
