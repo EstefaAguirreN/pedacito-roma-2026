@@ -706,6 +706,37 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .sec-chip .fl.f2{right:26px;animation-delay:1.4s}
 @keyframes heart{0%{opacity:0;transform:translateY(4px) scale(.7)}25%{opacity:1}100%{opacity:0;transform:translateY(-22px) scale(1.1)}}
 @media (prefers-reduced-motion:reduce){.vcorner.due,.sec-chip,.sec-chip .fl{animation:none!important}}
+/* tarjeta HOY */
+.hoyc{display:flex;gap:12px;align-items:center;margin:14px 0 4px;background:var(--card);border:2px solid var(--coral);border-radius:18px;padding:10px;box-shadow:var(--sh)}
+.hoyc img{width:84px;height:84px;object-fit:cover;border-radius:12px;flex:none}
+.hoy-t{flex:1;min-width:0}.hoy-k{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;color:var(--coral-d)}
+.hoy-t b{display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:1.3rem;line-height:1.1}
+.hoy-t small{color:var(--ink-2);font-size:.78rem}
+.hoy-a{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.hoy-a .btn{padding:7px 12px;font-size:.8rem;min-height:0}
+/* índice del capítulo */
+.capidx{display:flex;gap:6px;overflow-x:auto;margin-top:7px;scrollbar-width:none}.capidx::-webkit-scrollbar{display:none}
+.capidx button{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font:inherit;font-size:.74rem;font-weight:600;color:var(--ink);cursor:pointer}
+#resumen-dia,#lugares,#mision,#carta,#pl-top{scroll-margin-top:130px}
+/* confeti */
+.cf{position:fixed;z-index:200;pointer-events:none;font-size:1.1rem;animation:cf 1s ease-out forwards}
+@keyframes cf{to{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
+/* aparición suave */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}.rv.in{opacity:1;transform:none}
+/* brújula que late hasta que la usen */
+#fab-now.pulse{animation:fabin .4s ease,fabp 2s ease-in-out .5s infinite}
+@keyframes fabp{0%,100%{box-shadow:0 6px 18px rgba(0,0,0,.22),0 0 0 0 rgba(200,115,92,.5)}60%{box-shadow:0 6px 18px rgba(0,0,0,.22),0 0 0 12px rgba(200,115,92,0)}}
+/* lectura más cómoda */
+details.story-d .in p{font-size:1.02rem;line-height:1.65}
+.whyday p{font-size:1.04rem}
+.early{margin-top:12px;background:#FFF6E6;border:2px solid var(--yellow);border-radius:16px;padding:12px 14px}
+.early>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.early>summary::-webkit-details-marker{display:none}
+.early .ek{grid-column:1/-1;font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#9A6B12}
+.early summary b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.15rem;line-height:1.25}
+.early .lx{font-size:.75rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:4px 10px}
+.early .lx i{font-style:normal;display:inline-block;transition:transform .2s}.early[open] .lx i{transform:rotate(180deg)}
+.early .ex p{margin:10px 0 0;font-size:.95rem;line-height:1.55}
+.early .ex-r{background:#fff;border-radius:10px;padding:8px 10px;font-size:.82rem!important;font-weight:600}
 </style>
 </head>
 <body>
@@ -718,6 +749,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 
 <main>
 <section class="view" id="v-inicio"><div class="wrap">
+  <div id="hoy-card"></div>
   <div class="magcover">
     <img src="Fotos/navona.webp" alt="Piazza Navona al amanecer">
     <div class="stamp"><b>ROMA</b>ITALIA<br>2026</div>
@@ -1343,6 +1375,12 @@ const legMin = (stops, n) => { const C = typeof PLACE_COORDS !== 'undefined' ? P
 const icoMom = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
 const cleanLine = l => (l || '').split(' · ').filter(x => !/^\s*(~?\d+\s*(min|h)\b|gratis|.*€|parada \d+)/i.test(x.replace(/<[^>]+>/g,''))).join(' · ');
 const LT_CAP = {1:'Las cuatro, siempre juntas ♡', 2:'Ya extrañamos estos días ♡', 3:'Nuestra mesa de cuatro ♡', 4:'Nuestras diosas romanas ✨'};
+const EARLY = {3: `<details class="early" open><summary><span class="ek">⏰ IMPORTANTE PARA HOY</span><b>¿Por qué salir temprano si la reserva es a las 12:30?</b><span class="lx">ver <i>⌄</i></span></summary><div class="ex">
+  <p>La reserva de las 12:30 es <b>solo para los Museos Vaticanos y la Capilla Sixtina</b>. Pero el Vaticano es mucho más que eso: antes está la <b>Plaza y la Basílica de San Pedro</b>, que no necesitan reserva y son, para muchos, lo más impresionante del día.</p>
+  <p><b>Lo que van a ver es enorme.</b> La Basílica es una de las iglesias más grandes del mundo: adentro las esperan la Piedad de Miguel Ángel, el Baldaquino de Bernini y la cúpula. Y los Museos son kilómetros de galerías hasta llegar a la Sixtina. No es una visita de una hora: es el día más largo y más lleno de arte del viaje.</p>
+  <p><b>Por qué temprano:</b> para entrar a la Basílica hay control de seguridad, y la fila crece a medida que avanza la mañana. Si llegan hacia las 9:00, entran rápido y la recorren con calma.</p>
+  <p><b>Por qué llegar con tiempo a los Museos:</b> la entrada no está en la Plaza, sino en <b>Viale Vaticano</b>, rodeando la muralla (unos 15 minutos caminando). También hay control de seguridad. Por eso el plan es comer antes de las 11:30 y estar en la entrada hacia las 12:00, con las entradas a la mano.</p>
+  <p class="ex-r">🕗 Salida 8:00 · ⛪ Basílica 9:00 · 🍝 Comer 10:45 · 🚶 Hacia los Museos 11:30 · 🎟️ Museos 12:30</p></div></details>`};
 const MISION = {
   1:{t:'Descubrir las muchas Romas que viven dentro de una misma ciudad.', s:'De Campo de’ Fiori a la Fontana di Trevi, entre historias antiguas y arte barroco.', img:'Fotos/paradas/trevi.jpg'},
   2:{t:'Caminar por el lugar donde se decidía el destino de un imperio.', s:'Del Campidoglio al Coliseo, entre templos, palacios y gladiadores.', img:'Fotos/paradas/coliseo.jpg'},
@@ -1523,6 +1561,8 @@ function refresh(){ const a = document.activeElement; if(a && a.tagName === 'TEX
 /* ================= inicio ================= */
 function renderHome(){
   const td = tripDay();
+  { const hc = document.getElementById('hoy-card'); if(hc){ if(!td){ hc.innerHTML = ''; } else { const d = DAYS[td-1], c = CHAPTERS[td], st = built(d).filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
+    hc.innerHTML = `<div class="hoyc"><img src="${c.img}" alt=""><div class="hoy-t"><span class="hoy-k">HOY · ${esc(d.date)}</span><b>${esc(c.dest)}</b><small>✓ ${v} de ${st.length} lugares</small><div class="hoy-a"><button class="btn coral" onclick="go('capitulo-${td}')">Abrir el día de hoy →</button><button class="btn ghost" onclick="openNow()">🧭 ¿Y ahora?</button></div></div></div>`; } } }
   const chapHTML = DAYS.map(d => {
     const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
     const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length;
@@ -1555,7 +1595,7 @@ function renderNow(target, inCap){
   const label = x => x.kind === 'log' ? x.b.title : x.kind === 'group' ? x.title : x.name;
   const dest = x => x.kind === 'log' ? (x.b.place || x.b.to) : x.kind === 'group' ? null : x.q;
   const slot = (x, cls, lbl) => x ? `<div class="slot ${cls}"><div class="lbl">${lbl}</div><div class="what">${esc(label(x))}</div><div class="t">${esc(x.time)}${x.end && x.end !== x.time ? ' – ' + esc(x.end) : ''}</div>
-      <div class="acts">${dest(x) ? `<a class="btn coral" href="${mapsDir(dest(x))}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${x.kind === 'stop' ? `<button class="btn ghost" onclick="go('capitulo-${td}','p-${x.id}')">Ver la parada</button>` : ''}</div></div>` : '';
+      <div class="acts">${dest(x) ? `<a class="btn ink" href="${mapsDir(dest(x))}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${x.kind === 'stop' ? `<button class="btn ghost" onclick="go('capitulo-${td}','p-${x.id}')">Ver la parada</button>` : ''}</div></div>` : '';
   box.innerHTML = `<div class="now torn"><div class="ban">🧭 ¿Qué hacemos ahora?</div><div class="eyebrow">🧭 ¿QUÉ HACEMOS AHORA?</div><div class="dname">Hoy · ${d.date} · <span>${c.dest}</span></div>
     ${slot(cur, '', 'AHORA MISMO')}${slot(nxt, 'next', cur ? 'DESPUÉS' : 'LO PRÓXIMO')}
     ${!cur && !nxt ? '<div class="t">El plan de hoy ya terminó. ¡A descansar! 💛</div>' : ''}
@@ -1580,7 +1620,7 @@ function renderChapter(id){
   const d = DAYS.find(x => x.id === id), c = CHAPTERS[id], it = built(d), w = (typeof WEATHER !== 'undefined' && WEATHER[id]) || null;
   const stops = it.filter(x => x.kind === 'stop'), secrets = stops.filter(x => x.secret);
   const vv = stops.filter(x => visited(x.id)).length, sf = secrets.filter(x => found(x.id)).length;
-  let h = `<div class="dayprog" onclick="jump('pl-top')"><div class="dp-t"><b>✓ ${vv} de ${stops.length} lugares</b>${secrets.length ? ` · 🔑 ${sf} de ${secrets.length} secretos` : ''}</div><div class="bar"><i style="width:${stops.length ? Math.round(vv/stops.length*100) : 0}%"></i></div></div>
+  let h = `<div class="dayprog" onclick="jump('pl-top')"><div class="dp-t"><b>✓ ${vv} de ${stops.length} lugares</b>${secrets.length ? ` · 🔑 ${sf} de ${secrets.length} secretos` : ''}</div><div class="bar"><i style="width:${stops.length ? Math.round(vv/stops.length*100) : 0}%"></i></div><nav class="capidx" onclick="event.stopPropagation()">${[['resumen-dia','📋 Resumen'],['pl-top','🗺️ Mapa'],['lugares','📍 Paradas'],['mision','🎯 Misiones'],['carta','💌 Carta']].map(([k, l]) => `<button onclick="jump('${k}')">${l}</button>`).join('')}</nav></div>
   <div class="hero"><img src="${c.img}" alt=""><div class="txt"><div class="hstrip">${id < 4 ? 'Capítulo 0' + id : 'Epílogo'} · ${d.date.replace(/^./, x => x.toUpperCase()).replace(/ noviembre$/,' Nov')}</div><h1>${c.dest}</h1><i class="hline"></i><div class="obj">${c.obj}</div></div></div>
     ${(() => { const ts = it.filter(x => mins(x.time) != null && x.kind !== 'log'); let hrs = ''; if(ts.length > 1){ const a = mins(ts[0].time), z = Math.max(...ts.map(x => mins(x.end) ?? mins(x.time))); hrs = '~' + Math.round((z - a)/60) + ' h'; }
       const nk = stops.filter(x => isKey(x.name)).length, lv = NIVEL[id].split(' · ');
@@ -1591,6 +1631,7 @@ function renderChapter(id){
         <div class="mcells">${cell('📍', stops.length + (stops.length === 1 ? ' parada' : ' paradas'), nk + (nk === 1 ? ' imprescindible' : ' imprescindibles'))}${hrs ? cell('👣', hrs, 'de paseo a pie · ' + lv[0].toLowerCase()) : cell('📶', lv[0], lv[1] || '')}${w ? cell(w.icon, w.temp.replace('-', '–'), /oscurece/.test(w.desc) ? w.desc.split(' · ').find(x => /oscurece/.test(x)) : w.desc.split(' · ')[0]) : ''}</div>
         `; })()}
 `;
+  if(EARLY[id]) h += EARLY[id];
   { const tc = TIME_CHARS[id]; if(tc && !DAY_CHARS[id]) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
     { const ps = d.narrative.body.match(/<p[^>]*>[\s\S]*?<\/p>/g) || [d.narrative.body]; const vis = ps.slice(0, 4).join(''), rest = ps.slice(4).join('');
@@ -1611,7 +1652,7 @@ function renderChapter(id){
       const tgt = x.kind === 'stop' ? 'p-' + x.id : 'pl-' + k;
       return `<button class="pill-d${x.kind === 'stop' ? (isKey(x.name) ? ' key' : ' st') : ''}${x.kind === 'stop' && visited(x.id) ? ' ok' : ''}" data-k="${k}" onclick="jump('${tgt}')"><span class="pi">${ic}</span><b>${esc(String(x.time||'').replace(/\s/g,''))}</b><span class="pl">${esc(String(lbl).split(/ · |: |, /)[0])}</span></button>`;
     }).join('');
-    h += `<div class="sec glance"><div class="strip sm">Resumen del itinerario de hoy</div><div class="muted" style="font-size:.85rem">Todo el día de un vistazo, en orden. Toquen un momento para ir a él.</div><div class="strip-wrap"><button class="sarr l" onclick="document.getElementById('strip-d').scrollBy({left:-220,behavior:'smooth'})" aria-label="Anterior">‹</button><div class="strip-d" id="strip-d">${pills}</div><button class="sarr r" onclick="document.getElementById('strip-d').scrollBy({left:220,behavior:'smooth'})" aria-label="Siguiente">›</button><span class="swipe-hint">desliza →</span></div></div>`;
+    h += `<div class="sec glance" id="resumen-dia"><div class="strip sm">Resumen del itinerario de hoy</div><div class="muted" style="font-size:.85rem">Todo el día de un vistazo, en orden. Toquen un momento para ir a él.</div><div class="strip-wrap"><button class="sarr l" onclick="document.getElementById('strip-d').scrollBy({left:-220,behavior:'smooth'})" aria-label="Anterior">‹</button><div class="strip-d" id="strip-d">${pills}</div><button class="sarr r" onclick="document.getElementById('strip-d').scrollBy({left:220,behavior:'smooth'})" aria-label="Siguiente">›</button><span class="swipe-hint">desliza →</span></div></div>`;
     window.__curK = curK;
   }
   h += `<div class="sec moms-sec">${(d.quickStats||[]).length ? `<div class="mom-k">LOS MOMENTOS IMPORTANTES</div><div class="moms">${d.quickStats.map(s => `<div class="mom"><span class="mi">${icoMom(s.lbl)}</span><b>${esc((v => v.includes(' – ') ? v.split(' – ')[0] + (/[AP]M$/.test(v) && !/[AP]M/.test(v.split(' – ')[0]) ? ' ' + v.slice(-2) : '') : v)(s.val.split(' · ')[0]))}</b><small>${esc(s.lbl)}${s.val.split(' · ')[1] ? ' · ' + esc(s.val.split(' · ')[1]) : ''}</small></div>`).join('')}</div>` : ''}</div>`;
@@ -1693,7 +1734,7 @@ function renderChapter(id){
     </div></div>`;
   }
   if(d.letter){
-    h += `<div class="sec"><div class="letter"><div class="when">💌 ${esc((d.letter.when || 'Una carta desde casa').toUpperCase())}</div><div class="lt">${d.letter.title}</div>${d.letter.body.replace(/ class="lt-hi"/g,'')}<figure class="polaroid lt-ph"><img src="Fotos/cartas/dia${id}.jpg" alt="Las cuatro juntas" loading="lazy"><figcaption>${LT_CAP[id] || 'Las cuatro ♡'}</figcaption></figure><div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div>`;
+    h += `<div class="sec" id="carta"><div class="letter"><div class="when">💌 ${esc((d.letter.when || 'Una carta desde casa').toUpperCase())}</div><div class="lt">${d.letter.title}</div>${d.letter.body.replace(/ class="lt-hi"/g,'')}<figure class="polaroid lt-ph"><img src="Fotos/cartas/dia${id}.jpg" alt="Las cuatro juntas" loading="lazy"><figcaption>${LT_CAP[id] || 'Las cuatro ♡'}</figcaption></figure><div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div>`;
   }
   if(d.budget){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>💶 Presupuesto del día · ${d.budget.total}</summary><div class="in"><table class="bt">${d.budget.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${d.budget.total}</td></tr></table>${d.budget.extra ? `<p class="small" style="white-space:normal;margin-top:8px">${d.budget.extra}</p>` : ''}${d.budget.note ? `<p class="small" style="white-space:normal">${d.budget.note}</p>` : ''}</div></details></div>`;
@@ -1859,7 +1900,13 @@ function renderSecretos(){
   $('#secretos').innerHTML = DAYS.map(d => { const ss = built(d).filter(x => x.kind === 'stop' && x.secret); if(!ss.length) return ''; return `<div class="secrets-day" style="margin-bottom:14px"><div class="eyebrow" style="color:#7A5B2E">${CHAPTERS[d.id].short.toUpperCase()} · ${CHAPTERS[d.id].dest}</div>${ss.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}.</b> ${String(s.secret.text || '').replace(/<[^>]+>/g,'')}</span></label>`).join('')}<button class="btn soft" style="margin-top:8px" onclick="go('capitulo-${d.id}')">Ir al capítulo →</button></div>`; }).join('');
 }
 window.goDay = n => go('capitulo-' + n);
-function toggleVisit(id){ setVisited(id, !visited(id)); route(true); }
+function toggleVisit(id){ const on = !visited(id), ev = window.event, b = ev && ev.currentTarget && ev.currentTarget.getBoundingClientRect ? ev.currentTarget.getBoundingClientRect() : null; setVisited(id, on); route(true);
+  if(on){ const dd = +String(id).split('-')[0], st = built(DAYS[dd-1]).filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
+    toast(v === st.length ? '🎉 ¡Completaron todos los lugares del día! Las amamos.' : `🎉 ¡Bien! Llevan ${v} de ${st.length} lugares hoy.`); confetti(b); } }
+function confetti(b){ if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; const r = b && b.width ? b : {left: innerWidth/2, top: innerHeight/2, width: 0, height: 0};
+  const em = ['✨','💛','🎉','⭐','🇮🇹']; for(let i = 0; i < 14; i++){ const s = document.createElement('span'); s.className = 'cf'; s.textContent = em[i % em.length];
+    s.style.left = (r.left + r.width/2) + 'px'; s.style.top = (r.top + r.height/2) + 'px'; s.style.setProperty('--dx', (Math.random()*180 - 90) + 'px'); s.style.setProperty('--dy', (-60 - Math.random()*120) + 'px');
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1100); } }
 
 /* ================= recuerdos: fotos y anécdota por parada ================= */
 const pub = ruta => sb ? sb.storage.from('fotos').getPublicUrl(ruta).data.publicUrl : '';
@@ -1975,6 +2022,10 @@ if(window.supabase && SUPA_URL.indexOf('/*') !== 0 && SUPA_URL.indexOf('http') =
 }
 setTimeout(() => tour(false), 700);
 idbAll().then(a => { pendFotos = a.length; netBadge(); });
+{ const seen = new Set(); const io = 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches ? new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); seen.add(e.target.id); io.unobserve(e.target); } }), {rootMargin: '0px 0px -8% 0px'}) : null;
+  const scan = () => { if(!io) return; document.querySelectorAll('.stop-card[id], .chap[id]').forEach(el => { if(el.dataset.rv) return; el.dataset.rv = 1; if(el.id && seen.has(el.id)) return; el.classList.add('rv'); io.observe(el); }); };
+  new MutationObserver(scan).observe(document.body, {childList: true, subtree: true}); scan(); }
+{ const f = document.getElementById('fab-now'); if(f && !store.get('fab-seen', false)){ f.classList.add('pulse'); f.addEventListener('click', () => { store.set('fab-seen', true); f.classList.remove('pulse'); }, {once: true}); } }
 if('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) navigator.serviceWorker.register('sw.js').catch(() => {});
 setInterval(() => { fabNow(); if(!document.hidden && document.getElementById('ahora')) renderNow(); }, 60000);
 fabNow();
