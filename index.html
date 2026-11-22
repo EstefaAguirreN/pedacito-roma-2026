@@ -192,6 +192,19 @@ details.more .in p{margin:0 0 10px}
 .notice b.t{display:block;margin-bottom:2px}
 
 /* plan del día */
+.daymap .dm{display:block;width:100%;height:auto}
+.dmp{cursor:pointer}
+.dm-ley{display:flex;flex-wrap:wrap;gap:10px;font-size:.76rem;color:var(--ink-2);margin-top:6px}
+.dm-ley i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.dlist{list-style:none;margin:12px 0 0;padding:0}
+.dlist li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);scroll-margin-top:110px}
+.dlist li:first-child{border-top:0}
+.dlist .dn{flex:none;width:26px;height:26px;border-radius:50%;background:#F3DFA6;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.dlist .dn.key{background:var(--coral);color:#fff}
+.dlist .go{background:none;border:0;padding:0;text-align:left;cursor:pointer;flex:1}
+.dlist .go b{font-weight:700}.dlist .go small{display:block;color:var(--ink-2);font-size:.82rem}
+.dlist li.ok .go b{text-decoration:line-through;color:var(--ink-2)}
+.dlist li.nowrow{background:#FBEFD2;border-radius:10px}
 .plan{list-style:none;margin:0;padding:0}
 .plan li{scroll-margin-top:70px}
 .strip-d{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
@@ -415,7 +428,10 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
 .photo-idea .pi-arr{margin-left:auto;font-size:1.5rem}
 #idea{position:fixed;inset:0;z-index:95;background:rgba(15,20,26,.75);display:none;align-items:flex-end;justify-content:center;padding:16px}
 #idea.on{display:flex}
-#idea .ic{width:100%;max-width:520px;background:#FFFDF8;border-radius:20px;overflow:hidden;margin-bottom:70px}
+#idea .ic{width:100%;max-width:520px;max-height:86vh;overflow:auto;background:#FFFDF8;border-radius:20px;margin-bottom:70px}
+#idea .ib{max-height:42vh}
+#idea .ipin{padding:12px 14px 0;display:flex;flex-direction:column;align-items:center}
+#idea .ipk{align-self:flex-start;font-size:.74rem;font-weight:700;letter-spacing:.08em;color:var(--coral-d);margin-bottom:6px}
 #idea .ib{position:relative;aspect-ratio:4/5;max-height:62vh;background-size:cover;background-position:center}
 #idea .ib::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,40,0) 30%,rgba(20,30,40,.85))}
 #idea .it{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:18px;color:#fff}
@@ -723,6 +739,55 @@ const WEATHER = {
   3: { icon:'🌦', temp:'8-15°C', desc:'fresco · llevar paraguas pequeño' },
   4: { icon:'⛅️', temp:'8-15°C', desc:'fresco · día de regreso' }
 };
+const PLACE_COORDS = {
+  "Roma Trastevere station": [41.8728, 12.4693],
+  "FIORE Piazza Pollarola 29 Roma": [41.8962, 12.4718],
+  "Frigidarium Via del Governo Vecchio 112 Roma": [41.8989, 12.4693],
+  "Corner Pizza Piazza del Teatro di Pompeo 20 Roma": [41.8952, 12.4729],
+  "Fontana delle Tartarughe": [41.8939, 12.4777],
+  "Pasticceria Boccione": [41.8925, 12.478],
+  "Portico d'Ottavia": [41.8925, 12.4787],
+  "Teatro di Marcello": [41.8918, 12.4799],
+  "La Prezzemolina Via del Colosseo 1 Roma": [41.8934, 12.4895],
+  "Arch of Constantine": [41.8898, 12.4906],
+  'Via dei Cappellari 35 Roma': [41.8963, 12.4708],
+  'Carrefour Express Via del Biscione 79 Roma': [41.8958, 12.4726],
+  'Parco del Colle Oppio': [41.8925, 12.4955],
+  'Campo de\' Fiori': [41.8956, 12.4722],
+  'Fiumicino Airport': [41.8003, 12.2389],
+  'Forno Campo de\' Fiori': [41.8957, 12.4718],
+  'Roma Termini': [41.9009, 12.5019],
+  'Piazza Navona': [41.8992, 12.4731],
+  'Pantheon Rome': [41.8986, 12.4769],
+  'Trevi Fountain Rome': [41.9009, 12.4833],
+  'Spanish Steps Rome': [41.9059, 12.4823],
+  'St Peter\'s Square Vatican': [41.9022, 12.4533],
+  'St Peter\'s Basilica Vatican': [41.9022, 12.4539],
+  'Vatican Museums': [41.9065, 12.4536],
+  'Castel Sant\'Angelo': [41.9031, 12.4663],
+  'Ponte Sant\'Angelo': [41.9018, 12.4665],
+  'Pizzarium Bonci Rome': [41.9077, 12.4485],
+  'Trastevere Rome': [41.8896, 12.4695],
+  'Ponte Sisto Rome': [41.8924, 12.4704],
+  'Santa Maria in Trastevere': [41.8894, 12.4703],
+  'Colosseum': [41.8902, 12.4922],
+  'Roman Forum': [41.8925, 12.4853],
+  'Palatine Hill': [41.8894, 12.4875],
+  'Altare della Patria Rome': [41.8946, 12.4831],
+  'Via del Corso Rome': [41.9020, 12.4803],
+  'Osteria da Fortunata Rome': [41.8970, 12.4697],
+  'Antico Forno Roscioli Rome': [41.8941, 12.4741],
+  'Da Enzo al 29 Rome': [41.8877, 12.4776],
+  'La Taverna dei Fori Imperiali Rome': [41.8942, 12.4895],
+  'Giolitti Rome': [41.9008, 12.4774],
+  'Largo di Torre Argentina': [41.8955, 12.4768],
+  'Piazza del Campidoglio': [41.8933, 12.4828],
+  'Trajan\'s Market': [41.8958, 12.4862],
+  'San Luigi dei Francesi': [41.8995, 12.4746],
+  'Santa Maria sopra Minerva': [41.8980, 12.4782],
+  'Piazza Farnese': [41.8949, 12.4710],
+  'Sant\'Ivo alla Sapienza': [41.8988, 12.4744]
+};
 const STAY = {
   name: 'Alojamiento · Campo de\' Fiori',
   provider: 'Airbnb',
@@ -930,7 +995,7 @@ const DAYS = [
       { lbl: 'Almorzar', val: 'antes de las 11:30' }
     ],
     notices: [
-      { type: 'tip', title: '✅ Reserva confirmada', body: '<strong>Museos Vaticanos + Capilla Sixtina · martes 24 · 12:30 PM · 2 personas.</strong> Entrada general, visita por libre. La Sixtina está incluida: no hay que comprar nada más.' },
+      { type: 'tip', title: '✅ Entradas compradas · martes 24 · 12:30 PM', body: 'Museos Vaticanos + Capilla Sixtina, 2 personas, entrada general. <strong>Las entradas (con código de barras) las tienen en WhatsApp/correo.</strong><br>1. Entrar por <strong>Viale Vaticano</strong>, fila de reservas al <strong>lado derecho</strong> de la entrada principal: <strong>Corridoio 1</strong>.<br>2. Mostrar la entrada (en el celular o impresa) <strong>con el pasaporte</strong> al personal de afuera.<br>3. Pasar el control de seguridad y <strong>validar la entrada en el torniquete del primer piso</strong>.<br>Solo vale para ese día y esa hora.' },
       { type: 'calm', title: '★ Si se cansan o llueve', body: '<strong>Hoy casi todo es bajo techo</strong>: buen día si llueve. En los museos no hace falta quedarse cinco horas: sigan las flechas hacia las Estancias de Rafael y la Sixtina, y descansen en los patios. Castel Sant\'Angelo queda opcional.' },
       { type: 'warn', title: '! Dos visitas que no funcionan igual', body: '<strong>Basílica de San Pedro:</strong> gratis, con control de seguridad y posibles filas.<br><strong>Museos y Sixtina:</strong> se entra por <strong>Viale Vaticano</strong>, a 15–25 min caminando desde la Plaza de San Pedro, no por la puerta de la basílica. <strong>Coman bien antes de las 12:30.</strong>' }
     ],
@@ -1239,20 +1304,20 @@ function renderChapter(id){
     h += `<div class="sec glance"><div class="eyebrow">EL DÍA EN UN VISTAZO</div><div class="muted" style="font-size:.85rem">Toquen un momento para ir a él</div><div class="strip-wrap"><button class="sarr l" onclick="document.getElementById('strip-d').scrollBy({left:-220,behavior:'smooth'})" aria-label="Anterior">‹</button><div class="strip-d" id="strip-d">${pills}</div><button class="sarr r" onclick="document.getElementById('strip-d').scrollBy({left:220,behavior:'smooth'})" aria-label="Siguiente">›</button><span class="swipe-hint">desliza →</span></div></div>`;
     window.__curK = curK;
   }
-  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2" id="pl-top">El plan del día</div><div class="muted">Toquen una parada para ir a su ficha.</div></div><div class="box"><ul class="plan">`;
-  it.forEach((x, k) => {
-    if(x.kind === 'log'){
+  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2" id="pl-top">El mapa del día</div><div class="muted">Los números son los lugares en orden. Toquen uno para ir a su ficha.</div></div>
+    <div class="box daymap">${dayMap(stops)}${(() => { const qs = ['Via dei Cappellari 35 Roma'].concat(stops.map(s => s.q).filter(Boolean)); return qs.length > 1 ? `<a class="btn coral" style="margin-top:10px" href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(mq(qs[0]))}&destination=${encodeURIComponent(mq(qs[qs.length-1]))}${qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).slice(-9).map(q => encodeURIComponent(mq(q))).join('|') : ''}&travelmode=walking" target="_blank" rel="noopener">🗺 Abrir la ruta del día en Google Maps</a>` : ''; })()}
+    <ol class="dlist">${stops.map((x, n) => { const nowM = romeMin(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30); return `<li class="${visited(x.id) ? 'ok' : ''}${isNow ? ' nowrow' : ''}"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="Marcar ${esc(x.name)}">✓</button><span class="dn${isKey(x.name) ? ' key' : ''}">${n+1}</span><button class="go" onclick="jump('p-${x.id}')"><b>${esc(x.name)}</b>${isNow ? ' <em class="nowtag">Ahora</em>' : ''}<small>${x.time ? esc(x.time) : ''}${x.optional ? ' · opcional' : ''}</small></button></li>`; }).join('')}</ol></div>`;
+  const logs = it.map((x, k) => [x, k]).filter(([x]) => x.kind === 'log');
+  if(logs.length){
+    h += `<details class="more box" id="traslados" style="padding:4px 18px;margin-top:12px"><summary>🚆 Traslados, comidas y descanso del día</summary><div class="in"><ul class="plan">`;
+    logs.forEach(([x, k]) => {
       const b = x.b, link = b.from && b.to ? mapsTransit(b.from, b.to) : (b.place ? mapsDir(b.place) : '');
       const extra = (b.desc ? `<p>${b.desc}</p>` : '') + (b.steps ? `<ol>${b.steps.map(s => `<li>${s}</li>`).join('')}</ol>` : '') + ((b.info && b.info.sections) || []).map(s => `<p><b>${esc(s.lbl)}.</b> ${s.text || ''}${s.items ? s.items.join(' · ') : ''}</p>`).join('') + ((b.meta||[]).length ? `<p>${b.meta.join(' · ')}</p>` : '') + (link ? `<a class="btn soft" style="margin-top:4px" href="${link}" target="_blank" rel="noopener">📍 Abrir en Google Maps</a>` : '');
       h += `<li id="pl-${k}"><span class="tm">${esc(x.time)}</span><details><summary><span class="ti">${b.title}<small>${b.subtitle || ''}</small></span></summary><div class="logx">${extra}</div></details></li>`;
-    } else if(x.kind === 'group'){
-      h += `<li id="pl-${k}"><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
-    } else {
-      const thumb = imgFor(x.name), nowM = romeMin(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30);
-      h += `<li class="stop${visited(x.id) ? ' ok' : ''}${isNow ? ' nowrow' : ''}"><span class="tm">${esc(x.time)}</span><span class="row-ck">${thumb ? `<img class="th" src="${thumb}" alt="" loading="lazy">` : ''}<button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="${visited(x.id) ? 'Desmarcar' : 'Marcar'} ${esc(x.name)} como visitado">✓</button><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}${isNow ? ' <em class="nowtag">Actividad actual</em>' : ''}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></span></li>`;
-    }
-  });
-  h += `</ul></div></div>`;
+    });
+    h += `</ul></div></details>`;
+  }
+  h += `</div>`;
   // fichas: los lugares clave tienen card propia; los puntos de paso se agrupan en un recorrido
   const cards = [];
   stops.forEach(s => {
@@ -1350,6 +1415,24 @@ function renderChapter(id){
   renderRecuerdo({id:'dia-' + id, name: c.dest}, id);
 }
 const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','El Palatino','El Coliseo','Basílica de San Pedro','Museos Vaticanos'];
+function dayMap(stops){
+  const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {};
+  const home = C['Via dei Cappellari 35 Roma'];
+  const pts = stops.map((s, n) => ({s, n: n+1, c: C[s.q]})).filter(p => p.c);
+  if(!pts.length || !home) return '';
+  const all = [home].concat(pts.map(p => p.c));
+  const k = Math.cos(41.9 * Math.PI/180);
+  let x0 = Math.min(...all.map(c => c[1]*k)), x1 = Math.max(...all.map(c => c[1]*k)), y0 = Math.min(...all.map(c => c[0])), y1 = Math.max(...all.map(c => c[0]));
+  const span = Math.max(x1 - x0, y1 - y0, .006), W = 340, H = 250, pad = 28, sc = Math.min((W - 2*pad)/Math.max(x1 - x0, .002), (H - 2*pad)/Math.max(y1 - y0, .002));
+  const cx = (x0 + x1)/2, cy = (y0 + y1)/2;
+  const P = c => [W/2 + (c[1]*k - cx)*sc, H/2 - (c[0] - cy)*sc];
+  const hp = P(home), path = [hp].concat(pts.map(p => P(p.c))).map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' ');
+  return `<svg class="dm" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de los lugares del día">
+    <rect width="${W}" height="${H}" rx="12" fill="#EFE6D3"/><path d="${path}" fill="none" stroke="#283B4D" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>
+    <g><circle cx="${hp[0]}" cy="${hp[1]}" r="13" fill="#283B4D" stroke="#E4BD63" stroke-width="3"/><text x="${hp[0]}" y="${hp[1]+5}" text-anchor="middle" font-size="13">🏠</text></g>
+    ${pts.map(p => { const q = P(p.c), key = isKey(p.s.name), on = visited(p.s.id); return `<g class="dmp" onclick="jump('p-${p.s.id}')"><circle cx="${q[0]}" cy="${q[1]}" r="13" fill="${on ? '#8C9D86' : key ? '#C8735C' : '#F3DFA6'}" stroke="#fff" stroke-width="2.5"/><text x="${q[0]}" y="${q[1]+4.5}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="12" fill="${on || key ? '#fff' : '#283B4D'}">${on ? '✓' : p.n}</text></g>`; }).join('')}
+  </svg><div class="dm-ley"><span><i style="background:#C8735C"></i>imprescindible</span><span><i style="background:#F3DFA6"></i>de paso</span><span><i style="background:#8C9D86"></i>visitado</span><span>🏠 Airbnb</span></div>`;
+}
 function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length; return [nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : '', nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''].filter(Boolean).join(' · '); }
 function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
 function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
@@ -1362,12 +1445,16 @@ function tips(s){
     return `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${txt}</div>`;
   }).join('');
 }
+const PINS = {"Campo de' Fiori":'5136987071575001', 'Un gelato':'1025554146411510219', 'Piazza Navona':'704461566734962299', 'El Panteón':'256001560058265669', 'Fontana di Trevi':'723461127688150076', 'El Campidoglio':'1149966086152379780', 'El Coliseo':'704461566730111476', 'Plaza de San Pedro':'530439662390350639'};
+function pinFor(n){ const k = Object.keys(PINS).find(x => n.indexOf(x) === 0); return k ? PINS[k] : null; }
+function loadPinit(cb){ if(window.PinUtils){ cb(); return; } if(!document.getElementById('pinit')){ const s = document.createElement('script'); s.id = 'pinit'; s.async = true; s.src = 'https://assets.pinterest.com/js/pinit.js'; s.onload = () => setTimeout(cb, 300); document.body.appendChild(s); } else setTimeout(() => loadPinit(cb), 300); }
 function idea(key){
   const x = (window.__IDEAS || {})[key]; if(!x) return;
   const q = 'https://www.pinterest.com/search/pins/?q=' + encodeURIComponent(x.name.split(' · ')[0] + ' Roma foto ideas');
   const o = document.getElementById('idea');
-  o.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ib" style="background-image:url('${x.img}')"><div class="it"><div class="ik">📸 IDEA DE FOTO · ${esc(x.name.split(' · ')[0]).toUpperCase()}</div><div class="ix">${x.txt}</div></div></div><div class="ia"><a class="btn coral" href="${q}" target="_blank" rel="noopener">Ver más ideas en Pinterest</a><button class="btn soft" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div></div>`;
+  o.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ib" style="background-image:url('${x.img}')"><div class="it"><div class="ik">📸 IDEA DE FOTO · ${esc(x.name.split(' · ')[0]).toUpperCase()}</div><div class="ix">${x.txt}</div></div></div>${pinFor(x.name) ? `<div class="ipin"><div class="ipk">UN EJEMPLO EN PINTEREST</div><a data-pin-do="embedPin" data-pin-width="medium" href="https://www.pinterest.com/pin/${pinFor(x.name)}/"></a></div>` : ''}<div class="ia"><a class="btn coral" href="${q}" target="_blank" rel="noopener">Ver más ideas en Pinterest</a><button class="btn soft" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div></div>`;
   o.classList.add('on');
+  if(pinFor(x.name)) loadPinit(() => { try { window.PinUtils.build(); } catch(e){} });
 }
 window.idea = idea;
 function visitCorner(s){ const on = visited(s.id); return `<button class="vcorner${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}" aria-label="${on ? 'Desmarcar visitado' : 'Marcar como visitado'}"><span class="vc">✓</span><small>${on ? 'Visitado' : '¿Ya fueron?'}</small></button>`; }
@@ -1428,7 +1515,7 @@ async function subir(files, sid, dia){
 /* ================= navegación ================= */
 let VIEW = null;
 function go(view, anchor){ VIEW = view; const h = '#' + view; try { if(location.hash !== h) history.pushState(null, '', h); } catch(e){} route(); if(anchor) setTimeout(() => jump(anchor), 60); else window.scrollTo(0, 0); }
-function jump(id){ const e = document.getElementById(id); if(e) e.scrollIntoView({behavior:'smooth', block:'start'}); }
+function jump(id){ const e = document.getElementById(id); if(!e) return; let d = e.closest('details'); while(d){ d.open = true; d = d.parentElement.closest('details'); } e.scrollIntoView({behavior:'smooth', block:'start'}); }
 function route(keep){
   const h = VIEW || (location.hash || '#inicio').slice(1), y = window.scrollY;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
