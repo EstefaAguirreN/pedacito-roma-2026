@@ -655,6 +655,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .sec-l{display:flex;align-items:center;gap:8px;padding:4px 14px 12px;font-weight:600;cursor:pointer}.sec-l input{width:20px;height:20px;accent-color:var(--sage)}
 .mission .mq{margin:10px 0 0 38px;font-size:.92rem}
 .mission .mq+textarea{margin-left:38px;width:calc(100% - 38px)}
+.sec-chip .sc-v{margin-left:4px;font-size:.72rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:2px 8px}
 </style>
 </head>
 <body>
@@ -1722,7 +1723,7 @@ function story(s){ const pro = proFor(s); const st = (pro ? [{text: pro.text}] :
   let hook = plain.split(/(?<![\s(][adAD]\.)(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"])/)[0]; if(hook.length > 210) hook = hook.slice(0, 207).replace(/\s\S*$/,'') + '…';
   return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span>${pro ? `<span class="faces">${pro.who.map(face).join('')}</span>` : ''}<span class="hook">“${esc(hook)}”</span><span class="pv">${esc(plain.slice(hook.length, hook.length + 220))}</span><span class="sh">Seguir leyendo aquí <i>⌄</i></span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
 window.__SEC = {};
-function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id); return `<button class="chip sec-chip${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">🔑 ${ok ? '¡Secreto encontrado!' : 'Secreto'}</button>`; }
+function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id); return `<button class="chip sec-chip${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">🔑 ${ok ? '¡Secreto encontrado!' : 'Secreto'}<span class="sc-v">ver</span></button>`; }
 function verSecreto(id){ const s = window.__SEC[id]; if(!s) return; const el = document.getElementById('idea');
   el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">🔑 SECRETO · ${esc(s.name.split(' · ')[0]).toUpperCase()}</div><div class="sec-x">${s.secret.text || (s.secret.items||[]).join(' ')}</div></div><label class="sec-l"><input type="checkbox" ${found(id) ? 'checked' : ''} onchange="setFound('${id}',this.checked);route(true)"> ¡Lo encontramos!</label><button class="btn ghost" style="margin:0 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
   el.classList.add('on'); }
