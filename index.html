@@ -658,6 +658,24 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .sec-chip .sc-v{margin-left:4px;font-size:.72rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:2px 8px}
 .letter .lt-ph{display:block;margin:16px auto 12px;transform:rotate(2deg);max-width:300px;position:relative}
 .letter .lt-ph img{aspect-ratio:auto;max-height:420px;object-fit:cover}
+#netb{display:none;position:fixed;left:10px;right:10px;top:calc(8px + env(safe-area-inset-top));z-index:120;background:#283B4D;color:#fff;border-radius:12px;padding:8px 12px;font-size:.8rem;line-height:1.35;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+#netb.on{display:block}#netb.off{background:#5C6B78}
+/* momentos sutiles */
+.moms-sec .mom-k{font-size:.66rem;color:var(--ink-2);letter-spacing:.08em;margin:2px 0 4px}
+.moms-sec .moms{display:flex;flex-wrap:wrap;gap:4px 14px}
+.moms-sec .mom{background:none;padding:0;border-radius:0;text-align:left;display:flex;align-items:baseline;gap:5px}
+.moms-sec .mom+.mom::before{display:none}
+.moms-sec .mom .mi{font-size:.8rem}
+.moms-sec .mom b{font-family:Inter,system-ui,sans-serif;font-weight:600;font-size:.82rem;margin:0}
+.moms-sec .mom small{display:inline;font-size:.8rem;margin:0;color:var(--ink-2)}
+.stop-card{overflow:visible}
+.stop-card .ph.ov{position:relative;overflow:visible}
+.stop-card .ph.ov>img{border-radius:22px 22px 0 0}
+.tape-t{position:absolute;z-index:3;top:-10px;left:50%;width:96px;height:22px;background:rgba(240,214,150,.85);transform:translateX(-50%) rotate(-3deg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pstamp{position:absolute;z-index:3;left:12px;top:12px;width:66px;height:66px;border-radius:50%;border:2px dashed var(--coral-d);background:rgba(255,253,248,.93);color:var(--coral-d);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-8deg);line-height:1}
+.pstamp small{font-size:.56rem;font-weight:700;letter-spacing:.1em}
+.pstamp b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.5rem}
+.pt-ph{position:relative}.pstamp.sm{width:54px;height:54px;left:10px;top:10px}.pstamp.sm b{font-size:1.2rem}
 </style>
 </head>
 <body>
@@ -842,6 +860,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 
 <div id="lightbox" onclick="this.classList.remove('on')"></div>
 <div id="toast" role="status"></div>
+<div id="netb" role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
@@ -1430,9 +1449,35 @@ const visited = id => !!store.get('v:' + id, false);
 function setVisited(id, v){ store.set('v:' + id, v); share('visita:' + id, v); }
 const found = id => !!store.get('s:' + id, false);
 function setFound(id, v){ store.set('s:' + id, v); share('secreto:' + id, v); }
-function share(clave, valor){ if(!sb) return; sb.from('estado').upsert({clave, valor, por: store.get('quien','') || null, actualizado: new Date().toISOString()}).then(({error}) => { if(error) toast('No se pudo guardar. Revisen la conexión.'); }); }
+const outbox = { get(){ try { return JSON.parse(localStorage.getItem('outbox') || '{}'); } catch(e){ return {}; } }, put(o){ try { localStorage.setItem('outbox', JSON.stringify(o)); } catch(e){} } };
+function share(clave, valor){ const o = outbox.get(); o[clave] = {valor, t: new Date().toISOString()}; outbox.put(o); flushOutbox(); netBadge(); }
+let flushing = false;
+async function flushOutbox(){ if(!sb || flushing || !navigator.onLine) return; flushing = true;
+  try { const o = outbox.get();
+    for(const k of Object.keys(o)){ const {error} = await sb.from('estado').upsert({clave: k, valor: o[k].valor, por: store.get('quien','') || null, actualizado: o[k].t});
+      if(error) break; const n = outbox.get(); if(n[k] && n[k].t === o[k].t){ delete n[k]; outbox.put(n); } }
+  } catch(e){} flushing = false; await flushFotos(); netBadge(); }
+/* fotos sin conexión: se guardan en el celular (IndexedDB) y se suben solas */
+const idb = () => new Promise((res, rej) => { const r = indexedDB.open('roma-fotos', 1); r.onupgradeneeded = () => r.result.createObjectStore('pend', {keyPath: 'ruta'}); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+async function idbAll(){ try { const db = await idb(); return await new Promise(res => { const q = db.transaction('pend').objectStore('pend').getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); } catch(e){ return []; } }
+async function idbPut(x){ const db = await idb(); return new Promise(res => { const tx = db.transaction('pend', 'readwrite'); tx.objectStore('pend').put(x); tx.oncomplete = res; tx.onerror = res; }); }
+async function idbDel(k){ const db = await idb(); return new Promise(res => { const tx = db.transaction('pend', 'readwrite'); tx.objectStore('pend').delete(k); tx.oncomplete = res; tx.onerror = res; }); }
+let pendFotos = 0;
+async function flushFotos(){ const all = await idbAll(); pendFotos = all.length; if(!sb || !navigator.onLine) return;
+  for(const x of all){ try {
+    const up = await sb.storage.from('fotos').upload(x.ruta, x.blob, {contentType: x.blob.type || 'image/jpeg', upsert: true});
+    if(up.error && !/exist/i.test(up.error.message || '')) continue;
+    const ins = await sb.from('fotos').insert({dia: x.dia, autor: x.autor, nota: x.nota, ruta: x.ruta});
+    if(!ins.error || /duplicate/i.test(ins.error.message || '')){ await idbDel(x.ruta); pendFotos--; if(!fotos.some(f => f.ruta === x.ruta)) fotos.unshift({dia: x.dia, autor: x.autor, nota: x.nota, ruta: x.ruta}); }
+  } catch(e){} }
+  if(!all.length) return; refresh(); }
+function netBadge(){ const b = document.getElementById('netb'); if(!b) return; const n = Object.keys(outbox.get()).length + pendFotos;
+  if(!navigator.onLine){ b.className = 'on off'; b.innerHTML = '📴 Sin internet: todo se guarda en el celular' + (n ? ` (${n} por enviar)` : '') + ' y se sincroniza solo al volver la señal.'; }
+  else b.className = ''; }
+window.addEventListener('online', () => { netBadge(); flushOutbox(); });
+window.addEventListener('offline', netBadge);
 function applyRemote(r){
-  const k = r.clave, v = r.valor;
+  const k = r.clave, v = r.valor; if(outbox.get()[k]) return;
   if(k.startsWith('visita:')) store.set('v:' + k.slice(7), !!v);
   else if(k.startsWith('secreto:')) store.set('s:' + k.slice(8), !!v);
   else if(k.startsWith('mision:')) store.set('m:' + k.slice(7), !!v);
@@ -1569,7 +1614,7 @@ function renderChapter(id){
     const cont = next ? `<div class="nextstop">Siguiente: <a href="#" onclick="jump('p-${next.id}');return false">${esc(nextName)} →</a></div>` : '';
     if(c.type === 'major'){
       const s = c.s, img = imgFor(s.name);
-      h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph ov"><img src="${img}" alt="" loading="lazy">${visitCorner(s)}<div class="ph-t"><span class="eyebrow">⭐ IMPRESCINDIBLE</span><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p></div></div>` : ''}<div class="bd">
+      h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph ov"><img src="${img}" alt="" loading="lazy"><i class="tape-t"></i><span class="pstamp"><small>PARADA</small><b>${String(s.n || '').padStart(2,'0')}</b></span>${visitCorner(s)}<div class="ph-t"><span class="eyebrow">⭐ IMPRESCINDIBLE</span><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p></div></div>` : ''}<div class="bd">
         ${img ? '' : `<div class="k"><span class="eyebrow">⭐ IMPRESCINDIBLE</span>${visitCorner(s)}</div><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>`}
         <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}${secretChip(s)}</div>
         ${story(s)}
@@ -1587,7 +1632,7 @@ function renderChapter(id){
         ${route ? `<div class="acts" style="margin-bottom:6px"><a class="btn coral" href="${route}" target="_blank" rel="noopener">🗺 ${qs.length > 1 ? 'Ruta a pie completa' : 'Cómo llegar'}</a></div>` : ''}
         ${c.pts.map((p, j) => { const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {}, pi = j ? C[c.pts[j-1].q] : null, pc = C[p.q], wm = pi && pc ? Math.max(2, Math.round(km(pi, pc) * 1.3 / 4.5 * 60)) : 0, pim = imgFor(p.name);
           return `${j ? `<div class="pt-walk"><span>🚶 ${wm ? '≈ ' + wm + ' min caminando hasta la siguiente parada' : 'siguiente parada'}</span></div>` : ''}<div class="pt" id="p-${p.id}">
-          ${pim ? `<div class="pt-ph"><img src="${pim}" alt="" loading="lazy"></div>` : ''}
+          ${pim ? `<div class="pt-ph"><img src="${pim}" alt="" loading="lazy"><span class="pstamp sm"><small>PARADA</small><b>${String(p.n || j+1).padStart(2,'0')}</b></span></div>` : ''}
           <div class="pt-h"><span class="pt-n${isKey(p.name) ? ' key' : ''}">${p.n || j+1}</span><div style="flex:1"><div class="pt-k">PARADA ${p.n || j+1}${p.optional ? ' · OPCIONAL' : ''}</div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? '🕒 ' + esc(p.time) + ' · ' : ''}${cleanLine(p.line).replace(/^parada \d+ · /i, '')}</div></div>${visitCorner(p)}</div>
           ${p.chips.length || p.secret ? `<div class="facts" style="margin:8px 0 0">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}${secretChip(p)}</div>` : ''}
           <div class="pt-b">
@@ -1802,12 +1847,15 @@ async function subir(files, sid, dia){
     st.textContent = `Subiendo ${ok+1} de ${list.length}…`;
     const b = await shrink(f), ext = b.type === 'image/jpeg' ? 'jpg' : ((f.name.split('.').pop() || 'jpg').toLowerCase());
     const ruta = `dia-${dia}/${sid}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.${ext}`;
+    const pend = {ruta, blob: b, dia, autor: store.get('quien',''), nota: s ? s.name : null};
+    if(!navigator.onLine || !sb){ await idbPut(pend); pendFotos++; ok++; continue; }
     const up = await sb.storage.from('fotos').upload(ruta, b, {contentType: b.type || f.type || 'image/jpeg'});
-    if(up.error){ st.textContent = 'Una foto no se pudo subir. Revisen la conexión e intenten otra vez.'; continue; }
+    if(up.error){ await idbPut(pend); pendFotos++; ok++; continue; }
     const ins = await sb.from('fotos').insert({dia, autor: store.get('quien',''), nota: s ? s.name : null, ruta});
     if(!ins.error){ ok++; fotos.unshift({dia, autor: store.get('quien',''), nota: s ? s.name : '', ruta}); }
   }
-  if(ok){ st.textContent = `¡Listo! ${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'} ❤️`; if(s) setTimeout(() => renderRecuerdo(s, dia), 400); }
+  netBadge(); if(pendFotos) flushOutbox();
+  if(ok){ st.textContent = pendFotos && !navigator.onLine ? `📴 ${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'} en el celular: se suben solas cuando haya internet.` : `¡Listo! ${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'} ❤️`; if(s) setTimeout(() => renderRecuerdo(s, dia), 400); }
 }
 
 /* ================= navegación ================= */
@@ -1872,8 +1920,9 @@ route();
 if(window.supabase && SUPA_URL.indexOf('/*') !== 0 && SUPA_URL.indexOf('http') === 0){
   sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
   Promise.all([sb.from('estado').select('*'), sb.from('fotos').select('*').order('creado', {ascending:false})]).then(([e, f]) => {
-    (e.data || []).forEach(applyRemote); fotos = f.data || []; refresh();
-  });
+    (e.data || []).forEach(applyRemote); fotos = f.data || []; refresh(); flushOutbox();
+  }).catch(() => {});
+  setInterval(flushOutbox, 30000);
   sb.channel('viaje-roma')
     .on('postgres_changes', {event:'*', schema:'public', table:'estado'}, p => { if(p.new){ applyRemote(p.new); refresh(); } })
     .on('postgres_changes', {event:'INSERT', schema:'public', table:'fotos'}, p => { if(p.new && !fotos.some(x => x.ruta === p.new.ruta)){ fotos.unshift(p.new); refresh(); } })
@@ -1881,6 +1930,8 @@ if(window.supabase && SUPA_URL.indexOf('/*') !== 0 && SUPA_URL.indexOf('http') =
   route(true);
 }
 setTimeout(() => tour(false), 700);
+idbAll().then(a => { pendFotos = a.length; netBadge(); });
+if('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) navigator.serviceWorker.register('sw.js').catch(() => {});
 setInterval(() => { fabNow(); if(!document.hidden && document.getElementById('ahora')) renderNow(); }, 60000);
 fabNow();
 }
