@@ -158,6 +158,8 @@ details.more .in p{margin:0 0 10px}
 .facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:.82rem;font-weight:600;white-space:nowrap}
 .chip.warm{background:#FBEFD2;border-color:#EFD9A2}
+.timechars{margin-top:12px;font-size:.92rem;color:var(--ink-2);display:grid;gap:4px}
+.timechars b{color:var(--ink)}
 .notice{border-radius:14px;padding:12px 14px;margin-top:10px;font-size:.93rem;background:var(--card);border-left:4px solid var(--sage)}
 .notice.warn{border-left-color:var(--coral)}
 .notice.tip{border-left-color:var(--yellow)}
@@ -165,6 +167,18 @@ details.more .in p{margin:0 0 10px}
 
 /* plan del día */
 .plan{list-style:none;margin:0;padding:0}
+.plan li{scroll-margin-top:70px}
+.strip-d{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.strip-d::-webkit-scrollbar{height:4px}.strip-d::-webkit-scrollbar-thumb{background:var(--coral);border-radius:99px}
+.pill-d{flex:none;scroll-snap-align:start;width:96px;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 6px;border-radius:14px;border:1px solid var(--line);background:var(--card);cursor:pointer;text-align:center}
+.pill-d .pi{font-size:1.35rem;line-height:1}
+.pill-d b{font-size:.78rem;color:var(--coral-d)}
+.pill-d .pl{font-size:.74rem;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pill-d.st{background:#FBEFD2;border-color:#EFD9A2}
+.pill-d.ok{background:#E3EADF;border-color:var(--sage)}
+.pill-d.ok .pl{text-decoration:line-through;color:var(--ink-2)}
+.pill-d.now{outline:3px solid var(--coral);outline-offset:1px}
+.pill-d.now::after{content:'AHORA';font-size:.6rem;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--coral);border-radius:99px;padding:1px 6px;margin-top:2px}
 .plan li{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .plan li:first-child{border-top:0}
 .plan .tm{font-weight:700;font-size:.88rem;color:var(--coral-d);white-space:nowrap;padding-top:2px}
@@ -918,6 +932,12 @@ const CHAPTERS = {
   3:{num:'03 · MARTES 24 NOV', short:'Capítulo III', dest:'Vaticano', obj:'Arte, fe y algunas de las obras más importantes del mundo.', places:'Plaza y Basílica de San Pedro · Museos Vaticanos · Capilla Sixtina', meta:'Arte y Renacimiento · Museos 12:30', img:'Fotos/cap3-san-pedro.webp'},
   4:{num:'EPÍLOGO · MIÉRCOLES 25 NOV', short:'Epílogo', dest:'Arrivederci, Roma', obj:'Despedirse de Trevi con la luz de la mañana y volver a Madrid sin afanes.', places:'Fontana di Trevi · Vuelo a Madrid', meta:'Trevi 7:35 · Vuelo 12:00', img:'Fotos/epilogo-callecita.webp'}
 };
+const TIME_CHARS = {
+  1:{t:'Siglos XVI–XVIII, con un salto al siglo II d. C.', p:'Bernini, Borromini, Adriano y Rafael.'},
+  2:{t:'Siglo I a. C. – siglo II d. C.', p:'Julio César, Augusto, Trajano, Marco Aurelio y Cómodo.'},
+  3:{t:'Siglos XV–XVII, con raíces en el siglo I d. C.', p:'San Pedro, Constantino, Miguel Ángel, Rafael y el papa Julio II.'},
+  4:{t:'Regresamos al siglo XXI.', p:''}
+};
 const STOP_IMG = {
   'Piazza Navona':'Fotos/navona.webp', 'Fontana di Trevi':'Fotos/paradas/trevi.jpg',
   'El Campidoglio':'Fotos/paradas/campidoglio.jpg', 'La Columna de Trajano':'Fotos/paradas/columna-trajano.jpg', 'El Foro Romano':'Fotos/paradas/foro-romano.jpg',
@@ -1059,19 +1079,34 @@ function renderChapter(id){
   const stops = it.filter(x => x.kind === 'stop'), secrets = stops.filter(x => x.secret);
   let h = `<div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
     <div class="facts"><span class="chip warm">${placesLabel(stops)}</span>${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}${w ? `<span class="chip">${w.icon} ${w.temp}</span>` : ''}</div>`;
-  (d.notices||[]).forEach(n => { h += `<div class="notice ${n.type}"><b class="t">${n.title}</b>${n.body}</div>`; });
+  { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
     h += `<details class="more" style="margin-top:16px"><summary>📖 ${esc(d.narrative.title)}</summary><div class="in">${d.narrative.body}</div></details>`;
   }
   // plan del día
+  { const ICON = {airport:'✈️', transport:'🚆', stay:'🏠', food:'🍝', free:'🌿', walk:'🚶', group:'🚶'};
+    const isToday = tripDay() === id, nm = new Date().getHours()*60 + new Date().getMinutes();
+    let curK = -1;
+    const pills = it.map((x, k) => {
+      if(x.kind === 'stop' && !x.time) return '';
+      const t = mins(x.time), e = mins(x.end) ?? (t != null ? t + 30 : null);
+      if(isToday && t != null && nm >= t && nm < e && curK < 0) curK = k;
+      const lbl = x.kind === 'log' ? x.b.title : x.kind === 'group' ? x.title : x.name;
+      const ic = x.kind === 'stop' ? (isKey(x.name) ? '⭐' : '📍') : (ICON[x.kind === 'group' ? 'group' : x.b.type] || '•');
+      const tgt = x.kind === 'stop' ? 'p-' + x.id : 'pl-' + k;
+      return `<button class="pill-d${x.kind === 'stop' ? ' st' : ''}${x.kind === 'stop' && visited(x.id) ? ' ok' : ''}" data-k="${k}" onclick="jump('${tgt}')"><span class="pi">${ic}</span><b>${esc(String(x.time||'').replace(/\s/g,''))}</b><span class="pl">${esc(String(lbl).split(/ · |: |, /)[0])}</span></button>`;
+    }).join('');
+    h += `<div class="sec glance"><div class="eyebrow">EL DÍA EN UN VISTAZO</div><div class="muted" style="font-size:.85rem">Deslicen con el dedo · toquen un momento para ir a él</div><div class="strip-d" id="strip-d">${pills}</div></div>`;
+    window.__curK = curK;
+  }
   h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2">El plan del día</div><div class="muted">Toquen una parada para ir a su ficha.</div></div><div class="box"><ul class="plan">`;
-  it.forEach(x => {
+  it.forEach((x, k) => {
     if(x.kind === 'log'){
       const b = x.b, link = b.from && b.to ? mapsTransit(b.from, b.to) : (b.place ? mapsDir(b.place) : '');
       const extra = (b.desc ? `<p>${b.desc}</p>` : '') + (b.steps ? `<ol>${b.steps.map(s => `<li>${s}</li>`).join('')}</ol>` : '') + ((b.info && b.info.sections) || []).map(s => `<p><b>${esc(s.lbl)}.</b> ${s.text || ''}${s.items ? s.items.join(' · ') : ''}</p>`).join('') + ((b.meta||[]).length ? `<p>${b.meta.join(' · ')}</p>` : '') + (link ? `<a class="btn soft" style="margin-top:4px" href="${link}" target="_blank" rel="noopener">📍 Abrir en Google Maps</a>` : '');
-      h += `<li><span class="tm">${esc(x.time)}</span><details><summary><span class="ti">${b.title}<small>${b.subtitle || ''}</small></span></summary><div class="logx">${extra}</div></details></li>`;
+      h += `<li id="pl-${k}"><span class="tm">${esc(x.time)}</span><details><summary><span class="ti">${b.title}<small>${b.subtitle || ''}</small></span></summary><div class="logx">${extra}</div></details></li>`;
     } else if(x.kind === 'group'){
-      h += `<li><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
+      h += `<li id="pl-${k}"><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
     } else {
       h += `<li class="stop${visited(x.id) ? ' ok' : ''}"><span class="tm">${esc(x.time)}</span><span class="row-ck"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="${visited(x.id) ? 'Desmarcar' : 'Marcar'} ${esc(x.name)} como visitado">✓</button><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></span></li>`;
     }
@@ -1131,6 +1166,9 @@ function renderChapter(id){
   });
   h += `</div>`;
   window.__CARDS = cards;
+  if((d.notices||[]).length){
+    h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>🧭 Por si acaso · avisos y planes B</summary><div class="in">${d.notices.map(n => `<div class="notice ${n.type}" style="margin-top:8px"><b class="t">${n.title.replace(/^[★!✅]\s*/,'')}</b>${n.body}</div>`).join('')}</div></details></div>`;
+  }
   if(secrets.length){
     h += `<div class="sec"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || '').replace(/<[^>]+>/g,'').split(/(?<=[.:])\s/)[0])}</span></label>`).join('')}</div></div>`;
   }
@@ -1151,6 +1189,8 @@ function renderChapter(id){
   h += nd ? `<button class="nextchap" onclick="go('capitulo-${nd.id}')"><span><small>SIGUIENTE</small><b>${CHAPTERS[nd.id].short} · ${CHAPTERS[nd.id].dest}</b></span><span aria-hidden="true">→</span></button>`
           : `<button class="nextchap" onclick="go('inicio')"><span><small>FIN DEL VIAJE</small><b>Volver al inicio</b></span><span aria-hidden="true">🏠</span></button>`;
   $('#capitulo').innerHTML = h;
+  { const s = document.getElementById('strip-d'), c = s && s.querySelector(`[data-k="${window.__curK}"]`);
+    if(c){ c.classList.add('now'); s.scrollLeft = c.offsetLeft - 16; } }
   (window.__CARDS || []).forEach(c => renderRecuerdo({id:c.id, name: c.type === 'major' ? c.s.name : (c.title || c.pts.map(p => p.name).join(' · '))}, id));
 }
 const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','El Palatino','El Coliseo','Basílica de San Pedro','Museos Vaticanos'];
