@@ -649,6 +649,10 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .pt-walk{display:flex;justify-content:center;position:relative;margin:12px 0 0;padding:4px 0}
 .pt-walk::before{content:'';position:absolute;left:50%;top:-12px;bottom:-12px;border-left:2px dotted var(--coral)}
 .pt-walk span{position:relative;background:#FBF4E6;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.76rem;font-weight:600;color:var(--ink-2)}
+.sec-chip{cursor:pointer;font:inherit;font-size:.82rem;font-weight:700;background:#FBEFCF;border-color:#E4BD63;color:#7A5B2E}
+.sec-chip.ok{background:#E3EADF;border-color:var(--sage);color:var(--ink)}
+.sec-x{font-size:1rem;line-height:1.55;margin-top:8px;color:var(--ink)}
+.sec-l{display:flex;align-items:center;gap:8px;padding:4px 14px 12px;font-weight:600;cursor:pointer}.sec-l input{width:20px;height:20px;accent-color:var(--sage)}
 </style>
 </head>
 <body>
@@ -1560,10 +1564,9 @@ function renderChapter(id){
       const s = c.s, img = imgFor(s.name);
       h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph ov"><img src="${img}" alt="" loading="lazy">${visitCorner(s)}<div class="ph-t"><span class="eyebrow">⭐ IMPRESCINDIBLE</span><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p></div></div>` : ''}<div class="bd">
         ${img ? '' : `<div class="k"><span class="eyebrow">⭐ IMPRESCINDIBLE</span>${visitCorner(s)}</div><h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>`}
-        <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>
+        <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}${secretChip(s)}</div>
         ${story(s)}
         ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${lookHTML(s)}</div>` : ''}
-        ${secretBox(s)}
         <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts arow">${s.q ? `<a class="btn ink" href="${mapsDir(s.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${ideaBtn(s)}</div>${tips(s)}${cont}</div>
       </div></article>`;
     } else {
@@ -1579,10 +1582,9 @@ function renderChapter(id){
           return `${j ? `<div class="pt-walk"><span>🚶 ${wm ? '≈ ' + wm + ' min caminando hasta la siguiente parada' : 'siguiente parada'}</span></div>` : ''}<div class="pt" id="p-${p.id}">
           ${pim ? `<div class="pt-ph"><img src="${pim}" alt="" loading="lazy"></div>` : ''}
           <div class="pt-h"><span class="pt-n${isKey(p.name) ? ' key' : ''}">${p.n || j+1}</span><div style="flex:1"><div class="pt-k">PARADA ${p.n || j+1}${p.optional ? ' · OPCIONAL' : ''}</div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? '🕒 ' + esc(p.time) + ' · ' : ''}${(p.line || '').replace(/^parada \d+ · /i, '')}</div></div>${visitCorner(p)}</div>
-          ${p.chips.length ? `<div class="facts" style="margin:8px 0 0">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
+          ${p.chips.length || p.secret ? `<div class="facts" style="margin:8px 0 0">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}${secretChip(p)}</div>` : ''}
           <div class="pt-b">
             ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${lookHTML(p)}</div>` : ''}
-            ${secretBox(p, true)}
             <div class="acts arow" style="margin-top:8px">${p.q ? `<a class="btn ink" href="${mapsDir(p.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${ideaBtn(p)}</div>
             ${tips(p)}
             ${story(p)}
@@ -1716,6 +1718,12 @@ function story(s){ const pro = proFor(s); const st = (pro ? [{text: pro.text}] :
   const words = plain.split(' ').length, mn = Math.max(1, Math.round(words/180));
   let hook = plain.split(/(?<![\s(][adAD]\.)(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"])/)[0]; if(hook.length > 210) hook = hook.slice(0, 207).replace(/\s\S*$/,'') + '…';
   return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span>${pro ? `<span class="faces">${pro.who.map(face).join('')}</span>` : ''}<span class="hook">“${esc(hook)}”</span><span class="pv">${esc(plain.slice(hook.length, hook.length + 220))}</span><span class="sh">Seguir leyendo aquí <i>⌄</i></span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
+window.__SEC = {};
+function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id); return `<button class="chip sec-chip${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">🔑 ${ok ? '¡Secreto encontrado!' : 'Secreto'}</button>`; }
+function verSecreto(id){ const s = window.__SEC[id]; if(!s) return; const el = document.getElementById('idea');
+  el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">🔑 SECRETO · ${esc(s.name.split(' · ')[0]).toUpperCase()}</div><div class="sec-x">${s.secret.text || (s.secret.items||[]).join(' ')}</div></div><label class="sec-l"><input type="checkbox" ${found(id) ? 'checked' : ''} onchange="setFound('${id}',this.checked);route(true)"> ¡Lo encontramos!</label><button class="btn ghost" style="margin:0 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
+  el.classList.add('on'); }
+window.verSecreto = verSecreto;
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><details class="secret-d${found(s.id) ? ' ok' : ''}"><summary><span>🔑 Secreto${found(s.id) ? ' · ¡encontrado!' : ''}</span><span class="sh">toquen para descubrirlo</span></summary><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></details></div>` : ''; }
 function ideaBtn(s){
   return s.tips.map((t, k) => { if(!/foto/i.test(t.lbl)) return ''; const txt = (t.text || '') + (t.items ? t.items.join(' · ') : ''); window.__IDEAS = window.__IDEAS || {}; const key = s.id + '-' + k; window.__IDEAS[key] = {name:s.name, txt, img: imgFor(s.name) || (CHAPTERS[+s.id.split('-')[0]] || {}).img}; return `<button class="idea-mini" onclick="idea('${key}')">📸 Idea de foto</button>`; }).join('');
