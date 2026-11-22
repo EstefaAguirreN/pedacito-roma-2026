@@ -134,6 +134,9 @@ details.story-d .sh{font-size:.8rem;font-weight:600;color:var(--coral-d);white-s
 details.story-d[open]>summary{border-bottom:1px solid var(--line);background:#F3EAD8;border-radius:12px 12px 0 0}
 details.story-d[open] .sh{font-size:0}details.story-d[open] .sh::after{content:'cerrar ↑';font-size:.8rem}
 details.story-d .in{padding:12px 14px 4px}
+details.story-d.prologo{background:#FBF6EA;border-color:var(--coral)}
+details.story-d.prologo summary small{display:block;font-weight:500;font-size:.85rem;color:var(--ink-2)}
+details.story-d.prologo summary{padding:10px 14px}
 details.story-d .in p{margin:0 0 10px}
 details.more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;font-weight:700}
 details.more>summary::-webkit-details-marker{display:none}
@@ -1126,7 +1129,7 @@ function renderChapter(id){
     <div class="facts"><span class="chip warm">${placesLabel(stops)}</span>${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}${w ? `<span class="chip">${w.icon} ${w.temp}</span>` : ''}</div>`;
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
-    h += `<details class="more" style="margin-top:16px"><summary>📖 ${esc(d.narrative.title)}</summary><div class="in">${d.narrative.body}</div></details>`;
+    h += `<details class="story-d prologo" style="margin-top:16px"><summary><span>📖 La historia de este capítulo<small>${esc(d.narrative.title)}</small></span><span class="sh">toquen para leer ↓</span></summary><div class="in">${d.narrative.body}</div></details>`;
   }
   // plan del día
   { const ICON = {airport:'✈️', transport:'🚆', stay:'🏠', food:'🍝', free:'🌿', walk:'🚶', group:'🚶'};
