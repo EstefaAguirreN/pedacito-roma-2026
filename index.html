@@ -635,6 +635,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 #idea .now-ic .now{box-shadow:none;border:0;margin:0;-webkit-mask:none;mask:none;padding-bottom:6px}
 .dlist .go .dd{display:block;font-size:.84rem;color:var(--ink);margin-top:1px}
 @media(min-width:700px){.dm-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}.dm-grid .dlist{margin-top:0}.dm-grid .dm-l{position:sticky;top:90px}}
+.moms-sec .mom-k{margin-top:0}
 </style>
 </head>
 <body>
@@ -1265,6 +1266,7 @@ const SHORT = [
 ];
 const shortDesc = x => { const m = SHORT.find(([k]) => x.name.includes(k)); if(m) return m[1]; const l = (x.line || '').replace(/<[^>]+>/g, ''); return /\d|·/.test(l) ? '' : l; };
 const legMin = (stops, n) => { const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {}; const a = n ? C[stops[n-1].q] : C['Via dei Cappellari 35 Roma'], b = C[stops[n].q]; return a && b ? Math.max(2, Math.round(km(a, b) * 1.3 / 4.5 * 60)) : 0; };
+const icoMom = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
 const MISION = {
   1:{t:'Descubrir las muchas Romas que viven dentro de una misma ciudad.', s:'De Campo de’ Fiori a la Fontana di Trevi, entre historias antiguas y arte barroco.', img:'Fotos/paradas/trevi.jpg'},
   2:{t:'Caminar por el lugar donde se decidía el destino de un imperio.', s:'Del Campidoglio al Coliseo, entre templos, palacios y gladiadores.', img:'Fotos/paradas/coliseo.jpg'},
@@ -1481,11 +1483,10 @@ function renderChapter(id){
     ${(() => { const ts = it.filter(x => mins(x.time) != null && x.kind !== 'log'); let hrs = ''; if(ts.length > 1){ const a = mins(ts[0].time), z = Math.max(...ts.map(x => mins(x.end) ?? mins(x.time))); hrs = '~' + Math.round((z - a)/60) + ' h'; }
       const nk = stops.filter(x => isKey(x.name)).length, lv = NIVEL[id].split(' · ');
       const tile = (ic, v, l) => `<div class="dt"><span class="di">${ic}</span><b>${v}</b><small>${l}</small></div>`;
-      const MI = MISION[id], ico = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
+      const MI = MISION[id];
       const cell = (ic, v, l) => `<div class="mc"><span class="mi">${ic}</span><div><b>${v}</b><small>${l}</small></div></div>`;
       return `${MI && false ? `<div class="mision"><div class="ms-ph"><img src="${MI.img}" alt=""></div><div class="ms-tx"><div class="ms-k">LA MISIÓN DE HOY</div><div class="ms-t">${MI.t}</div><div class="ms-s">${MI.s}</div></div></div>` : ''}
         <div class="mcells">${cell('📍', stops.length + (stops.length === 1 ? ' parada' : ' paradas'), nk + (nk === 1 ? ' imprescindible' : ' imprescindibles'))}${hrs ? cell('👣', hrs, 'de paseo a pie · ' + lv[0].toLowerCase()) : cell('📶', lv[0], lv[1] || '')}${w ? cell(w.icon, w.temp.replace('-', '–'), /oscurece/.test(w.desc) ? w.desc.split(' · ').find(x => /oscurece/.test(x)) : w.desc.split(' · ')[0]) : ''}</div>
-        ${(d.quickStats||[]).length ? `<div class="mom-k">LOS MOMENTOS IMPORTANTES</div><div class="moms">${d.quickStats.map(s => `<div class="mom"><span class="mi">${ico(s.lbl)}</span><b>${esc((v => v.includes(' – ') ? v.split(' – ')[0] + (/[AP]M$/.test(v) && !/[AP]M/.test(v.split(' – ')[0]) ? ' ' + v.slice(-2) : '') : v)(s.val.split(' · ')[0]))}</b><small>${esc(s.lbl)}${s.val.split(' · ')[1] ? ' · ' + esc(s.val.split(' · ')[1]) : ''}</small></div>`).join('')}</div>` : ''}
         `; })()}
 `;
   { const tc = TIME_CHARS[id]; if(tc && !DAY_CHARS[id]) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
@@ -1511,6 +1512,7 @@ function renderChapter(id){
     h += `<div class="sec glance"><div class="strip sm">Resumen del itinerario de hoy</div><div class="muted" style="font-size:.85rem">Todo el día de un vistazo, en orden. Toquen un momento para ir a él.</div><div class="strip-wrap"><button class="sarr l" onclick="document.getElementById('strip-d').scrollBy({left:-220,behavior:'smooth'})" aria-label="Anterior">‹</button><div class="strip-d" id="strip-d">${pills}</div><button class="sarr r" onclick="document.getElementById('strip-d').scrollBy({left:220,behavior:'smooth'})" aria-label="Siguiente">›</button><span class="swipe-hint">desliza →</span></div></div>`;
     window.__curK = curK;
   }
+  h += `<div class="sec moms-sec">${(d.quickStats||[]).length ? `<div class="mom-k">LOS MOMENTOS IMPORTANTES</div><div class="moms">${d.quickStats.map(s => `<div class="mom"><span class="mi">${icoMom(s.lbl)}</span><b>${esc((v => v.includes(' – ') ? v.split(' – ')[0] + (/[AP]M$/.test(v) && !/[AP]M/.test(v.split(' – ')[0]) ? ' ' + v.slice(-2) : '') : v)(s.val.split(' · ')[0]))}</b><small>${esc(s.lbl)}${s.val.split(' · ')[1] ? ' · ' + esc(s.val.split(' · ')[1]) : ''}</small></div>`).join('')}</div>` : ''}</div>`;
   h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="strip sm" id="pl-top">El mapa del día</div><div class="muted">Los números son los lugares en orden. Toquen uno para ir a su ficha.</div></div>
     <div class="box daymap"><div class="dm-grid"><div class="dm-l">${dayMap(stops, id)}${(() => { const qs = ['Via dei Cappellari 35 Roma'].concat(stops.map(s => s.q).filter(Boolean)); return qs.length > 1 ? `<a class="btn coral" style="margin-top:10px" href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(mq(qs[0]))}&destination=${encodeURIComponent(mq(qs[qs.length-1]))}${qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).slice(-9).map(q => encodeURIComponent(mq(q))).join('|') : ''}&travelmode=walking" target="_blank" rel="noopener">🗺 Abrir la ruta del día en Google Maps</a>` : ''; })()}
     </div><div class="dm-r"><ol class="dlist">${stops.map((x, n) => { const nowM = romeMin(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30); return `<li class="${visited(x.id) ? 'ok' : ''}${isNow ? ' nowrow' : ''}"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="Marcar ${esc(x.name)}">✓</button><span class="dn${isKey(x.name) ? ' key' : ''}">${n+1}</span><button class="go" onclick="jump('p-${x.id}')"><b>${esc(x.name)}</b>${isNow ? ' <em class="nowtag">Ahora</em>' : ''}${shortDesc(x) ? `<span class="dd">${esc(shortDesc(x))}</span>` : ''}<small>${x.time ? '🕒 ' + esc(x.time) : ''}${legMin(stops, n) ? ' · 🚶 ≈ ' + legMin(stops, n) + ' min ' + (n ? 'desde la anterior' : 'desde el Airbnb') : ''}${x.optional ? ' · opcional' : ''}</small></button></li>`; }).join('')}</ol></div></div></div>`;
