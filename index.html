@@ -127,6 +127,14 @@ body{padding-bottom:76px}
 .letter .end{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);text-align:center;font-family:'DM Serif Display',serif;font-style:italic}
 
 details.more{border-top:1px solid var(--line)}
+details.story-d{margin:10px 0 4px;border:1.5px solid var(--ink);border-radius:14px;background:#FFFDF8}
+details.story-d>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:52px;padding:0 14px;font-weight:700}
+details.story-d>summary::-webkit-details-marker{display:none}
+details.story-d .sh{font-size:.8rem;font-weight:600;color:var(--coral-d);white-space:nowrap}
+details.story-d[open]>summary{border-bottom:1px solid var(--line);background:#F3EAD8;border-radius:12px 12px 0 0}
+details.story-d[open] .sh{font-size:0}details.story-d[open] .sh::after{content:'cerrar ↑';font-size:.8rem}
+details.story-d .in{padding:12px 14px 4px}
+details.story-d .in p{margin:0 0 10px}
 details.more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;font-weight:700}
 details.more>summary::-webkit-details-marker{display:none}
 details.more>summary::after{content:'+';font-size:1.3rem;color:var(--coral-d)}
@@ -253,10 +261,31 @@ details.more .in p{margin:0 0 10px}
 .mission .mt{font-family:'DM Serif Display',serif;font-size:1.3rem;margin:4px 0 8px}
 .check{display:flex;align-items:center;gap:10px;min-height:44px;font-weight:600;cursor:pointer}
 .check input{width:22px;height:22px;accent-color:var(--sage);flex:none}
+.mtask{padding:10px 0;border-top:1px dashed #E6CF94}
+.mtask:first-of-type{border-top:0}
+.mtask textarea{width:100%;min-height:64px;margin-top:6px;border:1px solid #E6CF94;border-radius:12px;padding:10px;font:16px/1.4 Inter,sans-serif;background:#FFFDF8;color:var(--ink);resize:vertical}
+.mdesc{font-weight:400;font-size:.94rem;line-height:1.5;color:var(--ink)}
 .secrets-day{background:#EFE4CF;border-radius:var(--r);padding:16px 18px}
 .secrets-day .check{font-weight:500;font-size:.95rem;line-height:1.35;align-items:flex-start;padding:6px 0}
 .secrets-day .check input{margin-top:2px}
 
+.diary{background:#FBF6EA;border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.diary .d-h,.remind .r-h{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.diary .d-h>span{font-size:1.8rem}
+.diary .d-k{font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--ink-2)}
+.diary .d-t{font-family:'DM Serif Display',serif;font-size:1.35rem}
+.diary .j-q{font-family:'DM Serif Display',serif;font-style:italic;font-size:1.1rem;color:var(--coral-d);margin:12px 0 6px}
+.journal{display:block;width:100%;min-height:96px;border:1.5px dashed var(--ink);border-radius:10px;padding:2px 12px;font:1.3rem/32px Caveat,cursive;color:var(--ink);resize:vertical;background-color:#FBF6EA;background-image:repeating-linear-gradient(180deg,transparent 0 31px,#B9D4DD 31px 32px);background-attachment:local}
+.journal.tall{min-height:160px}
+.remind{position:relative;overflow:hidden;border-radius:var(--r);padding:18px 18px 12px;color:#fff;background:linear-gradient(135deg,#DE967E,#C26D52);box-shadow:var(--sh)}
+.remind::after{content:'';position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.12)}
+.remind .bell{font-size:2rem}
+.remind .r-k{font-size:.74rem;font-weight:700;letter-spacing:.12em;opacity:.9}
+.remind .r-t{font-family:'DM Serif Display',serif;font-size:1.4rem}
+.remind p{margin:0 0 8px;color:var(--ink)}
+.remind .r-i{display:flex;gap:10px;align-items:flex-start;padding:7px 0;cursor:pointer;line-height:1.4}
+.remind .r-i strong,.remind .r-i b{text-decoration:underline;text-underline-offset:3px}
+.remind input{flex:none;width:22px;height:22px;margin-top:1px;accent-color:#fff}
 .nextchap{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:22px 0 40px;padding:18px;border:0;border-radius:var(--r);background:var(--ink);color:#fff;text-align:left;cursor:pointer}
 .nextchap b{display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:1.25rem}
 .nextchap small{font-size:.76rem;font-weight:700;letter-spacing:.06em;color:var(--yellow)}
@@ -1188,10 +1217,16 @@ function renderChapter(id){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>🧭 Por si acaso · avisos y planes B</summary><div class="in">${d.notices.map(n => `<div class="notice ${n.type}" style="margin-top:8px"><b class="t">${n.title.replace(/^[★!✅]\s*/,'')}</b>${n.body}</div>`).join('')}</div></details></div>`;
   }
   if(secrets.length){
-    h += `<div class="sec"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || '').replace(/<[^>]+>/g,'').split(/(?<=[.:])\s/)[0])}</span></label>`).join('')}</div></div>`;
+    h += `<div class="sec"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || (s.secret.items||[]).join(' ')).replace(/<[^>]+>/g,''))}</span></label>`).join('')}</div></div>`;
   }
   if(d.mission){
-    h += `<div class="sec"><div class="mission"><div class="mk">🎯 LA MISIÓN DE RAFITA</div><div class="mt">${d.mission.title}</div><div>${d.mission.body}</div><label class="check" style="margin-top:8px"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"> ¡Misión cumplida!</label></div></div>`;
+    const tx = (k, q, ph) => { const key = `mision-${id}-${k}`, v = store.get('n:' + key, ''); return `<div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${v ? 'checked' : ''} disabled><span>${q}</span></label><textarea placeholder="${ph}" oninput="store.set('n:${key}',this.value);this.closest('.mtask').querySelector('input').checked=!!this.value.trim();clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea></div>`; };
+    h += `<div class="sec"><div class="mission"><div class="mk">🎯 LAS MISIONES DE RAFITA</div>
+      <div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"><span><b>${d.mission.title}</b><br><span class="mdesc">${d.mission.body}</span></span></label></div>
+      ${tx('favorito', '<b>Un mensaje para Rafita:</b> ¿cuál fue su lugar favorito de hoy y por qué?', 'Rafita, hoy nuestro lugar favorito fue…')}
+      ${tx('juntas', '<b>Para Naty y Estefa:</b> ¿a qué lugar de hoy quieren que volvamos todas juntas algún día?', 'Queremos volver con ustedes a…')}
+      <div class="small" style="white-space:normal;margin-top:6px">Lo que escriban aquí lo leemos desde casa. ❤️</div>
+    </div></div>`;
   }
   if(d.letter){
     h += `<div class="sec"><div class="letter"><div class="when">💌 ${esc((d.letter.when || 'Una carta desde casa').toUpperCase())}</div><div class="lt">${d.letter.title}</div>${d.letter.body.replace(/ class="lt-hi"/g,'')}<div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div>`;
@@ -1199,9 +1234,12 @@ function renderChapter(id){
   if(d.budget){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>💶 Presupuesto del día · ${d.budget.total}</summary><div class="in"><table class="bt">${d.budget.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${d.budget.total}</td></tr></table>${d.budget.extra ? `<p class="small" style="white-space:normal;margin-top:8px">${d.budget.extra}</p>` : ''}${d.budget.note ? `<p class="small" style="white-space:normal">${d.budget.note}</p>` : ''}</div></details></div>`;
   }
+  // diario del día (se comparte con la familia)
+  { const jr = (k, q, tall) => { const key = `diario-${id}-${k}`; return `<div class="j-q">${q}</div><textarea class="journal${tall ? ' tall' : ''}" oninput="store.set('n:${key}',this.value);clearTimeout(window.__jt);window.__jt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(store.get('n:' + key, ''))}</textarea>`; };
+    h += `<div class="sec"><div class="diary"><div class="d-h"><span>📔</span><div><div class="d-k">PARA ESCRIBIR AL FINAL DEL DÍA</div><div class="d-t">Diario del día</div></div></div>${jr('a', 'Lo mejor del día fue…', true)}${jr('b', 'Una palabra para este día:', false)}${jr('c', 'Algo que nos hizo reír:', false)}</div></div>`; }
   if(d.tomorrowReminder){
     const tr = d.tomorrowReminder;
-    h += `<div class="sec"><div class="box"><div class="eyebrow">🔔 ANTES DE DORMIR</div><p style="margin:6px 0 8px">${tr.intro}</p>${tr.tasks.map((t, k) => `<label class="check" style="font-weight:500;align-items:flex-start;padding:4px 0"><input type="checkbox" ${store.get('t:' + id + '-' + k, false) ? 'checked' : ''} onchange="store.set('t:${id}-${k}',this.checked);share('tarea:${id}-${k}',this.checked)"><span>${t}</span></label>`).join('')}</div></div>`;
+    h += `<div class="sec"><div class="remind"><div class="r-h"><span class="bell">🔔</span><div><div class="r-k">ANTES DE DORMIR HOY</div><div class="r-t">Recordatorio para mañana</div></div></div><p>${tr.intro}</p>${tr.tasks.map((t, k) => `<label class="r-i"><input type="checkbox" ${store.get('t:' + id + '-' + k, false) ? 'checked' : ''} onchange="store.set('t:${id}-${k}',this.checked);share('tarea:${id}-${k}',this.checked)"><span>${t}</span></label>`).join('')}</div></div>`;
   }
   const nd = DAYS.find(x => x.id === id + 1);
   h += nd ? `<button class="nextchap" onclick="go('capitulo-${nd.id}')"><span><small>SIGUIENTE</small><b>${CHAPTERS[nd.id].short} · ${CHAPTERS[nd.id].dest}</b></span><span aria-hidden="true">→</span></button>`
@@ -1215,7 +1253,7 @@ const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','
 function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length; return [nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : '', nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''].filter(Boolean).join(' · '); }
 function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
 function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
-function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="more"><summary>📖 Descubrir su historia</summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
+function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="story-d"><summary><span>📖 Descubrir su historia</span><span class="sh">toquen para leer ↓</span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><div class="secret"><div class="sk">🔑 EL SECRETO DE ESTE LUGAR</div><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></div></div>` : ''; }
 function tips(s){ return s.tips.map(t => `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${t.text || ''}${t.items ? t.items.join(' · ') : ''}</div>`).join(''); }
 function visitBtn(s){ const on = visited(s.id); return `<button class="visit${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}"><span class="vc">✓</span><span class="vt">${on ? '¡Ya estuvimos aquí!' : '¿Ya estuvieron aquí?'}<small>${on ? 'toquen para desmarcar' : 'toquen para marcarlo'}</small></span></button>`; }
