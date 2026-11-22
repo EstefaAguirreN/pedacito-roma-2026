@@ -633,6 +633,8 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .mom b{display:inline;font-size:.92rem;margin:0 0 0 2px}
 .mom small{font-size:.68rem;margin-top:1px}
 #idea .now-ic .now{box-shadow:none;border:0;margin:0;-webkit-mask:none;mask:none;padding-bottom:6px}
+.dlist .go .dd{display:block;font-size:.84rem;color:var(--ink);margin-top:1px}
+@media(min-width:700px){.dm-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}.dm-grid .dlist{margin-top:0}.dm-grid .dm-l{position:sticky;top:90px}}
 </style>
 </head>
 <body>
@@ -1249,6 +1251,20 @@ const CHAPTERS = {
   3:{num:'03 · MARTES 24 NOV', short:'Capítulo III', dest:'Vaticano', obj:'Arte, fe y algunas de las obras más importantes del mundo.', places:'Plaza y Basílica de San Pedro · Museos Vaticanos · Capilla Sixtina', meta:'Arte y Renacimiento · Museos 12:30', img:'Fotos/cap3-san-pedro.webp'},
   4:{num:'EPÍLOGO · MIÉRCOLES 25 NOV', short:'Epílogo', dest:'Arrivederci, Roma', obj:'Despedirse de Trevi con la luz de la mañana y volver a Madrid sin afanes.', places:'Fontana di Trevi · Vuelo a Madrid', meta:'Trevi 7:35 · Vuelo 12:00', img:'Fotos/epilogo-callecita.webp'}
 };
+const SHORT = [
+  ["Campo de' Fiori", 'Mercado, plaza y la estatua de Giordano Bruno'], ['gelato', 'Pausa dulce en Frigidarium'],
+  ['Piazza Navona', 'El estadio de Domiciano convertido en plaza'], ['Panteón', 'El templo romano que sigue en pie'],
+  ['Tortugas', 'Una fuente escondida en el Gueto'], ['Boccione', 'Pastelería tradicional del Gueto'],
+  ['Octavia', 'Ruinas romanas en pleno Gueto'], ['Marcelo', 'Un teatro romano anterior al Coliseo'],
+  ['Campidoglio', 'La plaza diseñada por Miguel Ángel'], ['Trajano', 'Una columna que cuenta una guerra'],
+  ['Foro Romano', 'El corazón político de la antigua Roma'], ['ángulo diferente', 'La foto del Coliseo desde el Foro'],
+  ['Palatino', 'La colina de los emperadores'], ['Arco de Constantino', 'Un arco triunfal junto al Coliseo'],
+  ['Coliseo', 'El anfiteatro más famoso del Imperio'], ['Plaza de San Pedro', 'La plaza abrazada por las columnas de Bernini'],
+  ['Basílica de San Pedro', 'La Piedad, el baldaquino y la cúpula'], ['Museos Vaticanos', 'Rafael, el Laocoonte y la Capilla Sixtina'],
+  ["Castel Sant'Angelo", 'El mausoleo de Adriano iluminado'], ['Trevi', 'Una moneda y la promesa de volver']
+];
+const shortDesc = x => { const m = SHORT.find(([k]) => x.name.includes(k)); if(m) return m[1]; const l = (x.line || '').replace(/<[^>]+>/g, ''); return /\d|·/.test(l) ? '' : l; };
+const legMin = (stops, n) => { const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {}; const a = n ? C[stops[n-1].q] : C['Via dei Cappellari 35 Roma'], b = C[stops[n].q]; return a && b ? Math.max(2, Math.round(km(a, b) * 1.3 / 4.5 * 60)) : 0; };
 const MISION = {
   1:{t:'Descubrir las muchas Romas que viven dentro de una misma ciudad.', s:'De Campo de’ Fiori a la Fontana di Trevi, entre historias antiguas y arte barroco.', img:'Fotos/paradas/trevi.jpg'},
   2:{t:'Caminar por el lugar donde se decidía el destino de un imperio.', s:'Del Campidoglio al Coliseo, entre templos, palacios y gladiadores.', img:'Fotos/paradas/coliseo.jpg'},
@@ -1496,8 +1512,8 @@ function renderChapter(id){
     window.__curK = curK;
   }
   h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="strip sm" id="pl-top">El mapa del día</div><div class="muted">Los números son los lugares en orden. Toquen uno para ir a su ficha.</div></div>
-    <div class="box daymap">${dayMap(stops, id)}${(() => { const qs = ['Via dei Cappellari 35 Roma'].concat(stops.map(s => s.q).filter(Boolean)); return qs.length > 1 ? `<a class="btn coral" style="margin-top:10px" href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(mq(qs[0]))}&destination=${encodeURIComponent(mq(qs[qs.length-1]))}${qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).slice(-9).map(q => encodeURIComponent(mq(q))).join('|') : ''}&travelmode=walking" target="_blank" rel="noopener">🗺 Abrir la ruta del día en Google Maps</a>` : ''; })()}
-    <ol class="dlist">${stops.map((x, n) => { const nowM = romeMin(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30); return `<li class="${visited(x.id) ? 'ok' : ''}${isNow ? ' nowrow' : ''}"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="Marcar ${esc(x.name)}">✓</button><span class="dn${isKey(x.name) ? ' key' : ''}">${n+1}</span><button class="go" onclick="jump('p-${x.id}')"><b>${esc(x.name)}</b>${isNow ? ' <em class="nowtag">Ahora</em>' : ''}<small>${x.time ? esc(x.time) : ''}${x.optional ? ' · opcional' : ''}</small></button></li>`; }).join('')}</ol></div>`;
+    <div class="box daymap"><div class="dm-grid"><div class="dm-l">${dayMap(stops, id)}${(() => { const qs = ['Via dei Cappellari 35 Roma'].concat(stops.map(s => s.q).filter(Boolean)); return qs.length > 1 ? `<a class="btn coral" style="margin-top:10px" href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(mq(qs[0]))}&destination=${encodeURIComponent(mq(qs[qs.length-1]))}${qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).slice(-9).map(q => encodeURIComponent(mq(q))).join('|') : ''}&travelmode=walking" target="_blank" rel="noopener">🗺 Abrir la ruta del día en Google Maps</a>` : ''; })()}
+    </div><div class="dm-r"><ol class="dlist">${stops.map((x, n) => { const nowM = romeMin(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30); return `<li class="${visited(x.id) ? 'ok' : ''}${isNow ? ' nowrow' : ''}"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="Marcar ${esc(x.name)}">✓</button><span class="dn${isKey(x.name) ? ' key' : ''}">${n+1}</span><button class="go" onclick="jump('p-${x.id}')"><b>${esc(x.name)}</b>${isNow ? ' <em class="nowtag">Ahora</em>' : ''}${shortDesc(x) ? `<span class="dd">${esc(shortDesc(x))}</span>` : ''}<small>${x.time ? '🕒 ' + esc(x.time) : ''}${legMin(stops, n) ? ' · 🚶 ≈ ' + legMin(stops, n) + ' min ' + (n ? 'desde la anterior' : 'desde el Airbnb') : ''}${x.optional ? ' · opcional' : ''}</small></button></li>`; }).join('')}</ol></div></div></div>`;
   const logs = it.map((x, k) => [x, k]).filter(([x]) => x.kind === 'log');
   if(logs.length){
     h += `<details class="more box" id="traslados" style="padding:4px 18px;margin-top:12px"><summary>🚆 Traslados, comidas y descanso del día</summary><div class="in"><ul class="plan">`;
@@ -1645,14 +1661,14 @@ function dayMap(stops, did){
     for(const f of [.5, .35, .65]) for(const o of [0, 13, -13]){ const mx = a[0] + (b[0]-a[0])*f + nx*o, my = a[1] + (b[1]-a[1])*f + ny*o, r = {x:mx - w/2, y:my - 8, w, h:16};
       if(!placed.concat(pinR).some(x => ov(r, x) > 0)){ placed.push(r); return `<rect x="${r.x}" y="${r.y}" width="${w}" height="16" rx="8" fill="#F3DFA6"/><text x="${mx}" y="${my + 3.5}" text-anchor="middle" font-family="Inter" font-size="9.5" font-weight="700" fill="#283B4D">🚶${m}′</text>`; } }
     return ''; }).join('');
-  return `<div class="dm-cap">🚶 Salen del Airbnb y recorren <b>${pts.length} ${pts.length === 1 ? 'lugar' : 'lugares'} a pie</b> · ${WALK[did] ? `≈ <b>${WALK[did]} caminando</b> en total según Google Maps, sin contar el tiempo en cada parada. Las cifras amarillas son el tramo aproximado entre una parada y otra.` : `unos <b>${dist.toFixed(1).replace('.', ',')} km</b> en total.`}</div>
+  return `<div class="dm-cap">🚶 Salen del Airbnb y recorren <b>${pts.length} ${pts.length === 1 ? 'lugar' : 'lugares'} a pie</b> · ${WALK[did] ? `≈ <b>${WALK[did]} caminando</b> en total según Google Maps, sin contar el tiempo en cada parada.` : `unos <b>${dist.toFixed(1).replace('.', ',')} km</b> en total.`}</div>
   <svg class="dm" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de Roma con los lugares del día">
     <defs><clipPath id="dmclip"><rect width="${W}" height="${H}" rx="12"/></clipPath><pattern id="dmdots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(40,59,77,.08)"/></pattern></defs>
     <g clip-path="url(#dmclip)"><rect width="${W}" height="${H}" fill="#EFE6D3"/><rect width="${W}" height="${H}" fill="url(#dmdots)"/>
     <path d="${river}" fill="none" stroke="#C9DCE2" stroke-width="${Math.max(10, Math.min(26, sc*0.0009))}" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="${rmid[0] - 8}" y="${rmid[1]}" font-family="Caveat" font-size="15" fill="#7EA7B5" text-anchor="end">río Tíber</text>
     <path d="${path}" fill="none" stroke="#283B4D" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>
-    ${legs}${labels}
+    ${labels}
     <g><circle cx="${hp[0]}" cy="${hp[1]}" r="14" fill="#283B4D" stroke="#E4BD63" stroke-width="3"/><text x="${hp[0]}" y="${hp[1]+5}" text-anchor="middle" font-size="13">🏠</text></g>
     ${pts.map(p => { const q = P(p.c), key = isKey(p.s.name), on = visited(p.s.id); return `<g class="dmp" onclick="jump('p-${p.s.id}')"><circle cx="${q[0]}" cy="${q[1]}" r="14" fill="${on ? '#8C9D86' : key ? '#C8735C' : '#F3DFA6'}" stroke="#fff" stroke-width="2.5"/><text x="${q[0]}" y="${q[1]+4.5}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="12" fill="${on || key ? '#fff' : '#283B4D'}">${on ? '✓' : p.n}</text></g>`; }).join('')}
     <g transform="translate(${W - 24} 26)"><circle r="15" fill="#FFFDF8" stroke="#C8735C" stroke-width="1.5"/><path d="M0 -11 L4 0 L0 11 L-4 0 Z" fill="#C8735C"/><text y="-17" text-anchor="middle" font-size="9" font-weight="700" fill="#283B4D">N</text></g>
