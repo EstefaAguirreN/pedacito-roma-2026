@@ -577,11 +577,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 #fab-now[hidden]{display:none}
 #fab-now .fn-i{font-size:1.5rem;line-height:1}
 @keyframes fabin{from{transform:scale(.6);opacity:0}}
-#nowsheet{position:fixed;inset:0;z-index:90;background:rgba(20,28,38,.45);display:none;align-items:flex-end;justify-content:center}
-#nowsheet.on{display:flex}
-#nowsheet .ns-in{position:relative;width:100%;max-width:560px;max-height:85vh;overflow:auto;padding:14px 12px calc(16px + env(safe-area-inset-bottom));background:var(--ivory);border-radius:22px 22px 0 0;animation:nsup .25s ease}
 @keyframes nsup{from{transform:translateY(40px);opacity:.4}}
-#nowsheet .ns-x{position:absolute;right:16px;top:14px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:.9rem;cursor:pointer}
 .tipd>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .tipd>summary::-webkit-details-marker{display:none}
 .tipd .lx{flex:none;font-size:.75rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:4px 10px}
@@ -636,6 +632,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .mom .mi{display:inline;font-size:.85rem}
 .mom b{display:inline;font-size:.92rem;margin:0 0 0 2px}
 .mom small{font-size:.68rem;margin-top:1px}
+#idea .now-ic .now{box-shadow:none;border:0;margin:0;-webkit-mask:none;mask:none;padding-bottom:6px}
 </style>
 </head>
 <body>
@@ -817,7 +814,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 <div id="tour" role="dialog" aria-modal="true"><div class="tcard"><div class="tstep" id="t-step"></div><div class="ttitle" id="t-title"></div><div class="ttext" id="t-text"></div><div class="tacts"><button class="btn soft" id="t-skip" onclick="tourEnd()">Saltar</button><button class="btn coral" id="t-next" onclick="tourNext()">Siguiente →</button></div></div></div>
 <div id="idea" onclick="this.classList.remove('on')"></div>
 <button id="fab-now" onclick="openNow()" aria-label="¿Qué hacemos ahora?" hidden><span class="fn-i">🧭</span><span class="fn-t">¿Qué hacemos<br>ahora?</span></button>
-<div id="nowsheet" onclick="if(event.target===this||event.target.closest('a,button'))closeNow()"><div class="ns-in"><button class="ns-x" aria-label="Cerrar">✕</button><div id="ahora"></div></div></div>
+
 <div id="lightbox" onclick="this.classList.remove('on')"></div>
 <div id="toast" role="status"></div>
 
@@ -1342,8 +1339,10 @@ function verFoto(k){ const o = window.__LK[k]; if(!o) return; const el = documen
   el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">🔍 QUÉ BUSCAR · ${esc(o.n).toUpperCase()}</div></div><img class="lk-big" src="Fotos/${o.i}" alt="${esc(o.n)}">${o.d ? `<div class="lk-d">${o.d}</div>` : ''}${o.f ? `<div class="lk-cr">Foto: <a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(o.f)}" target="_blank" rel="noopener">Wikimedia Commons</a></div>` : ''}<button class="btn ghost" style="margin:10px 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
   el.classList.add('on'); }
 window.verFoto = verFoto;
-function openNow(){ renderNow(); document.getElementById('nowsheet').classList.add('on'); }
-function closeNow(){ setTimeout(() => document.getElementById('nowsheet').classList.remove('on'), 50); }
+function openNow(){ const el = document.getElementById('idea');
+  el.innerHTML = `<div class="ic now-ic" onclick="event.stopPropagation(); if(event.target.closest('a,button')) closeNow()"><div id="ahora"></div><button class="btn ghost" style="margin:0 14px 14px">Cerrar</button></div>`;
+  renderNow(null, ((typeof VIEW !== 'undefined' && VIEW) || location.hash.slice(1)) === 'capitulo-' + tripDay()); el.classList.add('on'); }
+function closeNow(){ setTimeout(() => document.getElementById('idea').classList.remove('on'), 50); }
 function fabNow(){ const f = document.getElementById('fab-now'); if(f) f.hidden = !tripDay(); }
 window.openNow = openNow; window.closeNow = closeNow;
 function toChap(n){ const e = document.getElementById('chapcard-' + n); if(!e) return go('capitulo-' + n); e.scrollIntoView({behavior:'smooth', block:'center'}); e.classList.remove('flash'); void e.offsetWidth; e.classList.add('flash'); }
@@ -1826,7 +1825,7 @@ if(window.supabase && SUPA_URL.indexOf('/*') !== 0 && SUPA_URL.indexOf('http') =
   route(true);
 }
 setTimeout(() => tour(false), 700);
-setInterval(() => { fabNow(); if(!document.hidden && document.getElementById('nowsheet').classList.contains('on')) renderNow(); }, 60000);
+setInterval(() => { fabNow(); if(!document.hidden && document.getElementById('ahora')) renderNow(); }, 60000);
 fabNow();
 }
 </script>
