@@ -1286,6 +1286,7 @@ const SHORT = [
 const shortDesc = x => { const m = SHORT.find(([k]) => x.name.includes(k)); if(m) return m[1]; const l = (x.line || '').replace(/<[^>]+>/g, ''); return /\d|·/.test(l) ? '' : l; };
 const legMin = (stops, n) => { const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {}; const a = n ? C[stops[n-1].q] : C['Via dei Cappellari 35 Roma'], b = C[stops[n].q]; return a && b ? Math.max(2, Math.round(km(a, b) * 1.3 / 4.5 * 60)) : 0; };
 const icoMom = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
+const cleanLine = l => (l || '').split(' · ').filter(x => !/^\s*(~?\d+\s*(min|h)\b|gratis|.*€|parada \d+)/i.test(x.replace(/<[^>]+>/g,''))).join(' · ');
 const MISION = {
   1:{t:'Descubrir las muchas Romas que viven dentro de una misma ciudad.', s:'De Campo de’ Fiori a la Fontana di Trevi, entre historias antiguas y arte barroco.', img:'Fotos/paradas/trevi.jpg'},
   2:{t:'Caminar por el lugar donde se decidía el destino de un imperio.', s:'Del Campidoglio al Coliseo, entre templos, palacios y gladiadores.', img:'Fotos/paradas/coliseo.jpg'},
@@ -1583,7 +1584,7 @@ function renderChapter(id){
         ${c.pts.map((p, j) => { const C = typeof PLACE_COORDS !== 'undefined' ? PLACE_COORDS : {}, pi = j ? C[c.pts[j-1].q] : null, pc = C[p.q], wm = pi && pc ? Math.max(2, Math.round(km(pi, pc) * 1.3 / 4.5 * 60)) : 0, pim = imgFor(p.name);
           return `${j ? `<div class="pt-walk"><span>🚶 ${wm ? '≈ ' + wm + ' min caminando hasta la siguiente parada' : 'siguiente parada'}</span></div>` : ''}<div class="pt" id="p-${p.id}">
           ${pim ? `<div class="pt-ph"><img src="${pim}" alt="" loading="lazy"></div>` : ''}
-          <div class="pt-h"><span class="pt-n${isKey(p.name) ? ' key' : ''}">${p.n || j+1}</span><div style="flex:1"><div class="pt-k">PARADA ${p.n || j+1}${p.optional ? ' · OPCIONAL' : ''}</div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? '🕒 ' + esc(p.time) + ' · ' : ''}${(p.line || '').replace(/^parada \d+ · /i, '')}</div></div>${visitCorner(p)}</div>
+          <div class="pt-h"><span class="pt-n${isKey(p.name) ? ' key' : ''}">${p.n || j+1}</span><div style="flex:1"><div class="pt-k">PARADA ${p.n || j+1}${p.optional ? ' · OPCIONAL' : ''}</div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? '🕒 ' + esc(p.time) + ' · ' : ''}${cleanLine(p.line).replace(/^parada \d+ · /i, '')}</div></div>${visitCorner(p)}</div>
           ${p.chips.length || p.secret ? `<div class="facts" style="margin:8px 0 0">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}${secretChip(p)}</div>` : ''}
           <div class="pt-b">
             ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${lookHTML(p)}</div>` : ''}
