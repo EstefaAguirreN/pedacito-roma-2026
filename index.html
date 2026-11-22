@@ -169,6 +169,14 @@ details.more .in p{margin:0 0 10px}
 .facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:.82rem;font-weight:600;white-space:nowrap}
 .chip.warm{background:#FBEFD2;border-color:#EFD9A2}
+.infobox{margin-top:12px;background:var(--card);border-radius:12px;padding:12px 14px;display:grid;gap:6px;font-size:.92rem;box-shadow:var(--sh);border-left:4px solid var(--yellow)}
+.capnav{display:flex;gap:8px;overflow-x:auto;margin-top:12px;padding-bottom:4px}
+.capnav a{flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:.86rem;text-decoration:none}
+.capnav a:first-child{background:var(--ink);color:#fff;border-color:var(--ink)}
+.plan .th{flex:none;width:52px;height:52px;border-radius:10px;object-fit:cover}
+.plan .nowrow{background:#FBEFD2;border-radius:10px}
+.nowtag{display:inline-block;font-style:normal;font-size:.7rem;font-weight:800;background:var(--yellow);color:var(--ink);border-radius:4px;padding:1px 6px;margin-left:4px;transform:rotate(-2deg)}
+#secretos-dia,#mision,#album-dia,#lugares{scroll-margin-top:110px}
 .timechars{margin-top:12px;font-size:.92rem;color:var(--ink-2);display:grid;gap:4px}
 .timechars b{color:var(--ink)}
 .notice{border-radius:14px;padding:12px 14px;margin-top:10px;font-size:.93rem;background:var(--card);border-left:4px solid var(--sage)}
@@ -978,6 +986,7 @@ const CHAPTERS = {
   3:{num:'03 · MARTES 24 NOV', short:'Capítulo III', dest:'Vaticano', obj:'Arte, fe y algunas de las obras más importantes del mundo.', places:'Plaza y Basílica de San Pedro · Museos Vaticanos · Capilla Sixtina', meta:'Arte y Renacimiento · Museos 12:30', img:'Fotos/cap3-san-pedro.webp'},
   4:{num:'EPÍLOGO · MIÉRCOLES 25 NOV', short:'Epílogo', dest:'Arrivederci, Roma', obj:'Despedirse de Trevi con la luz de la mañana y volver a Madrid sin afanes.', places:'Fontana di Trevi · Vuelo a Madrid', meta:'Trevi 7:35 · Vuelo 12:00', img:'Fotos/epilogo-callecita.webp'}
 };
+const NIVEL = {1:'Tranquilo · después del vuelo', 2:'Exigente · mucha caminata', 3:'Moderado · museos largos', 4:'Tranquilo · día de viaje'};
 const TIME_CHARS = {
   1:{t:'Siglos XVI–XVIII, con un salto al siglo II d. C.', p:'Bernini, Borromini, Adriano y Rafael.'},
   2:{t:'Siglo I a. C. – siglo II d. C.', p:'Julio César, Augusto, Trajano, Marco Aurelio y Cómodo.'},
@@ -1086,8 +1095,9 @@ function renderHome(){
   renderBoard();
   ['Alexa','Sofi'].forEach((w, k) => { $('#n' + (k+1)).innerHTML = [...w].map(ch => `<span>${ch}</span>`).join(''); });
 }
-function renderNow(){
-  const td = tripDay(), box = $('#ahora');
+function renderNow(target, inCap){
+  const td = tripDay(), box = $(target ? '#' + target : '#ahora');
+  if(!box) return;
   if(!td){ box.innerHTML = ''; return; }
   const d = DAYS[td-1], c = CHAPTERS[td], it = built(d), now = new Date(), m = now.getHours()*60 + now.getMinutes();
   const timed = it.filter(x => (x.kind === 'stop' || x.kind === 'log' || x.kind === 'group') && mins(x.time) != null);
@@ -1104,7 +1114,7 @@ function renderNow(){
   box.innerHTML = `<div class="now torn"><div class="ban">🧭 ¿Qué hacemos ahora?</div><div class="eyebrow">🧭 ¿QUÉ HACEMOS AHORA?</div><div class="dname">Hoy · ${d.date} · <span>${c.dest}</span></div>
     ${slot(cur, '', 'AHORA MISMO')}${slot(nxt, 'next', cur ? 'DESPUÉS' : 'LO PRÓXIMO')}
     ${!cur && !nxt ? '<div class="t">El plan de hoy ya terminó. ¡A descansar! 💛</div>' : ''}
-    <div class="acts" style="margin-top:12px"><button class="btn ghost" onclick="go('capitulo-${td}')">Abrir el capítulo de hoy →</button></div></div>`;
+    ${inCap ? '' : `<div class="acts" style="margin-top:12px"><button class="btn ghost" onclick="go('capitulo-${td}')">Abrir el capítulo de hoy →</button></div>`}</div>`;
 }
 function renderBoard(){
   $('#tablero').innerHTML = DAYS.map(d => {
@@ -1126,7 +1136,10 @@ function renderChapter(id){
   const vv = stops.filter(x => visited(x.id)).length, sf = secrets.filter(x => found(x.id)).length;
   let h = `<div class="dayprog" onclick="jump('pl-top')"><div class="dp-t"><b>✓ ${vv} de ${stops.length} lugares</b>${secrets.length ? ` · 🔑 ${sf} de ${secrets.length} secretos` : ''}</div><div class="bar"><i style="width:${stops.length ? Math.round(vv/stops.length*100) : 0}%"></i></div></div>
   <div class="hero"><span class="stk stk${id}"><small>${id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${id < 4 ? '0' + id : '✦'}</b></span><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
-    <div class="facts"><span class="chip warm">${placesLabel(stops)}</span>${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}${w ? `<span class="chip">${w.icon} ${w.temp}</span>` : ''}</div>`;
+    <div class="infobox"><div>📅 <b>${d.date.replace(/^./, x => x.toUpperCase())}</b></div><div>🚶 Recorrido a pie · ${placesLabel(stops)}</div>${(() => { const ts = it.filter(x => mins(x.time) != null && x.kind !== 'log'); if(ts.length < 2) return ''; const a = mins(ts[0].time), z = Math.max(...ts.map(x => mins(x.end) ?? mins(x.time))); const hh = Math.round((z - a)/60); return `<div>⏱ Duración: unas ${hh} horas de paseo</div>`; })()}<div>📶 Nivel: ${NIVEL[id]}</div>${w ? `<div>${w.icon} ${w.temp} · ${w.desc}</div>` : ''}</div>
+    <div class="facts">${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}</div>
+    <nav class="capnav"><a href="#" onclick="jump('pl-top');return false">📋 Plan</a><a href="#" onclick="jump('lugares');return false">📍 Lugares</a>${secrets.length ? `<a href="#" onclick="jump('secretos-dia');return false">🔑 Secretos</a>` : ''}${d.mission ? `<a href="#" onclick="jump('mision');return false">🎯 Rafita</a>` : ''}<a href="#" onclick="jump('album-dia');return false">📸 Álbum</a></nav>
+    ${tripDay() === id ? '<div id="ahora-cap" style="margin-top:14px"></div>' : ''}`;
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
     h += `<details class="story-d prologo" style="margin-top:16px"><summary><span>📖 La historia de este capítulo<small>${esc(d.narrative.title)}</small></span><span class="sh">toquen para leer ↓</span></summary><div class="in">${d.narrative.body}</div></details>`;
@@ -1156,7 +1169,8 @@ function renderChapter(id){
     } else if(x.kind === 'group'){
       h += `<li id="pl-${k}"><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
     } else {
-      h += `<li class="stop${visited(x.id) ? ' ok' : ''}"><span class="tm">${esc(x.time)}</span><span class="row-ck"><button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="${visited(x.id) ? 'Desmarcar' : 'Marcar'} ${esc(x.name)} como visitado">✓</button><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></span></li>`;
+      const thumb = imgFor(x.name), nowM = new Date().getHours()*60 + new Date().getMinutes(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30);
+      h += `<li class="stop${visited(x.id) ? ' ok' : ''}${isNow ? ' nowrow' : ''}"><span class="tm">${esc(x.time)}</span><span class="row-ck">${thumb ? `<img class="th" src="${thumb}" alt="" loading="lazy">` : ''}<button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="${visited(x.id) ? 'Desmarcar' : 'Marcar'} ${esc(x.name)} como visitado">✓</button><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}${isNow ? ' <em class="nowtag">Actividad actual</em>' : ''}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></span></li>`;
     }
   });
   h += `</ul></div></div>`;
@@ -1172,7 +1186,7 @@ function renderChapter(id){
   });
   cards.forEach((c, k) => { c.n = k + 1; c.id = c.type === 'major' ? c.s.id : c.pts[0].id + '-r'; });
   const tot = String(cards.length).padStart(2,'0');
-  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">LOS LUGARES DEL DÍA</div><div class="h2">Qué estamos viendo</div></div>`;
+  h += `<div class="sec"><div class="sec-head"><div class="eyebrow" id="lugares">LOS LUGARES DEL DÍA</div><div class="h2">Qué estamos viendo</div></div>`;
   cards.forEach((c, k) => {
     const next = cards[k+1], nextName = next ? (next.type === 'major' ? next.s.name : (next.title || next.pts.map(p => p.name).join(' y '))) : '';
     const cont = next ? `<div class="nextstop">Siguiente: <a href="#" onclick="jump('p-${next.id}');return false">${esc(nextName)} →</a></div>` : '';
@@ -1220,11 +1234,11 @@ function renderChapter(id){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>🧭 Por si acaso · avisos y planes B</summary><div class="in">${d.notices.map(n => `<div class="notice ${n.type}" style="margin-top:8px"><b class="t">${n.title.replace(/^[★!✅]\s*/,'')}</b>${n.body}</div>`).join('')}</div></details></div>`;
   }
   if(secrets.length){
-    h += `<div class="sec"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || (s.secret.items||[]).join(' ')).replace(/<[^>]+>/g,''))}</span></label>`).join('')}</div></div>`;
+    h += `<div class="sec" id="secretos-dia"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || (s.secret.items||[]).join(' ')).replace(/<[^>]+>/g,''))}</span></label>`).join('')}</div></div>`;
   }
   if(d.mission){
     const tx = (k, q, ph) => { const key = `mision-${id}-${k}`, v = store.get('n:' + key, ''); return `<div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${v ? 'checked' : ''} disabled><span>${q}</span></label><textarea placeholder="${ph}" oninput="store.set('n:${key}',this.value);this.closest('.mtask').querySelector('input').checked=!!this.value.trim();clearTimeout(window.__mt);window.__mt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(v)}</textarea></div>`; };
-    h += `<div class="sec"><div class="mission"><div class="mk">🎯 LAS MISIONES DE RAFITA</div>
+    h += `<div class="sec" id="mision"><div class="mission"><div class="mk">🎯 LAS MISIONES DE RAFITA</div>
       <div class="mtask"><label class="check" style="align-items:flex-start"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"><span><b>${d.mission.title}</b><br><span class="mdesc">${d.mission.body}</span></span></label></div>
       ${tx('favorito', '<b>Un mensaje para Rafita:</b> ¿cuál fue su lugar favorito de hoy y por qué?', 'Rafita, hoy nuestro lugar favorito fue…')}
       ${tx('juntas', '<b>Para Naty y Estefa:</b> ¿a qué lugar de hoy quieren que volvamos todas juntas algún día?', 'Queremos volver con ustedes a…')}
@@ -1237,6 +1251,7 @@ function renderChapter(id){
   if(d.budget){
     h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>💶 Presupuesto del día · ${d.budget.total}</summary><div class="in"><table class="bt">${d.budget.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${d.budget.total}</td></tr></table>${d.budget.extra ? `<p class="small" style="white-space:normal;margin-top:8px">${d.budget.extra}</p>` : ''}${d.budget.note ? `<p class="small" style="white-space:normal">${d.budget.note}</p>` : ''}</div></details></div>`;
   }
+  h += `<div class="sec" id="album-dia"><div class="box"><div class="eyebrow">📸 NUESTRO ÁLBUM DEL DÍA</div><div class="muted" style="font-size:.9rem;margin:4px 0 10px">Aquí van los mejores momentos de ${c.dest}. Para añadir fotos, toquen «Subir fotos» en cada lugar.</div>${album(fotos.filter(f => f.dia === id))}</div></div>`;
   // diario del día (se comparte con la familia)
   { const jr = (k, q, tall) => { const key = `diario-${id}-${k}`; return `<div class="j-q">${q}</div><textarea class="journal${tall ? ' tall' : ''}" oninput="store.set('n:${key}',this.value);clearTimeout(window.__jt);window.__jt=setTimeout(()=>share('nota:${key}',this.value),900)">${esc(store.get('n:' + key, ''))}</textarea>`; };
     h += `<div class="sec"><div class="diary"><div class="d-h"><span>📔</span><div><div class="d-k">PARA ESCRIBIR AL FINAL DEL DÍA</div><div class="d-t">Diario del día</div></div></div>${jr('a', 'Lo mejor del día fue…', true)}${jr('b', 'Una palabra para este día:', false)}${jr('c', 'Algo que nos hizo reír:', false)}</div></div>`; }
@@ -1248,6 +1263,7 @@ function renderChapter(id){
   h += nd ? `<button class="nextchap" onclick="go('capitulo-${nd.id}')"><span><small>SIGUIENTE</small><b>${CHAPTERS[nd.id].short} · ${CHAPTERS[nd.id].dest}</b></span><span aria-hidden="true">→</span></button>`
           : `<button class="nextchap" onclick="go('inicio')"><span><small>FIN DEL VIAJE</small><b>Volver al inicio</b></span><span aria-hidden="true">🏠</span></button>`;
   $('#capitulo').innerHTML = h;
+  renderNow('ahora-cap', true);
   { const s = document.getElementById('strip-d'), c = s && s.querySelector(`[data-k="${window.__curK}"]`);
     if(c){ c.classList.add('now'); s.scrollLeft = c.offsetLeft - 16; } }
   (window.__CARDS || []).forEach(c => renderRecuerdo({id:c.id, name: c.type === 'major' ? c.s.name : (c.title || c.pts.map(p => p.name).join(' · '))}, id));
