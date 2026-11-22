@@ -45,6 +45,33 @@ img{display:block;max-width:100%}
 .sec{padding:26px 0 6px}
 .sec-head{margin-bottom:12px}
 
+/* inicio nuevo */
+body{padding-bottom:76px}
+.intro{padding:22px 0 4px}
+.intro .tag{display:inline-block;background:#FBEFD2;border-radius:6px;padding:4px 10px;font-size:.76rem;font-weight:700;letter-spacing:.06em}
+.intro h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(2.3rem,10vw,3.4rem);line-height:1.02;margin:10px 0 8px;text-wrap:balance}
+.intro h1 em{font-family:Caveat,cursive;font-style:normal;font-weight:700;color:var(--coral);font-size:1.25em}
+.intro .sub{color:var(--ink-2);margin:0 0 10px;max-width:32ch}
+.intro-ph{margin-top:14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10;box-shadow:var(--sh);border:6px solid #fff;transform:rotate(-1deg)}
+.intro-ph img{width:100%;height:100%;object-fit:cover}
+.sec-head.center{text-align:center}
+.chap .places{font-size:.86rem;color:var(--ink);margin:0 0 6px}
+.chap .explore{display:inline-flex;margin-top:10px;background:var(--coral);color:#fff;border-radius:999px;padding:8px 16px;font-weight:700;font-size:.88rem}
+.map-box .map-wrap{margin:10px 0 6px;border-radius:14px;overflow:hidden;background:#EAE0CC}
+.map-box svg{display:block;width:100%;height:auto}
+.map-box .city-pin{cursor:pointer}
+.family{display:grid;gap:14px}
+.polaroid{margin:0;background:#fff;padding:10px 10px 14px;border-radius:6px;box-shadow:var(--sh);transform:rotate(-2deg);max-width:340px;justify-self:center}
+.polaroid img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:3px}
+.polaroid figcaption{font-family:Caveat,cursive;font-size:1.4rem;text-align:center;margin-top:6px}
+.letter.note .lt{font-family:Caveat,cursive;font-size:1.7rem;color:var(--ink)}
+.letter.note .btn{margin-top:8px}
+.now .dname span{color:var(--yellow)}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(255,253,248,.97);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;background:none;border:0;border-radius:12px;font-size:.72rem;font-weight:600;color:var(--ink-2);cursor:pointer}
+.tabs button span{font-size:1.2rem}
+.tabs button.on{color:var(--coral-d);background:#FBEFD2}
+@media(min-width:700px){.family{grid-template-columns:300px minmax(0,1fr);align-items:center}}
 /* portada */
 .cover{position:relative;margin:14px 0 0;border-radius:22px;overflow:hidden;aspect-ratio:4/5;max-height:560px;width:100%;box-shadow:var(--sh)}
 .cover img{width:100%;height:100%;object-fit:cover}
@@ -265,22 +292,49 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
 
 <header class="top"><div class="wrap">
   <button class="brand" onclick="go('inicio')">Un pedacito de nosotras en Roma</button>
-  <button class="pill" onclick="go('inicio')" aria-label="Inicio">🏠 Inicio</button>
   <button class="pill sos" onclick="go('emergencias')">SOS</button>
 </div></header>
 
 <main>
 <section class="view" id="v-inicio"><div class="wrap">
+  <div class="intro">
+    <div class="tag">EL VIAJE DE SOFI Y MAMÁ</div>
+    <h1>Un pedacito de nosotras en <em>Roma</em></h1>
+    <p class="sub">Tres días para descubrir, aprender, caminar y crear recuerdos juntas.</p>
+    <span class="chip warm">📅 22 – 25 de noviembre de 2026</span>
+    <div class="intro-ph"><img src="Fotos/navona.webp" alt="Piazza Navona al amanecer"></div>
+  </div>
   <div id="ahora"></div>
-  <div class="cover"><img src="Fotos/navona.webp" alt="Piazza Navona al amanecer"><div class="txt">
-    <div class="when">ROMA · 22 AL 25 DE NOVIEMBRE DE 2026</div>
-    <h1>Un pedacito de nosotras en Roma</h1>
-    <div class="sub">Las aventuras de mamá y Sofía, con el amor de Naty, Estefa y Rafita.</div>
-  </div></div>
 
-  <div class="sec"><div class="sec-head"><div class="eyebrow">NUESTRA AVENTURA</div><div class="h2">Tres capítulos y un epílogo</div><div class="muted">Toquen un capítulo para ver el plan del día, las paradas y sus secretos.</div></div>
+  <div class="sec"><div class="sec-head center"><div class="h2">Las tres aventuras de nuestro viaje</div><div class="muted">Y un epílogo para despedirse de Roma.</div></div>
     <div class="chaps" id="chaps"></div>
   </div>
+
+  <div class="sec"><div class="box map-box"><div class="eyebrow">MAPA GENERAL DEL VIAJE</div><div class="h2" style="font-size:1.3rem">El recorrido completo de nuestros tres días en Roma</div><div class="map-wrap"><svg viewBox="0 170 580 410" class="map-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(44,58,82,0.08)"/></pattern></defs>
+        <rect x="0" y="170" width="580" height="410" fill="#ede4cf"/>
+        <rect x="0" y="170" width="580" height="410" fill="url(#dots)"/>
+        <path d="M 290,160 Q 268,230 236,288 Q 214,330 236,372 Q 252,410 296,440 Q 336,468 332,510 Q 326,550 300,590" fill="none" stroke="#b9d4dd" stroke-width="26" stroke-linecap="round"/>
+        <text x="200" y="250" font-family="Caveat" font-size="18" fill="#7ea7b5" transform="rotate(-62 200 250)">río Tíber</text>
+        <g fill="none" stroke="#2c3a52" stroke-width="3" stroke-dasharray="3 8" stroke-linecap="round" opacity="0.8">
+          <path d="M 274,397 Q 280,375 295,359 Q 312,360 330,367 Q 360,350 388,336"/>
+          <path d="M 274,397 Q 250,350 233,307 Q 170,312 115,319"/>
+          <path d="M 274,397 Q 268,440 263,485"/>
+          <path d="M 330,367 Q 400,420 469,477"/>
+          
+        </g>
+        <g class="city-pins">
+          <g class="city-pin" data-city="Vaticano" onclick="goDay(3)"><g transform="translate(115,319)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">⛪</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Vaticano</text></g></g>
+          <g class="city-pin" data-city="Castel" onclick="goDay(3)"><g transform="translate(233,307)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏰</text></g></g>
+          <g class="city-pin" data-city="Navona" onclick="goDay(1)"><g transform="translate(295,357)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">⛲</text></g></g>
+          <g class="city-pin" data-city="Pantheon" onclick="goDay(1)"><g transform="translate(333,370)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">🏛</text><text x="16" y="22" font-family="Permanent Marker" font-size="11" fill="#2c3a52">Pantheon</text></g></g>
+          <g class="city-pin" data-city="Trevi" onclick="goDay(1)"><g transform="translate(388,336)"><circle r="13" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">💧</text><text x="18" y="5" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trevi</text></g></g>
+          <g class="city-pin" data-city="Coliseo" onclick="goDay(2)"><g transform="translate(469,477)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">🏟</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Coliseo</text></g></g>
+          <g class="city-pin" data-city="Trastevere" onclick="goDay(2)"><g transform="translate(263,487)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏘</text><text y="30" text-anchor="middle" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trastevere</text></g></g>
+          <g class="city-pin" data-city="Roma" onclick="goDay(1)"><g transform="translate(274,397)"><circle r="16" fill="#2c3a52" stroke="#f3c84d" stroke-width="3"/><text y="6" text-anchor="middle" font-size="15">🏠</text><text x="-22" y="6" text-anchor="end" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Campo de' Fiori</text></g></g>
+        </g>
+        <g id="hereMarker" class="here-marker" style="display:none;pointer-events:none"></g>
+      </svg></div><div class="muted" style="font-size:.85rem">Toquen un lugar del mapa para abrir su capítulo.</div></div></div>
 
   <div class="sec"><div class="tools">
     <button class="tool" onclick="go('manual')"><span>📋</span>Manual</button>
@@ -288,48 +342,67 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
     <button class="tool" onclick="go('emergencias')"><span>🆘</span>Emergencias</button>
   </div></div>
 
-  <div class="sec" id="tablero-sec"><div class="box"><div class="eyebrow">ASÍ VA LA AVENTURA</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Paradas visitadas, secretos encontrados y fotos. Se actualiza solo.</div><div id="tablero"></div><div class="eyebrow" style="margin-top:14px">NUESTRAS FOTOS</div><div id="album-inicio"></div></div></div>
-
-  <div class="sec"><div class="letter">
-    <div class="when">ANTES DE ABRIR EL PRIMER CAPÍTULO</div><div class="lt">Una dedicatoria para ustedes</div>
-    <p>Ma, Sofi:</p>
-    <p>Preparamos esta guía pensando en todo lo que les gusta: la historia, los museos, las calles bonitas, las historias detrás de cada monumento y, por supuesto, comer algo rico en el camino.</p>
-    <p>Queremos que disfruten cada lugar, pero también que tengan tiempo de sentarse en una plaza, tomarse un café, conversar y vivir Roma a su manera.</p>
-    <p>No tienen que conocerlo todo. Lo importante es que disfruten esta oportunidad de estar juntas.</p>
-    <p>Y cuando vean algo que les emocione, acuérdense de contárnoslo. Nosotras estaremos esperando cada foto y cada historia.</p>
-    <div class="sign">Con todo nuestro amor, Naty, Estefa y Rafita ❤️</div>
+  <div class="sec"><div class="family">
+    <figure class="polaroid" id="familia"><img src="Fotos/familia.jpg" alt="Nuestra familia" onerror="this.closest('figure').style.display='none'"><figcaption>Nosotras ❤️</figcaption></figure>
+    <div class="letter note">
+      <div class="lt">Una notita de Naty y Estefa</div>
+      <p>Mamá y Sofi,</p>
+      <p>Aquí van nuestras cartas del viaje: pequeños mensajes, ideas, retos y mucho cariño para acompañarlas en cada paso de esta aventura. ¡Disfrútenla, vayan a su ritmo y cuéntennos todo a la vuelta!</p>
+      <button class="btn coral" onclick="go('cartas')">💌 Cartas del viaje</button>
+    </div>
   </div></div>
+
+  <div class="sec" id="tablero-sec"><div class="box"><div class="eyebrow">ASÍ VA LA AVENTURA</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Lugares visitados, secretos encontrados y fotos. Se actualiza solo.</div><div id="tablero"></div></div></div>
 
   <div class="sec"><div class="box">
     <div class="eyebrow">LAS PROTAGONISTAS DE ESTA HISTORIA</div>
     <div class="names"><div class="row" id="n1"></div><div class="amp">&amp;</div><div class="row" id="n2"></div></div>
-    <p><b>Mamá y Sofía, nuestras viajeras.</b> Dos mujeres curiosas, con ganas de descubrir la historia, el arte, la fe y esos rincones que hacen especial una ciudad.</p>
+    <p><b>Sofi y mamá, nuestras viajeras.</b> Dos mujeres curiosas, con ganas de descubrir la historia, el arte, la fe y esos rincones que hacen especial una ciudad.</p>
     <p><b>Naty y Estefa, las cómplices desde casa.</b> Las acompañaremos con nuestras cartas, recomendaciones y todo el cariño que pusimos en preparar este viaje.</p>
     <p style="margin-bottom:0"><b>Y Rafita</b>, el más pequeño de la familia, que todavía no ha nacido, pero ya tiene su primera aventura por Roma.</p>
   </div></div>
 
-  <div class="sec"><div class="box">
+  <div class="sec" style="padding-bottom:30px"><div class="box">
     <div class="eyebrow">NUESTRA MÁQUINA DEL TIEMPO</div><div class="h2" style="font-size:1.3rem">Una pequeña brújula histórica</div>
     <ol class="tl">
       <li><span class="n">1</span><span><b>Siglo I a. C. – II d. C.</b>César, Augusto, los emperadores y el esplendor del Imperio romano.</span></li>
       <li><span class="n">2</span><span><b>Siglos I–IV</b>Los primeros cristianos, San Pedro y Constantino.</span></li>
       <li><span class="n">3</span><span><b>Siglos XV–XVI</b>El Renacimiento de Rafael y Miguel Ángel.</span></li>
       <li><span class="n">4</span><span><b>Siglos XVII–XVIII</b>El Barroco de Bernini, Borromini y las grandes fuentes.</span></li>
-      <li><span class="n">5</span><span><b>2026</b>Mamá y Sofía escriben su propia historia en Roma. ❤️</span></li>
+      <li><span class="n">5</span><span><b>2026</b>Sofi y mamá escriben su propia historia en Roma. ❤️</span></li>
     </ol>
-  </div></div>
-
-  <div class="sec" style="padding-bottom:40px"><div class="box">
-    <div class="eyebrow">EL VIAJE EN UN BOLETO</div>
-    <div class="h2" style="font-size:1.3rem">22 — 25 de noviembre de 2026</div>
     <div class="pass"><div><b>4</b><span>DÍAS</span></div><div><b>1</b><span>CIUDAD</span></div><div><b>3.000</b><span>AÑOS</span></div></div>
-    <details class="more"><summary>Una nota: mamá e hija</summary><div class="in">
-      <p><b>Para Sofía y Alexandra.</b> Una ciudad eterna para dos.</p>
-      <p>Lo que se prometen en este viaje: ir del brazo, sin afán · probar todo, una mordida cada una · una foto juntas en cada lugar · parar a tomar café cuando provoque · reírse de perderse · contarse el deseo de Trevi la última noche.</p>
-    </div></details>
   </div></div>
 </div></section>
 
+<section class="view" id="v-recorrido"><div class="wrap sec"><div class="eyebrow">EL RECORRIDO</div><div class="h2">Nuestros tres días en Roma</div><div class="box map-box" style="margin:10px 0 16px"><div class="map-wrap"><svg viewBox="0 170 580 410" class="map-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(44,58,82,0.08)"/></pattern></defs>
+        <rect x="0" y="170" width="580" height="410" fill="#ede4cf"/>
+        <rect x="0" y="170" width="580" height="410" fill="url(#dots)"/>
+        <path d="M 290,160 Q 268,230 236,288 Q 214,330 236,372 Q 252,410 296,440 Q 336,468 332,510 Q 326,550 300,590" fill="none" stroke="#b9d4dd" stroke-width="26" stroke-linecap="round"/>
+        <text x="200" y="250" font-family="Caveat" font-size="18" fill="#7ea7b5" transform="rotate(-62 200 250)">río Tíber</text>
+        <g fill="none" stroke="#2c3a52" stroke-width="3" stroke-dasharray="3 8" stroke-linecap="round" opacity="0.8">
+          <path d="M 274,397 Q 280,375 295,359 Q 312,360 330,367 Q 360,350 388,336"/>
+          <path d="M 274,397 Q 250,350 233,307 Q 170,312 115,319"/>
+          <path d="M 274,397 Q 268,440 263,485"/>
+          <path d="M 330,367 Q 400,420 469,477"/>
+          
+        </g>
+        <g class="city-pins">
+          <g class="city-pin" data-city="Vaticano" onclick="goDay(3)"><g transform="translate(115,319)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">⛪</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Vaticano</text></g></g>
+          <g class="city-pin" data-city="Castel" onclick="goDay(3)"><g transform="translate(233,307)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏰</text></g></g>
+          <g class="city-pin" data-city="Navona" onclick="goDay(1)"><g transform="translate(295,357)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">⛲</text></g></g>
+          <g class="city-pin" data-city="Pantheon" onclick="goDay(1)"><g transform="translate(333,370)"><circle r="12" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12">🏛</text><text x="16" y="22" font-family="Permanent Marker" font-size="11" fill="#2c3a52">Pantheon</text></g></g>
+          <g class="city-pin" data-city="Trevi" onclick="goDay(1)"><g transform="translate(388,336)"><circle r="13" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">💧</text><text x="18" y="5" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trevi</text></g></g>
+          <g class="city-pin" data-city="Coliseo" onclick="goDay(2)"><g transform="translate(469,477)"><circle r="17" fill="#fbf6e8" stroke="#e8957f" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">🏟</text><text y="36" text-anchor="middle" font-family="Permanent Marker" font-size="13" fill="#2c3a52">Coliseo</text></g></g>
+          <g class="city-pin" data-city="Trastevere" onclick="goDay(2)"><g transform="translate(263,487)"><circle r="13" fill="#fbf6e8" stroke="#9ab088" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13">🏘</text><text y="30" text-anchor="middle" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Trastevere</text></g></g>
+          <g class="city-pin" data-city="Roma" onclick="goDay(1)"><g transform="translate(274,397)"><circle r="16" fill="#2c3a52" stroke="#f3c84d" stroke-width="3"/><text y="6" text-anchor="middle" font-size="15">🏠</text><text x="-22" y="6" text-anchor="end" font-family="Permanent Marker" font-size="12" fill="#2c3a52">Campo de' Fiori</text></g></g>
+        </g>
+        <g id="hereMarker" class="here-marker" style="display:none;pointer-events:none"></g>
+      </svg></div></div><div class="chaps" id="chaps2"></div></div></section>
+<section class="view" id="v-album"><div class="wrap sec"><div class="eyebrow">NUESTRO ÁLBUM</div><div class="h2">La Roma que vivimos</div><div class="muted">Las fotos que suben Sofi y mamá en cada lugar. Para subir, abran la ficha del lugar dentro de su capítulo.</div><div id="album-full"></div></div></section>
+<section class="view" id="v-cartas"><div class="wrap sec"><div class="eyebrow">CARTAS DEL VIAJE</div><div class="h2">Cartas desde casa</div><div class="muted" style="margin-bottom:12px">Una para empezar y una para cada noche.</div><div id="cartas"></div></div></section>
+<section class="view" id="v-secretos"><div class="wrap sec"><div class="eyebrow">TIPS SECRETOS</div><div class="h2">Los secretos de Roma</div><div class="muted" style="margin-bottom:12px">Pequeños descubrimientos para ir encontrando. Márquenlos cuando los vean.</div><div id="secretos"></div></div></section>
 <section class="view" id="v-capitulo"><div class="wrap" id="capitulo"></div></section>
 <section class="view legacy" id="v-manual"><div class="wrap sec"><div>
   <div class="pre-content">
@@ -394,6 +467,13 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
   </div></div></section>
 </main>
 
+<nav class="tabs" aria-label="Secciones">
+  <button data-v="inicio" onclick="go('inicio')"><span>🏠</span>Inicio</button>
+  <button data-v="recorrido" onclick="go('recorrido')"><span>🗺</span>Recorrido</button>
+  <button data-v="album" onclick="go('album')"><span>📸</span>Álbum</button>
+  <button data-v="cartas" onclick="go('cartas')"><span>💌</span>Cartas</button>
+  <button data-v="secretos" onclick="go('secretos')"><span>🔑</span>Secretos</button>
+</nav>
 <div id="lightbox" onclick="this.classList.remove('on')"></div>
 <div id="toast" role="status"></div>
 
@@ -768,10 +848,10 @@ const DAYS = [
 const SUPA_URL = 'https://mfkhgozqldnyqplzyrgm.supabase.co', SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ma2hnb3pxbGRueXFwbHp5cmdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzMDY2MTAsImV4cCI6MjExMDg4MjYxMH0.-LOzphYrtDy0bTdHCQfLes3QmMdRYDrQDOLqpEWdmNg';
 const TRIP_START = new Date(2026,10,22);
 const CHAPTERS = {
-  1:{num:'01 · DOMINGO 22 NOV', short:'Capítulo I', dest:'Centro histórico', obj:'Descubrir la Roma de las plazas, las fuentes y el Barroco.', meta:'A pie', img:'Fotos/cap1-navona-atardecer.webp'},
-  2:{num:'02 · LUNES 23 NOV', short:'Capítulo II', dest:'Coliseo', obj:'Entender cómo vivían, gobernaban y se entretenían los romanos.', meta:'Roma imperial · Coliseo 14:00', img:'Fotos/cap2-foro-coliseo.webp'},
-  3:{num:'03 · MARTES 24 NOV', short:'Capítulo III', dest:'Vaticano', obj:'Conocer las obras y las historias que marcaron siglos de arte y fe.', meta:'Arte y Renacimiento · Museos 12:30', img:'Fotos/cap3-san-pedro.webp'},
-  4:{num:'EPÍLOGO · MIÉRCOLES 25 NOV', short:'Epílogo', dest:'Arrivederci, Roma', obj:'Despedirse de Trevi con la luz de la mañana y volver a Madrid sin afanes.', meta:'Trevi 7:35 · Vuelo 12:00', img:'Fotos/epilogo-callecita.webp'}
+  1:{num:'01 · DOMINGO 22 NOV', short:'Capítulo I', dest:'Centro histórico', obj:'La Roma de las plazas, las fuentes y las grandes historias.', places:"Campo de' Fiori · Piazza Navona · Panteón · Fontana di Trevi", meta:'A pie', img:'Fotos/cap1-navona-atardecer.webp'},
+  2:{num:'02 · LUNES 23 NOV', short:'Capítulo II', dest:'Coliseo', obj:'El mundo de los emperadores, las decisiones y los gladiadores.', places:'Campidoglio · Foro Romano · Palatino · Coliseo', meta:'Roma imperial · Coliseo 14:00', img:'Fotos/cap2-foro-coliseo.webp'},
+  3:{num:'03 · MARTES 24 NOV', short:'Capítulo III', dest:'Vaticano', obj:'Arte, fe y algunas de las obras más importantes del mundo.', places:'Plaza y Basílica de San Pedro · Museos Vaticanos · Capilla Sixtina', meta:'Arte y Renacimiento · Museos 12:30', img:'Fotos/cap3-san-pedro.webp'},
+  4:{num:'EPÍLOGO · MIÉRCOLES 25 NOV', short:'Epílogo', dest:'Arrivederci, Roma', obj:'Despedirse de Trevi con la luz de la mañana y volver a Madrid sin afanes.', places:'Fontana di Trevi · Vuelo a Madrid', meta:'Trevi 7:35 · Vuelo 12:00', img:'Fotos/epilogo-callecita.webp'}
 };
 const STOP_IMG = {
   'Piazza Navona':'Fotos/navona.webp', 'Fontana di Trevi':'Fotos/paradas/trevi.jpg',
@@ -858,18 +938,21 @@ function refresh(){ const a = document.activeElement; if(a && a.tagName === 'TEX
 /* ================= inicio ================= */
 function renderHome(){
   const td = tripDay();
-  $('#chaps').innerHTML = DAYS.map(d => {
+  const chapHTML = DAYS.map(d => {
     const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
     const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length;
     return `<button class="chap" onclick="go('capitulo-${d.id}')">
       <div class="ph"><img src="${c.img}" alt="" loading="lazy"><span class="num">${c.num}${td === d.id ? ' · HOY' : ''}</span></div>
       <div class="bd"><div class="dest">${c.dest}</div><div class="obj">${c.obj}</div>
-      <div class="meta">${nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : ''}${nk && nr ? ' · ' : ''}${nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''} · ${c.meta}</div>
+      <div class="places">📍 ${c.places}</div>
+      <div class="meta">${c.meta}</div>
+      <span class="explore">Explorar capítulo →</span>
       ${v ? `<div class="prog"><i style="width:${Math.round(v/st.length*100)}%"></i></div>` : ''}</div></button>`;
   }).join('');
+  $('#chaps').innerHTML = chapHTML; $('#chaps2').innerHTML = chapHTML;
   renderNow();
   renderBoard();
-  ['Sofía','Alexandra'].forEach((w, k) => { $('#n' + (k+1)).innerHTML = [...w].map(ch => `<span>${ch}</span>`).join(''); });
+  ['Alexa','Sofi'].forEach((w, k) => { $('#n' + (k+1)).innerHTML = [...w].map(ch => `<span>${ch}</span>`).join(''); });
 }
 function renderNow(){
   const td = tripDay(), box = $('#ahora');
@@ -886,7 +969,7 @@ function renderNow(){
   const dest = x => x.kind === 'log' ? (x.b.place || x.b.to) : x.kind === 'group' ? null : x.q;
   const slot = (x, cls, lbl) => x ? `<div class="slot ${cls}"><div class="lbl">${lbl}</div><div class="what">${esc(label(x))}</div><div class="t">${esc(x.time)}${x.end && x.end !== x.time ? ' – ' + esc(x.end) : ''}</div>
       <div class="acts">${dest(x) ? `<a class="btn coral" href="${mapsDir(dest(x))}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${x.kind === 'stop' ? `<button class="btn ghost" onclick="go('capitulo-${td}','p-${x.id}')">Ver la parada</button>` : ''}</div></div>` : '';
-  box.innerHTML = `<div class="now"><div class="eyebrow">¿QUÉ HACEMOS AHORA? · HOY</div><div class="dname">${c.short} · ${c.dest}</div>
+  box.innerHTML = `<div class="now"><div class="eyebrow">🧭 ¿QUÉ HACEMOS AHORA?</div><div class="dname">Hoy · ${d.date} · <span>${c.dest}</span></div>
     ${slot(cur, '', 'AHORA MISMO')}${slot(nxt, 'next', cur ? 'DESPUÉS' : 'LO PRÓXIMO')}
     ${!cur && !nxt ? '<div class="t">El plan de hoy ya terminó. ¡A descansar! 💛</div>' : ''}
     <div class="acts" style="margin-top:12px"><button class="btn ghost" onclick="go('capitulo-${td}')">Abrir el capítulo de hoy →</button></div></div>`;
@@ -897,11 +980,10 @@ function renderBoard(){
     const sc = st.filter(x => x.secret), f = sc.filter(x => found(x.id)).length, ph = fotos.filter(x => x.dia === d.id).length;
     return `<div class="prog-row"><b>${CHAPTERS[d.id].dest}</b><div class="bar"><i style="width:${st.length ? Math.round(v/st.length*100) : 0}%"></i></div><span class="small">${v}/${st.length}${sc.length ? ` · 🔑 ${f}/${sc.length}` : ''} · 📸 ${ph}</span></div>`;
   }).join('');
-  $('#album-inicio').innerHTML = album(fotos.slice(0, 9));
 }
 function album(list){
   if(!sb) return '<p class="empty">Las fotos compartidas funcionan en la versión publicada de la guía.</p>';
-  if(!list.length) return '<p class="empty">Todavía no hay fotos. ¡Las primeras las suben mamá y Sofía!</p>';
+  if(!list.length) return '<p class="empty">Todavía no hay fotos. ¡Las primeras las suben Sofi y mamá!</p>';
   return `<div class="album">${list.map(f => { const u = pub(f.ruta); return `<button onclick="show('${esc(u)}','${esc(f.nota || '')}${f.autor ? ' · ' + esc(f.autor) : ''}')"><img src="${esc(u)}" loading="lazy" alt="Foto del viaje"><span>${esc(f.nota || '')}${f.autor ? ' · ' + esc(f.autor) : ''}</span></button>`; }).join('')}</div>`;
 }
 
@@ -1013,6 +1095,19 @@ function story(s){ const st = s.story.filter(x => x.text || x.items); return st.
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><div class="secret"><div class="sk">🔑 EL SECRETO DE ESTE LUGAR</div><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></div></div>` : ''; }
 function tips(s){ return s.tips.map(t => `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${t.text || ''}${t.items ? t.items.join(' · ') : ''}</div>`).join(''); }
 function visitBtn(s){ return `<button class="btn ${visited(s.id) ? 'done' : 'soft'}" onclick="toggleVisit('${s.id}')">${visited(s.id) ? '✓ Visitada' : 'Marcar visitada'}</button>`; }
+function renderAlbumView(){
+  const box = $('#album-full'); if(!box) return;
+  if(!sb){ box.innerHTML = '<p class="empty">El álbum compartido funciona en la versión publicada de la guía.</p>'; return; }
+  box.innerHTML = DAYS.map(d => { const l = fotos.filter(f => f.dia === d.id); return `<div class="sec"><div class="eyebrow">${CHAPTERS[d.id].short.toUpperCase()} · ${CHAPTERS[d.id].dest}</div>${album(l)}</div>`; }).join('');
+}
+function renderCartas(){
+  const ded = `<div class="letter"><div class="when">ANTES DE ABRIR EL PRIMER CAPÍTULO</div><div class="lt">Una dedicatoria para ustedes</div><p>Ma, Sofi:</p><p>Preparamos esta guía pensando en todo lo que les gusta: la historia, los museos, las calles bonitas, las historias detrás de cada monumento y, por supuesto, comer algo rico en el camino.</p><p>Queremos que disfruten cada lugar, pero también que tengan tiempo de sentarse en una plaza, tomarse un café, conversar y vivir Roma a su manera.</p><p>No tienen que conocerlo todo. Lo importante es que disfruten esta oportunidad de estar juntas.</p><p>Y cuando vean algo que les emocione, acuérdense de contárnoslo. Nosotras estaremos esperando cada foto y cada historia.</p><div class="sign">Con todo nuestro amor, Naty, Estefa y Rafita ❤️</div></div>`;
+  $('#cartas').innerHTML = ded + DAYS.filter(d => d.letter).map(d => `<details class="more box" style="padding:4px 18px;margin-top:12px"><summary>💌 ${CHAPTERS[d.id].short} · ${esc(d.letter.title)}<br><small class="muted" style="font-weight:500">${esc(d.letter.when || '')}</small></summary><div class="in"><div class="letter" style="border:0;padding:4px 0;background:none">${d.letter.body.replace(/ class="lt-hi"/g,'')}<div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div></details>`).join('');
+}
+function renderSecretos(){
+  $('#secretos').innerHTML = DAYS.map(d => { const ss = built(d).filter(x => x.kind === 'stop' && x.secret); if(!ss.length) return ''; return `<div class="secrets-day" style="margin-bottom:14px"><div class="eyebrow" style="color:#7A5B2E">${CHAPTERS[d.id].short.toUpperCase()} · ${CHAPTERS[d.id].dest}</div>${ss.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}.</b> ${String(s.secret.text || '').replace(/<[^>]+>/g,'')}</span></label>`).join('')}<button class="btn soft" style="margin-top:8px" onclick="go('capitulo-${d.id}')">Ir al capítulo →</button></div>`; }).join('');
+}
+window.goDay = n => go('capitulo-' + n);
 function toggleVisit(id){ setVisited(id, !visited(id)); route(true); }
 
 /* ================= recuerdos: fotos y anécdota por parada ================= */
@@ -1020,7 +1115,7 @@ const pub = ruta => sb ? sb.storage.from('fotos').getPublicUrl(ruta).data.public
 function renderRecuerdo(s, dia){
   const box = document.getElementById('rec-' + s.id); if(!box) return;
   const nota = store.get('n:' + s.id, '');
-  if(!sb){ box.innerHTML = `<div class="off">Aquí aparecerán las fotos que suban mamá y Sofía (en la versión publicada de la guía).</div>`; return; }
+  if(!sb){ box.innerHTML = `<div class="off">Aquí aparecerán las fotos que suban Sofi y mamá (en la versión publicada de la guía).</div>`; return; }
   const mine = fotos.filter(f => f.ruta.indexOf(`dia-${dia}/${s.id}/`) === 0);
   const q = store.get('quien', '');
   box.innerHTML = `<div class="who"><span>¿Quién sube?</span>${['Ma','Sofi'].map(n => `<button type="button" class="${q === n ? 'on' : ''}" onclick="store.set('quien','${n}');renderRecuerdo(window.__S['${s.id}'],${dia})">${n}</button>`).join('')}</div>
@@ -1065,7 +1160,12 @@ function route(keep){
   const m = h.match(/^capitulo-(\d)$/);
   if(m){ $('#v-capitulo').classList.add('on'); renderChapter(+m[1]); }
   else if(['manual','frases','emergencias'].includes(h)){ $('#v-' + h).classList.add('on'); }
+  else if(h === 'recorrido'){ $('#v-recorrido').classList.add('on'); renderHome(); }
+  else if(h === 'album'){ $('#v-album').classList.add('on'); renderAlbumView(); }
+  else if(h === 'cartas'){ $('#v-cartas').classList.add('on'); renderCartas(); }
+  else if(h === 'secretos'){ $('#v-secretos').classList.add('on'); renderSecretos(); }
   else { $('#v-inicio').classList.add('on'); renderHome(); }
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === h || (h.indexOf('capitulo') === 0 && b.dataset.v === 'recorrido')));
   if(keep) window.scrollTo(0, y);
 }
 window.addEventListener('popstate', () => { VIEW = null; route(); window.scrollTo(0,0); });
