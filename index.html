@@ -332,6 +332,25 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .stop-card .ph{position:relative}
 .stop-card .k .eyebrow{background:#F3DFA6;color:var(--ink);padding:2px 8px;transform:rotate(-1deg);display:inline-block}
 .tabs button.on{background:#F3DFA6;color:var(--ink)}
+
+/* fotos con texto encima: nada de fotos sueltas */
+.magcover{position:relative;margin:16px 0 4px;border-radius:6px;border:8px solid #fff;box-shadow:var(--sh);transform:rotate(-.6deg);aspect-ratio:4/5;max-height:620px;width:100%}
+.magcover::before{content:'';position:absolute;z-index:3;top:-14px;left:26px;width:96px;height:26px;background:rgba(240,214,150,.85);transform:rotate(-6deg)}
+.magcover img{width:100%;height:100%;object-fit:cover;border-radius:2px}
+.magcover::after{content:'';position:absolute;inset:0;border-radius:2px;background:linear-gradient(180deg,rgba(20,30,40,0) 28%,rgba(20,30,40,.55) 58%,rgba(20,30,40,.88))}
+.magcover .mc-txt{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:20px 18px;color:#fff}
+.magcover .tag{display:inline-block;background:#F3DFA6;color:var(--ink);border-radius:3px;padding:4px 10px;font-size:.74rem;font-weight:700;letter-spacing:.06em;transform:rotate(-2deg)}
+.magcover h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(2.3rem,10vw,3.4rem);line-height:1.02;margin:10px 0 8px;text-wrap:balance}
+.magcover h1 em{font-family:Caveat,cursive;font-style:normal;font-weight:700;color:#F4B9A6;font-size:1.25em}
+.magcover .sub{margin:0 0 12px;max-width:30ch;font-size:1.02rem;opacity:.95}
+.magcover .date{display:inline-block;background:rgba(255,253,248,.95);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:.84rem;font-weight:700}
+.magcover .stamp{right:10px;top:10px;transform:rotate(10deg)}
+.chap .ph{position:relative}
+.chap .ph::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,40,0) 40%,rgba(20,30,40,.8))}
+.chap .ph-txt{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:12px 16px;color:#fff}
+.chap .ph-txt .date{color:#F3DFA6}
+.chap .ph-txt .dest{color:#fff;font-size:1.9rem}
+.chap .bd .obj{margin-top:0}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#toast{transition:none}}
 </style>
 </head>
@@ -344,12 +363,15 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 
 <main>
 <section class="view" id="v-inicio"><div class="wrap">
-  <div class="intro">
-    <div class="tag">EL VIAJE DE SOFI Y MAMÁ</div>
-    <h1>Un pedacito de nosotras en <em>Roma</em></h1>
-    <p class="sub">Tres días para descubrir, aprender, caminar y crear recuerdos juntas.</p>
-    <span class="chip warm">📅 22 – 25 de noviembre de 2026</span>
-    <div class="intro-ph"><img src="Fotos/navona.webp" alt="Piazza Navona al amanecer"><div class="stamp"><b>ROMA</b>ITALIA<br>2026</div></div>
+  <div class="magcover">
+    <img src="Fotos/navona.webp" alt="Piazza Navona al amanecer">
+    <div class="stamp"><b>ROMA</b>ITALIA<br>2026</div>
+    <div class="mc-txt">
+      <div class="tag">EL VIAJE DE SOFI Y MAMÁ</div>
+      <h1>Un pedacito de nosotras en <em>Roma</em></h1>
+      <p class="sub">Tres días para descubrir, aprender, caminar y crear recuerdos juntas.</p>
+      <span class="date">📅 22 – 25 de noviembre de 2026</span>
+    </div>
   </div>
   <div id="ahora"></div>
 
@@ -983,8 +1005,8 @@ function renderHome(){
     const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
     const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length;
     return `<button class="chap" onclick="go('capitulo-${d.id}')">
-      <span class="stk stk${d.id}"><small>${d.id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${d.id < 4 ? '0' + d.id : '✦'}</b></span><div class="ph"><img src="${c.img}" alt="" loading="lazy"></div>
-      <div class="bd torn"><div class="date">${c.num.replace(/^\d+ · |^EPÍLOGO · /,'')}${td === d.id ? ' · HOY' : ''}</div><div class="dest">${c.dest}</div><div class="obj">${c.obj}</div>
+      <span class="stk stk${d.id}"><small>${d.id < 4 ? 'Capítulo' : 'Epílogo'}</small><b>${d.id < 4 ? '0' + d.id : '✦'}</b></span><div class="ph"><img src="${c.img}" alt="" loading="lazy"><div class="ph-txt"><div class="date">${c.num.replace(/^\d+ · |^EPÍLOGO · /,'')}${td === d.id ? ' · HOY' : ''}</div><div class="dest">${c.dest}</div></div></div>
+      <div class="bd torn"><div class="obj">${c.obj}</div>
       <div class="places">📍 ${c.places}</div>
       <div class="meta">${c.meta}</div>
       <span class="explore">Explorar capítulo →</span>
