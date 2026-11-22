@@ -64,6 +64,11 @@ body{padding-bottom:76px}
 .polaroid{margin:0;background:#fff;padding:10px 10px 14px;border-radius:6px;box-shadow:var(--sh);transform:rotate(-2deg);max-width:340px;justify-self:center}
 .polaroid img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:3px}
 .polaroid figcaption{font-family:Caveat,cursive;font-size:1.4rem;text-align:center;margin-top:6px}
+.prota{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center;margin:8px 0 14px}
+.prota.rev{grid-template-columns:minmax(0,1fr) 120px}.prota.rev figure{order:2;transform:rotate(3deg)}
+.polaroid.mini{padding:6px 6px 8px;transform:rotate(-3deg)}.polaroid.mini::before{width:50px;height:14px;top:-7px}
+.polaroid.mini img{aspect-ratio:1}.polaroid.mini figcaption{font-size:1.05rem;margin-top:3px}
+.prota p{margin:0}
 .ded-ph{max-width:300px;margin:10px auto 16px;transform:rotate(2deg)}
 .ded-ph img{aspect-ratio:3/4}
 .letter.note .lt{font-family:Caveat,cursive;font-size:1.7rem;color:var(--ink)}
@@ -512,9 +517,9 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
   <div class="sec"><div class="box">
     <div class="eyebrow">LAS PROTAGONISTAS DE ESTA HISTORIA</div>
     <div class="names"><div class="row" id="n1"></div><div class="amp">&amp;</div><div class="row" id="n2"></div></div>
-    <p><b>Sofi y mamá, nuestras viajeras.</b> Dos mujeres curiosas, con ganas de descubrir la historia, el arte, la fe y esos rincones que hacen especial una ciudad.</p>
+    <div class="prota"><figure class="polaroid mini"><img src="Fotos/viajeras.jpg" alt="Alexa y Sofi" onerror="this.closest('figure').style.display='none'"><figcaption>Nuestras viajeras</figcaption></figure><p><b>Sofi y mamá, nuestras viajeras.</b> Dos mujeres curiosas, con ganas de descubrir la historia, el arte, la fe y esos rincones que hacen especial una ciudad.</p></div>
     <p><b>Naty y Estefa, las cómplices desde casa.</b> Las acompañaremos con nuestras cartas, recomendaciones y todo el cariño que pusimos en preparar este viaje.</p>
-    <p style="margin-bottom:0"><b>Y Rafita</b>, el más pequeño de la familia, que todavía no ha nacido, pero ya tiene su primera aventura por Roma.</p>
+    <div class="prota rev"><figure class="polaroid mini"><img src="Fotos/rafita.jpg" alt="Rafita" onerror="this.closest('figure').style.display='none'"><figcaption>Rafita 💛</figcaption></figure><p style="margin-bottom:0"><b>Y Rafita</b>, el más pequeño de la familia, que todavía no ha nacido, pero ya tiene su primera aventura por Roma.</p></div>
   </div></div>
 
   <div class="sec" style="padding-bottom:30px"><div class="box">
