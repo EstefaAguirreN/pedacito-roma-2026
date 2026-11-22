@@ -321,6 +321,17 @@ table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
 .names .amp{font-family:Caveat,cursive;font-size:1.7rem;color:var(--coral-d);line-height:1}
 
 /* máquina del tiempo */
+.journey{position:relative;padding:6px 0}
+.jstop{display:flex;gap:10px;align-items:flex-start;max-width:86%}
+.jstop.r{margin-left:auto;flex-direction:row-reverse;text-align:right}
+.jn{flex:none;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.2rem;box-shadow:0 0 0 5px #F3DFA6}
+.jstop.last .jn{background:var(--coral)}
+.jc{background:#FFFBF3;border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:var(--sh)}
+.jc b{display:block;font-size:.88rem;color:var(--coral-d)}
+.jc p{margin:2px 0 6px;font-size:.93rem;line-height:1.4}
+.jl{display:inline-block;border:0;background:#F3DFA6;color:var(--ink);border-radius:999px;padding:6px 10px;font-size:.78rem;font-weight:700;cursor:pointer;text-align:left}
+.jpath{display:block;width:100%;height:46px;margin:-2px 0}
+.jpath path{fill:none;stroke:var(--coral);stroke-width:3;stroke-dasharray:3 8;stroke-linecap:round;vector-effect:non-scaling-stroke}
 .tl{list-style:none;margin:0;padding:0}
 .tl li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:8px 0}
 .tl .n{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
@@ -523,14 +534,8 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
   </div></div>
 
   <div class="sec" style="padding-bottom:30px"><div class="box">
-    <div class="eyebrow">NUESTRA MÁQUINA DEL TIEMPO</div><div class="h2" style="font-size:1.3rem">Una pequeña brújula histórica</div>
-    <ol class="tl">
-      <li><span class="n">1</span><span><b>Siglo I a. C. – II d. C.</b>César, Augusto, los emperadores y el esplendor del Imperio romano.</span></li>
-      <li><span class="n">2</span><span><b>Siglos I–IV</b>Los primeros cristianos, San Pedro y Constantino.</span></li>
-      <li><span class="n">3</span><span><b>Siglos XV–XVI</b>El Renacimiento de Rafael y Miguel Ángel.</span></li>
-      <li><span class="n">4</span><span><b>Siglos XVII–XVIII</b>El Barroco de Bernini, Borromini y las grandes fuentes.</span></li>
-      <li><span class="n">5</span><span><b>2026</b>Sofi y mamá escriben su propia historia en Roma. ❤️</span></li>
-    </ol>
+    <div class="eyebrow">NUESTRA MÁQUINA DEL TIEMPO</div><div class="h2" style="font-size:1.3rem">Un viaje de 2.000 años en cuatro días</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Sigan el camino: cada época les dice en qué capítulo la van a ver.</div>
+    <div class="journey"><div class="jstop l"><span class="jn">1</span><div class="jc"><b>Siglo I a. C. – II d. C.</b><p>César, Augusto, los emperadores y el esplendor del Imperio romano.</p><button class="jl" onclick="go('capitulo-2')">📍 Lo ven en: Capítulo 02 · lunes 23 · Coliseo</button></div></div><svg class="jpath" viewBox="0 0 320 60" preserveAspectRatio="none" aria-hidden="true"><path d="M70 0 C 70 40, 250 20, 250 60"/></svg><div class="jstop r"><span class="jn">2</span><div class="jc"><b>Siglos I–IV</b><p>Los primeros cristianos, San Pedro y Constantino.</p><button class="jl" onclick="go('capitulo-3')">📍 Lo ven en: Capítulo 03 · martes 24 · Vaticano</button></div></div><svg class="jpath" viewBox="0 0 320 60" preserveAspectRatio="none" aria-hidden="true"><path d="M250 0 C 250 40, 70 20, 70 60"/></svg><div class="jstop l"><span class="jn">3</span><div class="jc"><b>Siglos XV–XVI</b><p>El Renacimiento de Rafael y Miguel Ángel.</p><button class="jl" onclick="go('capitulo-3')">📍 Lo ven en: Capítulo 03 · martes 24 · Vaticano</button></div></div><svg class="jpath" viewBox="0 0 320 60" preserveAspectRatio="none" aria-hidden="true"><path d="M70 0 C 70 40, 250 20, 250 60"/></svg><div class="jstop r"><span class="jn">4</span><div class="jc"><b>Siglos XVII–XVIII</b><p>El Barroco de Bernini, Borromini y las grandes fuentes.</p><button class="jl" onclick="go('capitulo-1')">📍 Lo ven en: Capítulo 01 · domingo 22 · Centro histórico</button></div></div><svg class="jpath" viewBox="0 0 320 60" preserveAspectRatio="none" aria-hidden="true"><path d="M250 0 C 250 40, 70 20, 70 60"/></svg><div class="jstop l last"><span class="jn">5</span><div class="jc"><b>2026</b><p>Sofi y mamá escriben su propia historia en Roma. ❤️</p><button class="jl" onclick="go('inicio')">📍 Lo ven en: Todos los días · 22 al 25 de noviembre</button></div></div></div>
     <div class="pass"><div><b>4</b><span>DÍAS</span></div><div><b>1</b><span>CIUDAD</span></div><div><b>3.000</b><span>AÑOS</span></div></div>
   </div></div>
 </div></section>
