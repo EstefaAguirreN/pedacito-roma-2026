@@ -1363,20 +1363,20 @@ function route(keep){
 window.addEventListener('popstate', () => { VIEW = null; route(); window.scrollTo(0,0); });
 /* ================= recorrido de bienvenida ================= */
 const TOUR = [
-  {sel:null, t:'Bienvenidas, Alexa y Sofi 💛', x:'Esta es su guía de Roma. Va con ustedes los cuatro días para que no tengan que preguntarse qué sigue ni cómo llegar. Les mostramos cómo funciona en un minuto.'},
-  {sel:'#ahora', t:'¿Qué hacemos ahora?', x:'Durante el viaje, aquí arriba siempre verán qué toca en este momento y qué sigue, con el botón 📍 Cómo llegar, que abre Google Maps a pie.'},
-  {sel:'.map-box', t:'El mapa del viaje', x:'Cada zona de color es un capítulo y todo sale de su casa en Campo de\' Fiori. Tóquenla para abrir su capítulo.'},
-  {sel:'#chaps', t:'Los capítulos', x:'Un capítulo por día: Centro histórico, Coliseo, Vaticano y el epílogo. Adentro está el plan hora por hora, los lugares, sus historias y secretos.'},
-  {sel:null, t:'Dentro de cada lugar', x:'✓ Toquen «¿Ya estuvieron aquí?» para marcar cada lugar visitado.<br>🔑 Busquen el secreto de cada lugar y márquenlo cuando lo encuentren.<br>📖 «Descubrir su historia» se abre cuando quieran leer más.<br>📷 Suban fotos en cada lugar: nosotras las vemos desde casa.'},
-  {sel:null, t:'Al final de cada día', x:'🎯 Las misiones de Rafita, con espacio para escribirle.<br>💌 Una carta nuestra para leer antes de dormir.<br>📔 Un diario para contar lo mejor del día.<br>🔔 Los recordatorios para el día siguiente.'},
-  {sel:'.tabs', t:'Siempre a la mano', x:'Abajo: Inicio, el Recorrido completo y el Álbum con todas sus fotos. Arriba, el botón SOS tiene los números de emergencia. Y este recorrido lo pueden volver a ver con el botón «?».'}
+  {sel:null, t:'¡Bienvenidas! Las queremos tanto 💛', x:'Hicimos este itinerario para acompañarlas y asegurarnos de que no se pierdan nada, pero también para ir despacio. Confíen: no está lleno de cosas, está hecho para disfrutar sin afán.<br><br>Disfruten, y sobre todo… ¡llévennos con ustedes! 😄'},
+  {sel:'#ahora', t:'Cero pensar, solo mirar aquí', x:'Como sabemos que no quieren pensar mucho, aquí les dejamos lo que toca en este momento y lo que sigue. ¡Miren! Y si tocan 📍 Cómo llegar, Google Maps las lleva caminando.'},
+  {sel:'.map-box', t:'Un día para cada zona', x:'Este es el mapa de Roma. Para no desgastarlas, le dedicamos un día a cada zona. Así que sáquenle el máximo provecho… ¡porque no van a volver! Jaja… a menos que la moneda de Trevi funcione. 😉'},
+  {sel:'#chaps', t:'Sus tres aventuras', x:'Cada capítulo es un día: Centro histórico, Coliseo, Vaticano y el epílogo para despedirse. Adentro está el plan hora por hora, los lugares, sus historias y sus secretos.'},
+  {sel:null, t:'Cuando lleguen a un lugar', x:'✓ Toquen «¿Ya estuvieron aquí?» para marcarlo: así sabemos por dónde van.<br>🔑 Busquen su secreto, que siempre hay uno.<br>📖 Si les provoca, lean su historia; si no, sigan caminando, que también vale.<br>📷 ¡Súbannos fotos! Aquí en casa las estamos esperando.'},
+  {sel:null, t:'Antes de dormir', x:'🎯 Las misiones de Rafita, con espacio para escribirle.<br>💌 Una carta nuestra para cada noche.<br>📔 Un diario para contarnos lo mejor del día.<br>🔔 Y los recordatorios para el día siguiente, para que no se les olvide nada.'},
+  {sel:'.tabs', t:'Siempre a la mano', x:'Abajo están el Inicio, el Recorrido completo y el Álbum con todas sus fotos. Arriba, SOS tiene los números de emergencia, y con «?» vuelven a ver esta guía cuando quieran.<br><br>¡A disfrutar Roma! Las amamos. ❤️ Naty, Estefa y Rafita'}
 ];
 let tourI = 0, tourEl = null;
 function tourShow(){
   const s = TOUR[tourI]; if(tourEl){ tourEl.classList.remove('tour-hl'); tourEl = null; }
   if(s.sel){ tourEl = document.querySelector(s.sel); if(tourEl && !tourEl.offsetHeight) tourEl = null; if(tourEl){ tourEl.classList.add('tour-hl'); tourEl.scrollIntoView({block:'center'}); } }
   $('#t-step').textContent = `PASO ${tourI+1} DE ${TOUR.length}`; $('#t-title').innerHTML = s.t; $('#t-text').innerHTML = s.x;
-  $('#t-next').textContent = tourI === TOUR.length - 1 ? '¡Empezar!' : 'Siguiente →';
+  $('#t-next').textContent = tourI === TOUR.length - 1 ? '¡A disfrutar Roma!' : 'Siguiente →';
   $('#tour').classList.toggle('dim', !tourEl);
 }
 function tour(force){ if(!force && store.get('tour-v2', false)) return; go('inicio'); tourI = 0; $('#tour').classList.add('on'); setTimeout(tourShow, 80); }
