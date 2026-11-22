@@ -676,6 +676,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .pstamp small{font-size:.56rem;font-weight:700;letter-spacing:.1em}
 .pstamp b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.5rem}
 .pt-ph{position:relative}.pstamp.sm{width:54px;height:54px;left:10px;top:10px}.pstamp.sm b{font-size:1.2rem}
+.sec-chip.mi{background:#FBE3E3;border-color:#E9A3A3;color:#9A3B3B}
 </style>
 </head>
 <body>
@@ -1034,7 +1035,7 @@ const DAYS = [
         info: { title: 'Fontana di Trevi', tag: 'icon', sub: 'teatro de piedra y agua antigua', sections: [
           { lbl: 'La historia', text: 'Diseñada por Nicola Salvi y terminada en 1762. En el centro, Océano sobre un carro tirado por caballos marinos: uno agitado y otro tranquilo, las dos caras del mar. Marca la llegada del acueducto <strong>Aqua Virgo</strong>, inaugurado en el año 19 a. C.' },
           { lbl: 'La moneda', text: 'Se lanza por encima del hombro para pedir volver a Roma. Solo desde una zona donde esté permitido.' },
-          { lbl: 'El secreto', text: 'En el costado derecho, cerca de Via della Stamperia, busquen una pequeña pila con dos chorros: la <strong>Fontanella degli Innamorati</strong>. Según la tradición, quienes bebían juntos de ella permanecían unidos. La misión es encontrarla y fotografiarla; no hace falta beber.' },
+          { lbl: 'Misión de amor', text: 'En el costado derecho, cerca de Via della Stamperia, hay una pequeña pila con dos chorritos: la <strong>Fontanella degli Innamorati</strong>, la fuente del amor. Según la tradición, quienes beben juntos de ella permanecen unidos.<br><br>Cuando Estefa estuvo aquí, tocó los dos chorritos y pidió, con toda la seguridad, el amor real y verdadero. Su misión es hacer lo mismo: búsquenla, toquen los dos chorritos y pidan su deseo. 💛' },
           { lbl: 'Entrada', text: 'Verla desde la plaza es gratis. Acercarse al perímetro interior cuesta <strong>€2 por persona</strong>; el domingo funciona de 9:00 a 22:00, último ingreso 21:00.' },
           { lbl: 'Las tres fotos', text: 'Las dos frente a la fuente iluminada, los caballos y esculturas, y la fuente de los enamorados.' }
         ]}, meta: ['💚 Plaza gratis', '€2 c/u perímetro'] },
@@ -1357,7 +1358,7 @@ function toast(t){ const e = $('#toast'); e.textContent = t; e.classList.add('on
 function show(u, cap){ const l = $('#lightbox'); l.innerHTML = `<img src="${esc(u)}" alt=""><p>${esc(cap||'')}<br>tocar para cerrar</p>`; l.classList.add('on'); }
 
 /* ================= del texto del día a fichas ================= */
-const RX_SECRET = /secreto|curiosidad|^el detalle/i;
+const RX_SECRET = /secreto|curiosidad|^el detalle|misión/i;
 const RX_LOOK = /qué buscar|qué ver|cuatro|tres detalles|lo mejor|qué pedir|^qué buscar dentro/i;
 const RX_TIP = /foto|entrada|horario|vale la pena|llegar|consejo|cómo recorrer|vestido|hoy domingo|^ojo|ruta/i;
 const LOOKPICS = [
@@ -1771,9 +1772,9 @@ function story(s){ const pro = proFor(s); const st = (pro ? [{text: pro.text}] :
   let hook = plain.split(/(?<![\s(][adAD]\.)(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"])/)[0]; if(hook.length > 210) hook = hook.slice(0, 207).replace(/\s\S*$/,'') + '…';
   return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span>${pro ? `<span class="faces">${pro.who.map(face).join('')}</span>` : ''}<span class="hook">“${esc(hook)}”</span><span class="pv">${esc(plain.slice(hook.length, hook.length + 220))}</span><span class="sh">Seguir leyendo aquí <i>⌄</i></span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
 window.__SEC = {};
-function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id); return `<button class="chip sec-chip${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">🔑 ${ok ? '¡Secreto encontrado!' : 'Secreto'}<span class="sc-v">ver</span></button>`; }
+function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id), mi = /misión/i.test(s.secret.lbl || ''); return `<button class="chip sec-chip${mi ? ' mi' : ''}${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">${mi ? '💛' : '🔑'} ${ok ? (mi ? '¡Misión cumplida!' : '¡Secreto encontrado!') : (mi ? 'Misión de amor' : 'Secreto')}<span class="sc-v">ver</span></button>`; }
 function verSecreto(id){ const s = window.__SEC[id]; if(!s) return; const el = document.getElementById('idea');
-  el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">🔑 SECRETO · ${esc(s.name.split(' · ')[0]).toUpperCase()}</div><div class="sec-x">${s.secret.text || (s.secret.items||[]).join(' ')}</div></div><label class="sec-l"><input type="checkbox" ${found(id) ? 'checked' : ''} onchange="setFound('${id}',this.checked);route(true)"> ¡Lo encontramos!</label><button class="btn ghost" style="margin:0 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
+  el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">${/misión/i.test(s.secret.lbl || '') ? '💛 MISIÓN DE AMOR' : '🔑 SECRETO'} · ${esc(s.name.split(' · ')[0]).toUpperCase()}</div><div class="sec-x">${s.secret.text || (s.secret.items||[]).join(' ')}</div></div><label class="sec-l"><input type="checkbox" ${found(id) ? 'checked' : ''} onchange="setFound('${id}',this.checked);route(true)"> ${/misión/i.test(s.secret.lbl || '') ? '¡Lo hicimos!' : '¡Lo encontramos!'}</label><button class="btn ghost" style="margin:0 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
   el.classList.add('on'); }
 window.verSecreto = verSecreto;
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><details class="secret-d${found(s.id) ? ' ok' : ''}"><summary><span>🔑 Secreto${found(s.id) ? ' · ¡encontrado!' : ''}</span><span class="sh">toquen para descubrirlo</span></summary><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></details></div>` : ''; }
