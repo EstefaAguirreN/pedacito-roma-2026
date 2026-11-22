@@ -213,6 +213,16 @@ details.more .in p{margin:0 0 10px}
 .whyday .wmore>summary{list-style:none;cursor:pointer;font-weight:700;color:var(--coral-d);padding:4px 0 8px}
 .whyday .wmore>summary::-webkit-details-marker{display:none}
 .whyday .wmore[open]>summary{display:none}
+.chars{margin:14px -18px 4px;padding:12px 18px 6px;border-top:1px dashed var(--line)}
+.chars-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 10px;-webkit-overflow-scrolling:touch}
+.char{flex:0 0 72%;max-width:250px;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.char img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #F3DFA6;display:block;margin:0 auto 8px}
+.char b{display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:1.1rem;line-height:1.2}
+.char small{display:block;color:var(--coral-d);font-weight:700;font-size:.78rem;margin:2px 0 6px}
+.char p{margin:0!important;font-size:.85rem!important;line-height:1.45!important;color:var(--ink-2)}
+.faces{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0}
+.face{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 10px 2px 2px}
+.face img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .timechars{margin-top:12px;font-size:.92rem;color:var(--ink-2);display:grid;gap:4px}
 .timechars b{color:var(--ink)}
 .notice{border-radius:14px;padding:12px 14px;margin-top:10px;font-size:.93rem;background:var(--card);border-left:4px solid var(--sage)}
@@ -838,7 +848,7 @@ const DAYS = [
   {
     id: 1, date: 'domingo 22 noviembre', title: 'Capítulo I · La Roma barroca: fuentes, arte y leyendas', feel: 'De los antiguos dioses a las grandes plazas de Roma', city: 'Roma',
     heroPhoto: 'Fotos/cap1-navona-atardecer.webp',
-    narrative: { title: 'Prólogo · Una ciudad que ha vivido muchas vidas', body: `<p><strong>Ma, Sofi:</strong></p><p>Imaginen una ciudad donde una misma caminata permite viajar casi dos mil años en el tiempo.</p><p>En Roma, los emperadores levantaron templos y estadios. Muchos siglos después, los artistas transformaron esos espacios en iglesias, plazas y fuentes que hoy admiramos. Lo extraordinario es que una época no borró completamente a la anterior: construyó encima de ella.</p><p>Hoy van a descubrir esa Roma.</p><p>Primero encontrarán una plaza donde se recuerda a un filósofo condenado hace más de cuatro siglos. Después caminarán sobre un antiguo estadio romano, conocerán el templo que sobrevivió a los emperadores y terminarán frente a una fuente monumental que todavía recibe agua de un acueducto de la Antigüedad.</p><p>Y entre una historia y otra habrá tiempo para un gelato, fotografías, callecitas bonitas y una leyenda de amor.</p><p>Bienvenidas a Roma. Hoy no tienen que conquistarlo todo; solo empezar a enamorarse de la ciudad.</p>` },
+    narrative: { title: 'Prólogo · La ciudad que se convirtió en una obra de arte', body: `<p><strong>Ma, Sofi:</strong></p><p>Imaginen Roma hace cuatrocientos años. El Imperio romano había desaparecido hacía más de mil años, pero sus templos, columnas y monumentos seguían en pie, recordándole al mundo que aquella ciudad había sido el centro de un poder inmenso.</p><p>Roma ya no estaba gobernada por emperadores. Ahora eran los papas quienes ejercían buena parte del poder sobre la ciudad y querían convertirla en la gran capital del catolicismo. Para hacerlo, recurrieron a algunos de los artistas más extraordinarios de su tiempo.</p><p>Entre ellos estaban <strong>Gian Lorenzo Bernini y Francesco Borromini</strong>, dos hombres de enorme talento, personalidades muy diferentes y una rivalidad que marcaría la historia del arte.</p><p>Bernini era el artista favorito de varios papas. Esculpía el mármol con tal habilidad que sus figuras parecían moverse y respirar. Borromini, en cambio, era un arquitecto más reservado y de carácter difícil, obsesionado con las formas, las curvas y las posibilidades de transformar los espacios.</p><p>Ambos ayudaron a convertir Roma en un escenario monumental. Las plazas se llenaron de fuentes, las iglesias adquirieron fachadas sorprendentes y el arte comenzó a utilizarse para despertar emociones, transmitir poder y acercar a las personas a la fe.</p><p>Pero bajo aquella ciudad barroca seguía existiendo otra Roma, mucho más antigua. Roma no había dejado atrás su historia: había aprendido a construir sobre ella.</p><p>Y no todas las historias que encontrarán hoy son de belleza y esplendor: también fue una época de conflictos entre las ideas, la religión y el poder.</p><p><strong>Hoy van a caminar por una ciudad donde cada época dejó algo de sí misma.</strong> Entre antiguos emperadores, papas, artistas y pensadores, descubrirán que detrás de las plazas más hermosas de Roma hay historias de ambición, rivalidad, ingenio y transformación.</p><p>Y mientras recorren esas calles, también podrán detenerse a disfrutar de un gelato, descubrir un rincón escondido y empezar a escribir su propia historia en la Ciudad Eterna.</p>` },
     quickStats: [
       { lbl: 'Aterrizan', val: '8:25 AM · Fiumicino' },
       { lbl: 'Check-in', val: '3:00 PM · con Luca' },
@@ -1165,7 +1175,7 @@ const CHAPTERS = {
 };
 const NIVEL = {1:'Tranquilo · después del vuelo', 2:'Exigente · mucha caminata', 3:'Moderado · museos largos', 4:'Tranquilo · día de viaje'};
 const TIME_CHARS = {
-  1:{t:'Siglos XVI–XVIII, con un salto al siglo II d. C.', p:'Bernini, Borromini, Adriano y Rafael.'},
+  1:{t:'Del siglo I a. C. al Barroco (siglos XVI–XVIII).', p:'Bernini, Borromini, Giordano Bruno, Domiciano y Agripa.'},
   2:{t:'Siglo I a. C. – siglo II d. C.', p:'Julio César, Augusto, Trajano, Marco Aurelio y Cómodo.'},
   3:{t:'Siglos XV–XVII, con raíces en el siglo I d. C.', p:'San Pedro, Constantino, Miguel Ángel, Rafael y el papa Julio II.'},
   4:{t:'Regresamos al siglo XXI.', p:''}
@@ -1333,7 +1343,7 @@ function renderChapter(id){
   { const tc = TIME_CHARS[id]; if(tc) h += `<div class="timechars"><div>⏳ <b>Viaje en el tiempo:</b> ${tc.t}</div>${tc.p ? `<div>👤 <b>Personajes:</b> ${tc.p}</div>` : ''}</div>`; }
   if(d.narrative && d.narrative.body){
     { const ps = d.narrative.body.match(/<p[^>]*>[\s\S]*?<\/p>/g) || [d.narrative.body]; const vis = ps.slice(0, 4).join(''), rest = ps.slice(4).join('');
-    h += `<section class="whyday"><div class="wk">📖 POR QUÉ ESTAMOS AQUÍ HOY</div><div class="wt">${esc(d.narrative.title.replace(/^Prólogo · /,''))}</div>${vis}${rest ? `<details class="wmore"><summary>Seguir leyendo ↓</summary>${rest}</details>` : ''}</section>`; }
+    h += `<section class="whyday"><div class="wk">📖 POR QUÉ ESTAMOS AQUÍ HOY</div><div class="wt">${esc(d.narrative.title.replace(/^Prólogo · /,''))}</div>${vis}${rest ? `<details class="wmore"><summary>Seguir leyendo aquí ⌄</summary>${rest}</details>` : ''}${DAY_CHARS[id] ? `<div class="chars"><div class="wk">🎭 LOS PERSONAJES DE HOY</div><div class="chars-row">${DAY_CHARS[id].map(k => `<div class="char"><img src="Fotos/personajes/${k}.jpg" alt="${esc(CHARS[k].n)}" loading="lazy"><b>${esc(CHARS[k].n)}</b><small>${CHARS[k].y}</small><p>${esc(CHARS[k].t)}</p></div>`).join('')}</div><div class="muted" style="font-size:.8rem">desliza → · Los irán encontrando en cada lugar.</div></div>` : ''}</section>`; }
   }
   // plan del día
   window.__nextK = null;
@@ -1379,7 +1389,7 @@ function renderChapter(id){
   });
   cards.forEach((c, k) => { c.n = k + 1; c.id = c.type === 'major' ? c.s.id : c.pts[0].id + '-r'; });
   const tot = String(cards.length).padStart(2,'0');
-  h += `<div class="sec"><div class="sec-head"><div class="eyebrow" id="lugares">LOS LUGARES DEL DÍA</div><div class="h2">Qué estamos viendo</div></div>`;
+  h += `<div class="sec"><div class="sec-head"><div class="eyebrow" id="lugares">LOS LUGARES DEL DÍA</div><div class="h2">Recorrido detallado</div></div>`;
   cards.forEach((c, k) => {
     const next = cards[k+1], nextName = next ? (next.type === 'major' ? next.s.name : (next.title || next.pts.map(p => p.name).join(' y '))) : '';
     const cont = next ? `<div class="nextstop">Siguiente: <a href="#" onclick="jump('p-${next.id}');return false">${esc(nextName)} →</a></div>` : '';
@@ -1512,11 +1522,27 @@ function dayMap(stops, did){
 function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length; return [nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : '', nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''].filter(Boolean).join(' · '); }
 function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
 function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
-function story(s){ const st = s.story.filter(x => x.text || x.items); if(!st.length) return '';
+const CHARS = {
+  bernini:{n:'Gian Lorenzo Bernini', y:'1598–1680', t:'Escultor y arquitecto, uno de los grandes protagonistas del Barroco romano. Creó la Fuente de los Cuatro Ríos de Piazza Navona.'},
+  borromini:{n:'Francesco Borromini', y:'1599–1667', t:'Arquitecto innovador y rival de Bernini. Su iglesia de Sant\'Agnese in Agone, en Piazza Navona, es uno de los grandes referentes del Barroco.'},
+  bruno:{n:'Giordano Bruno', y:'1548–1600', t:'Filósofo italiano condenado por herejía y ejecutado en Campo de\' Fiori. Su estatua recuerda su historia.'},
+  domiciano:{n:'Domiciano', y:'51–96 d. C.', t:'Emperador romano que mandó construir el estadio sobre el que hoy se encuentra Piazza Navona.'},
+  agripa:{n:'Marco Vipsanio Agripa', y:'63–12 a. C.', t:'General y colaborador de Augusto, vinculado al primer Panteón y al acueducto Aqua Virgo, que sigue abasteciendo la Fontana di Trevi.'}
+};
+const DAY_CHARS = {1:['bernini','borromini','bruno','domiciano','agripa']};
+const PRO = {1:[
+  {k:'Campo de', who:['bruno'], text:'En Campo de’ Fiori conocerán la historia de <strong>Giordano Bruno</strong>, un pensador que fue condenado por la Inquisición y ejecutado en esa misma plaza en el año 1600. Su monumento recuerda que aquella también fue una época de conflictos entre las ideas, la religión y el poder.'},
+  {k:'Navona', who:['bernini','borromini','domiciano'], text:'La Piazza Navona, donde conocerán las fuentes de Bernini, conserva la forma del estadio que el emperador Domiciano mandó construir casi mil seiscientos años antes.'},
+  {k:'Pante', who:['agripa'], text:'El Panteón, levantado en tiempos del Imperio, sobrevivió en buena parte porque fue transformado en una iglesia cristiana.'},
+  {k:'Trevi', who:['agripa'], text:'Terminarán frente a la Fontana di Trevi, una obra barroca alimentada por un acueducto cuyo origen se remonta al año 19 a. C. Una fuente del siglo XVIII que todavía recibe agua gracias a una infraestructura nacida en la Roma de Augusto.'}
+]};
+const proFor = s => { const d = String(s.id || '').split('-')[0]; return (PRO[d] || []).find(p => s.name.includes(p.k)); };
+const face = k => `<span class="face"><img src="Fotos/personajes/${k}.jpg" alt="">${esc(CHARS[k].n.split(' ').slice(-1)[0])}</span>`;
+function story(s){ const pro = proFor(s); const st = (pro ? [{text: pro.text}] : []).concat(s.story.filter(x => x.text || x.items)); if(!st.length) return '';
   const plain = st.map(x => (x.text || '') + ' ' + (x.items || []).join(' ')).join(' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
   const words = plain.split(' ').length, mn = Math.max(1, Math.round(words/180));
-  let hook = plain.split(/(?<=[.!?])\s/)[0]; if(hook.length > 130) hook = hook.slice(0, 127).replace(/\s\S*$/,'') + '…';
-  return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span><span class="hook">“${esc(hook)}”</span><span class="pv">${esc(plain.slice(hook.length, hook.length + 220))}</span><span class="sh">Seguir leyendo aquí <i>⌄</i></span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
+  let hook = plain.split(/(?<=[.!?])\s/)[0]; if(hook.length > 210) hook = hook.slice(0, 207).replace(/\s\S*$/,'') + '…';
+  return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span>${pro ? `<span class="faces">${pro.who.map(face).join('')}</span>` : ''}<span class="hook">“${esc(hook)}”</span><span class="pv">${esc(plain.slice(hook.length, hook.length + 220))}</span><span class="sh">Seguir leyendo aquí <i>⌄</i></span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
 function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><details class="secret-d${found(s.id) ? ' ok' : ''}"><summary><span>🔑 Secreto${found(s.id) ? ' · ¡encontrado!' : ''}</span><span class="sh">toquen para descubrirlo</span></summary><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></details></div>` : ''; }
 function ideaBtn(s){
   return s.tips.map((t, k) => { if(!/foto/i.test(t.lbl)) return ''; const txt = (t.text || '') + (t.items ? t.items.join(' · ') : ''); window.__IDEAS = window.__IDEAS || {}; const key = s.id + '-' + k; window.__IDEAS[key] = {name:s.name, txt, img: imgFor(s.name) || (CHAPTERS[+s.id.split('-')[0]] || {}).img}; return `<button class="idea-mini" onclick="idea('${key}')">📸 Idea de foto</button>`; }).join('');
