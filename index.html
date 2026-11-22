@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F6F0E5">
+<title>Un pedacito de nosotras en Roma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* VOZ: diario de viaje cálido, que se escribe mientras sucede.
+   IDEA: revista de viajes interactiva; el destino manda, la decoración acompaña.
+   JERARQUÍA: identidad → capítulo → parada → información útil → historia desplegable.
+   COLOR: marfil, azul tinta, coral para acciones, amarillo para detalles, salvia para lo cumplido.
+   TIPO: DM Serif Display (títulos), Inter (información), Caveat solo para voces de la familia. */
+:root{
+  --ivory:#F6F0E5; --ivory-2:#EDE4D3; --card:#FFFDF8; --ink:#283B4D; --ink-2:#5C6B78; --line:#E2D7C3;
+  --coral:#C8735C; --coral-d:#A85A45; --yellow:#E4BD63; --sage:#8C9D86;
+  --r:16px; --sh:0 1px 2px rgba(40,59,77,.06),0 6px 18px rgba(40,59,77,.08);
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--ivory);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+button{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+.serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+.hand{font-family:Caveat,cursive}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.view{display:none}.view.on{display:block}
+
+/* barra superior */
+.top{position:sticky;top:0;z-index:50;background:rgba(246,240,229,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:10px;height:56px}
+.top .brand{flex:1;font-family:'DM Serif Display',serif;font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;border:0;text-align:left;padding:0;cursor:pointer}
+.top .pill{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:.86rem;font-weight:600;cursor:pointer}
+.top .pill.sos{background:var(--coral);border-color:var(--coral);color:#fff}
+
+/* textos */
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--coral-d)}
+.h2{font-family:'DM Serif Display',serif;font-size:1.65rem;line-height:1.15;margin:4px 0 6px;text-wrap:balance}
+.muted{color:var(--ink-2)}
+.sec{padding:26px 0 6px}
+.sec-head{margin-bottom:12px}
+
+/* portada */
+.cover{position:relative;margin:14px 0 0;border-radius:22px;overflow:hidden;aspect-ratio:4/5;max-height:560px;width:100%;box-shadow:var(--sh)}
+.cover img{width:100%;height:100%;object-fit:cover}
+.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,40,0) 35%,rgba(20,30,40,.78))}
+.cover .txt{position:absolute;left:0;right:0;bottom:0;padding:22px 20px;color:#fff;z-index:1}
+.cover .when{font-size:.82rem;font-weight:600;letter-spacing:.04em;opacity:.9}
+.cover h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(2.2rem,9vw,3.3rem);line-height:1.02;margin:6px 0 8px;text-wrap:balance}
+.cover .sub{font-size:1rem;opacity:.95;max-width:30ch}
+
+/* ahora */
+.now{margin-top:16px;background:var(--ink);color:#fff;border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.now .eyebrow{color:var(--yellow)}
+.now .dname{font-family:'DM Serif Display',serif;font-size:1.35rem;margin:2px 0 12px}
+.now .slot{background:rgba(255,255,255,.08);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.now .slot.next{background:transparent;border:1px solid rgba(255,255,255,.18)}
+.now .lbl{font-size:.74rem;font-weight:700;letter-spacing:.06em;opacity:.75}
+.now .what{font-weight:700;font-size:1.05rem;line-height:1.3;margin:2px 0}
+.now .t{font-size:.88rem;opacity:.85}
+.now .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;border:0;font-weight:700;font-size:.92rem;text-decoration:none;cursor:pointer}
+.btn.coral{background:var(--coral);color:#fff}
+.btn.ink{background:var(--ink);color:#fff}
+.btn.ghost{background:transparent;border:1.5px solid currentColor}
+.btn.soft{background:var(--ivory-2);color:var(--ink)}
+.btn.done{background:var(--sage);color:#fff}
+.btn:focus-visible,.pill:focus-visible,.chap:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+
+/* tarjetas de capítulo */
+.chaps{display:grid;gap:14px}
+.chap{display:block;width:100%;text-align:left;border:0;padding:0;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);cursor:pointer}
+.chap .ph{position:relative;aspect-ratio:16/9;overflow:hidden}
+.chap .ph img{width:100%;height:100%;object-fit:cover}
+.chap .num{position:absolute;left:12px;top:12px;background:rgba(246,240,229,.95);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:.76rem;font-weight:700;letter-spacing:.04em}
+.chap .bd{padding:14px 16px 16px}
+.chap .dest{font-family:'DM Serif Display',serif;font-size:1.6rem;line-height:1.1}
+.chap .obj{margin:4px 0 8px;color:var(--ink-2)}
+.chap .meta{font-size:.84rem;font-weight:600;color:var(--coral-d)}
+.chap .prog{height:5px;background:var(--ivory-2);border-radius:999px;overflow:hidden;margin-top:12px}
+.chap .prog i{display:block;height:100%;background:var(--sage)}
+
+/* herramientas */
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tool{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:76px;border-radius:14px;border:1px solid var(--line);background:var(--card);font-weight:600;font-size:.86rem;cursor:pointer;text-align:center;padding:8px}
+.tool span{font-size:1.3rem}
+
+/* cajas genéricas */
+.box{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.letter{background:#FFFBF3;border:1px solid var(--line);border-radius:var(--r);padding:20px 20px 16px}
+.letter .when{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--coral-d)}
+.letter .lt{font-family:'DM Serif Display',serif;font-size:1.3rem;margin:4px 0 10px}
+.letter p{font-family:Caveat,cursive;font-size:1.32rem;line-height:1.3;margin:0 0 8px}
+.letter .sign{font-family:Caveat,cursive;font-size:1.4rem;font-weight:700;color:var(--coral-d);text-align:right}
+.letter .end{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);text-align:center;font-family:'DM Serif Display',serif;font-style:italic}
+
+details.more{border-top:1px solid var(--line)}
+details.more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;font-weight:700}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::after{content:'+';font-size:1.3rem;color:var(--coral-d)}
+details.more[open]>summary::after{content:'–'}
+details.more .in{padding:0 0 14px}
+details.more .in p{margin:0 0 10px}
+
+/* tablero */
+.prog-row{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:.92rem}
+.prog-row:first-of-type{border-top:0}
+.bar{height:7px;border-radius:999px;background:var(--ivory-2);overflow:hidden}.bar i{display:block;height:100%;background:var(--sage)}
+.small{font-size:.82rem;color:var(--ink-2);white-space:nowrap}
+
+/* fotos propias */
+.album{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.album button{position:relative;padding:0;border:0;border-radius:10px;overflow:hidden;aspect-ratio:1;background:var(--ivory-2);cursor:pointer}
+.album img{width:100%;height:100%;object-fit:cover}
+.album span{position:absolute;left:5px;bottom:5px;right:5px;font-size:.68rem;line-height:1.2;color:#fff;background:rgba(20,30,40,.6);border-radius:6px;padding:2px 6px;text-align:left}
+.empty{font-size:.9rem;color:var(--ink-2);margin:4px 0}
+
+/* capítulo */
+.hero{position:relative;margin:14px 0 0;border-radius:22px;overflow:hidden;aspect-ratio:4/3;max-height:460px;width:100%}
+.hero img{width:100%;height:100%;object-fit:cover}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,30,40,.05) 30%,rgba(20,30,40,.82))}
+.hero .txt{position:absolute;left:0;right:0;bottom:0;padding:20px;color:#fff;z-index:1}
+.hero .num{font-size:.8rem;font-weight:700;letter-spacing:.06em;color:var(--yellow)}
+.hero h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(2.3rem,10vw,3.4rem);line-height:1;margin:4px 0 8px}
+.hero .obj{font-size:1rem;max-width:34ch;opacity:.95}
+.facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:.82rem;font-weight:600;white-space:nowrap}
+.chip.warm{background:#FBEFD2;border-color:#EFD9A2}
+.notice{border-radius:14px;padding:12px 14px;margin-top:10px;font-size:.93rem;background:var(--card);border-left:4px solid var(--sage)}
+.notice.warn{border-left-color:var(--coral)}
+.notice.tip{border-left-color:var(--yellow)}
+.notice b.t{display:block;margin-bottom:2px}
+
+/* plan del día */
+.plan{list-style:none;margin:0;padding:0}
+.plan li{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.plan li:first-child{border-top:0}
+.plan .tm{font-weight:700;font-size:.88rem;color:var(--coral-d);white-space:nowrap;padding-top:2px}
+.plan .ti{font-weight:600;line-height:1.3}
+.plan .ti small{display:block;font-weight:400;color:var(--ink-2);font-size:.85rem}
+.plan .go{background:none;border:0;padding:0;text-align:left;cursor:pointer;width:100%}
+.plan .stop .ti{color:var(--ink)}
+.plan .stop .ti::before{content:'●';color:var(--coral);font-size:.7rem;margin-right:6px;vertical-align:2px}
+.plan .ok .ti{color:var(--sage);text-decoration:line-through}
+.plan details>summary{list-style:none;cursor:pointer}
+.plan details>summary::-webkit-details-marker{display:none}
+.plan .logx{font-size:.9rem;color:var(--ink-2);padding-top:6px}
+.plan .logx ol{margin:6px 0;padding-left:18px}
+
+/* ficha de parada */
+.stop-card{background:var(--card);border-radius:20px;overflow:hidden;box-shadow:var(--sh);margin-bottom:18px;scroll-margin-top:70px}
+.stop-card .ph{aspect-ratio:16/10;overflow:hidden;background:var(--ivory-2)}
+.stop-card .ph img{width:100%;height:100%;object-fit:cover}
+.stop-card .bd{padding:16px 16px 6px}
+.stop-card .k{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.stop-card .k .opt{font-size:.72rem;font-weight:700;letter-spacing:.05em;background:var(--ivory-2);border-radius:999px;padding:3px 9px;color:var(--ink-2)}
+.stop-card h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.65rem;line-height:1.1;margin:4px 0 4px;text-wrap:balance}
+.stop-card .line{color:var(--ink-2);margin:0 0 10px}
+.step{padding:14px 0;border-top:1px solid var(--line)}
+.step .st{font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--ink-2);margin-bottom:6px}
+.step ul{margin:0;padding-left:18px}.step li{margin-bottom:6px}
+.secret{background:#EFE4CF;border-radius:14px;padding:14px 14px 12px;margin:4px 0}
+.secret .sk{font-size:.74rem;font-weight:700;letter-spacing:.06em;color:#7A5B2E}
+.secret .sx{font-family:'DM Serif Display',serif;font-size:1.06rem;line-height:1.35;margin-top:4px}
+.secret label{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.88rem;font-weight:600;cursor:pointer}
+.secret input{width:20px;height:20px;accent-color:var(--sage)}
+.tipbox{background:#FBF3DF;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:8px}
+.tipbox b{color:#8A6416}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.nextstop{font-size:.88rem;color:var(--ink-2);margin-top:8px}
+.memo textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:12px;padding:10px;font:16px/1.4 Inter,sans-serif;background:#fff;color:var(--ink);resize:vertical}
+.who{display:flex;align-items:center;gap:8px;margin:2px 0 10px;font-size:.88rem}
+.who button{min-height:40px;padding:0 16px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;font-weight:700;cursor:pointer}
+.who button.on{background:var(--ink);color:#fff}
+.up{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;border-radius:12px;background:var(--coral);color:#fff;font-weight:700;cursor:pointer;margin-bottom:8px}
+.status{font-size:.86rem;min-height:1.2em;margin-bottom:6px}
+.off{font-size:.85rem;color:var(--ink-2);background:var(--ivory-2);border-radius:10px;padding:8px 10px}
+
+.stop-card .ph.short{aspect-ratio:21/9}
+.stop-card h3.sm{font-size:1.35rem}
+.pt{padding:12px 0;border-top:1px solid var(--line);scroll-margin-top:70px}
+.pt-h{display:flex;gap:10px;align-items:flex-start}
+.pt-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.pt-name{font-weight:700;font-size:1.05rem;line-height:1.25}
+.pt-line{font-size:.88rem;color:var(--ink-2)}
+.pt-b{margin-left:34px}
+.pt-look{font-size:.92rem;margin-top:6px}.pt-look p{display:inline}
+/* misión y secretos del día */
+.mission{background:#FBEFD2;border-radius:var(--r);padding:18px}
+.mission .mk{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:#8A6416}
+.mission .mt{font-family:'DM Serif Display',serif;font-size:1.3rem;margin:4px 0 8px}
+.check{display:flex;align-items:center;gap:10px;min-height:44px;font-weight:600;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--sage);flex:none}
+.secrets-day{background:#EFE4CF;border-radius:var(--r);padding:16px 18px}
+.secrets-day .check{font-weight:500;font-size:.95rem;line-height:1.35;align-items:flex-start;padding:6px 0}
+.secrets-day .check input{margin-top:2px}
+
+.nextchap{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:22px 0 40px;padding:18px;border:0;border-radius:var(--r);background:var(--ink);color:#fff;text-align:left;cursor:pointer}
+.nextchap b{display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:1.25rem}
+.nextchap small{font-size:.76rem;font-weight:700;letter-spacing:.06em;color:var(--yellow)}
+
+table.bt{width:100%;border-collapse:collapse;font-size:.92rem}
+table.bt td{padding:7px 0;border-bottom:1px solid var(--line)}
+table.bt td:last-child{text-align:right;font-weight:600;white-space:nowrap;padding-left:10px}
+table.bt tr.tot td{font-weight:700;color:var(--coral-d);border:0}
+
+/* protagonistas */
+.names{display:flex;flex-direction:column;align-items:center;gap:4px;margin:6px 0 12px}
+.names .row{display:flex;flex-wrap:wrap;justify-content:center;gap:3px}
+.names .row span{display:inline-block;padding:2px 6px;border-radius:4px;font-family:'DM Serif Display',serif;font-size:1.5rem;line-height:1.15;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.names .row span:nth-child(4n+1){background:#F3DFA6}.names .row span:nth-child(4n+2){background:#CFE0E4}.names .row span:nth-child(4n+3){background:#F1CDBF}.names .row span:nth-child(4n){background:#D8E0D2}
+.names .amp{font-family:Caveat,cursive;font-size:1.7rem;color:var(--coral-d);line-height:1}
+
+/* máquina del tiempo */
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:8px 0}
+.tl .n{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
+.tl li:last-child .n{background:var(--coral)}
+.tl b{display:block;font-size:.85rem;color:var(--coral-d)}
+
+/* pase */
+.pass{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));text-align:center;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);margin:12px 0;padding:10px 0}
+.pass b{display:block;font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;color:var(--coral-d)}
+.pass span{font-size:.75rem;font-weight:700;letter-spacing:.05em;color:var(--ink-2)}
+
+/* manual y frases reutilizados */
+.legacy .acc-btn{display:flex;width:100%;align-items:center;gap:10px;min-height:52px;background:none;border:0;border-top:1px solid var(--line);font-weight:700;cursor:pointer;text-align:left}
+.legacy .acc-chev{margin-left:auto;color:var(--coral-d)}
+.legacy .acc-body{display:none;padding-bottom:12px}
+.legacy .accordion.open .acc-body{display:block}
+.legacy .callout{background:#FBF3DF;border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:.92rem}
+.legacy .callout .lead{display:block;font-weight:700}
+.legacy ul.checklist{list-style:none;padding:0;margin:0}
+.legacy ul.checklist li{position:relative;padding:8px 0 8px 32px;border-bottom:1px solid var(--line);cursor:pointer}
+.legacy ul.checklist li::before{content:'';position:absolute;left:0;top:9px;width:20px;height:20px;border:2px solid var(--ink-2);border-radius:6px}
+.legacy ul.checklist li.done{color:var(--ink-2);text-decoration:line-through}
+.legacy ul.checklist li.done::before{background:var(--sage);border-color:var(--sage)}
+.legacy p{margin:0 0 8px}
+.legacy .day-nav,.legacy .day-hero .badge{display:none}
+.legacy h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.8rem;margin:8px 0 2px}
+.legacy .feel{color:var(--ink-2);margin-bottom:10px}
+.legacy h2{font-size:1.05rem;margin:16px 0 8px}
+.legacy .phrases-table{background:var(--card);border-radius:14px;padding:4px 12px;box-shadow:var(--sh)}
+.legacy .ph-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.legacy .ph-row:first-child{font-weight:700;font-size:.78rem;color:var(--ink-2)}
+.legacy .ph-it{font-weight:700}.legacy .ph-sound{color:var(--coral-d);font-style:italic}
+.legacy .em-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.legacy .em-item{background:var(--card);border-radius:12px;padding:10px;box-shadow:var(--sh)}
+.legacy .em-lbl{font-size:.78rem;color:var(--ink-2)}.legacy .em-val{font-weight:700;font-size:1.15rem}
+.legacy .em-val a{text-decoration:none}
+
+#lightbox{position:fixed;inset:0;z-index:100;background:rgba(15,20,26,.92);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
+#lightbox.on{display:flex}#lightbox img{max-height:80vh;border-radius:12px}#lightbox p{color:#fff;font-size:.9rem;text-align:center;margin:0}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:.9rem;opacity:0;transition:opacity .3s;z-index:120;pointer-events:none}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#toast{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <button class="brand" onclick="go('inicio')">Un pedacito de nosotras en Roma</button>
+  <button class="pill" onclick="go('inicio')" aria-label="Inicio">🏠 Inicio</button>
+  <button class="pill sos" onclick="go('emergencias')">SOS</button>
+</div></header>
+
+<main>
+<section class="view" id="v-inicio"><div class="wrap">
+  <div id="ahora"></div>
+  <div class="cover"><img src="Fotos/navona.webp" alt="Piazza Navona al amanecer"><div class="txt">
+    <div class="when">ROMA · 22 AL 25 DE NOVIEMBRE DE 2026</div>
+    <h1>Un pedacito de nosotras en Roma</h1>
+    <div class="sub">Las aventuras de mamá y Sofía, con el amor de Naty, Estefa y Rafita.</div>
+  </div></div>
+
+  <div class="sec"><div class="sec-head"><div class="eyebrow">NUESTRA AVENTURA</div><div class="h2">Tres capítulos y un epílogo</div><div class="muted">Toquen un capítulo para ver el plan del día, las paradas y sus secretos.</div></div>
+    <div class="chaps" id="chaps"></div>
+  </div>
+
+  <div class="sec"><div class="tools">
+    <button class="tool" onclick="go('manual')"><span>📋</span>Manual</button>
+    <button class="tool" onclick="go('frases')"><span>🗣</span>Frases</button>
+    <button class="tool" onclick="go('emergencias')"><span>🆘</span>Emergencias</button>
+  </div></div>
+
+  <div class="sec" id="tablero-sec"><div class="box"><div class="eyebrow">ASÍ VA LA AVENTURA</div><div class="muted" style="font-size:.9rem;margin-bottom:6px">Paradas visitadas, secretos encontrados y fotos. Se actualiza solo.</div><div id="tablero"></div><div class="eyebrow" style="margin-top:14px">NUESTRAS FOTOS</div><div id="album-inicio"></div></div></div>
+
+  <div class="sec"><div class="letter">
+    <div class="when">ANTES DE ABRIR EL PRIMER CAPÍTULO</div><div class="lt">Una dedicatoria para ustedes</div>
+    <p>Ma, Sofi:</p>
+    <p>Preparamos esta guía pensando en todo lo que les gusta: la historia, los museos, las calles bonitas, las historias detrás de cada monumento y, por supuesto, comer algo rico en el camino.</p>
+    <p>Queremos que disfruten cada lugar, pero también que tengan tiempo de sentarse en una plaza, tomarse un café, conversar y vivir Roma a su manera.</p>
+    <p>No tienen que conocerlo todo. Lo importante es que disfruten esta oportunidad de estar juntas.</p>
+    <p>Y cuando vean algo que les emocione, acuérdense de contárnoslo. Nosotras estaremos esperando cada foto y cada historia.</p>
+    <div class="sign">Con todo nuestro amor, Naty, Estefa y Rafita ❤️</div>
+  </div></div>
+
+  <div class="sec"><div class="box">
+    <div class="eyebrow">LAS PROTAGONISTAS DE ESTA HISTORIA</div>
+    <div class="names"><div class="row" id="n1"></div><div class="amp">&amp;</div><div class="row" id="n2"></div></div>
+    <p><b>Mamá y Sofía, nuestras viajeras.</b> Dos mujeres curiosas, con ganas de descubrir la historia, el arte, la fe y esos rincones que hacen especial una ciudad.</p>
+    <p><b>Naty y Estefa, las cómplices desde casa.</b> Las acompañaremos con nuestras cartas, recomendaciones y todo el cariño que pusimos en preparar este viaje.</p>
+    <p style="margin-bottom:0"><b>Y Rafita</b>, el más pequeño de la familia, que todavía no ha nacido, pero ya tiene su primera aventura por Roma.</p>
+  </div></div>
+
+  <div class="sec"><div class="box">
+    <div class="eyebrow">NUESTRA MÁQUINA DEL TIEMPO</div><div class="h2" style="font-size:1.3rem">Una pequeña brújula histórica</div>
+    <ol class="tl">
+      <li><span class="n">1</span><span><b>Siglo I a. C. – II d. C.</b>César, Augusto, los emperadores y el esplendor del Imperio romano.</span></li>
+      <li><span class="n">2</span><span><b>Siglos I–IV</b>Los primeros cristianos, San Pedro y Constantino.</span></li>
+      <li><span class="n">3</span><span><b>Siglos XV–XVI</b>El Renacimiento de Rafael y Miguel Ángel.</span></li>
+      <li><span class="n">4</span><span><b>Siglos XVII–XVIII</b>El Barroco de Bernini, Borromini y las grandes fuentes.</span></li>
+      <li><span class="n">5</span><span><b>2026</b>Mamá y Sofía escriben su propia historia en Roma. ❤️</span></li>
+    </ol>
+  </div></div>
+
+  <div class="sec" style="padding-bottom:40px"><div class="box">
+    <div class="eyebrow">EL VIAJE EN UN BOLETO</div>
+    <div class="h2" style="font-size:1.3rem">22 — 25 de noviembre de 2026</div>
+    <div class="pass"><div><b>4</b><span>DÍAS</span></div><div><b>1</b><span>CIUDAD</span></div><div><b>3.000</b><span>AÑOS</span></div></div>
+    <details class="more"><summary>Una nota: mamá e hija</summary><div class="in">
+      <p><b>Para Sofía y Alexandra.</b> Una ciudad eterna para dos.</p>
+      <p>Lo que se prometen en este viaje: ir del brazo, sin afán · probar todo, una mordida cada una · una foto juntas en cada lugar · parar a tomar café cuando provoque · reírse de perderse · contarse el deseo de Trevi la última noche.</p>
+    </div></details>
+  </div></div>
+</div></section>
+
+<section class="view" id="v-capitulo"><div class="wrap" id="capitulo"></div></section>
+<section class="view legacy" id="v-manual"><div class="wrap sec"><div>
+  <div class="pre-content">
+    <div class="day-nav"><button onclick="goHome()">🗺 Mapa</button><span class="day-num">Manual</span><span style="width:60px"></span></div>
+    <div class="day-hero"><span class="badge">PRE-VIAJE</span><h1>Manual de supervivencia</h1><div class="feel">lo que hay que saber antes</div></div>
+    <div class="accordion open"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">📋</span><span class="acc-label">Documentos esenciales</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><ul class="checklist" data-key="docs"><li>Pasaporte vigente de las dos</li><li>Seguro de viaje (obligatorio para Schengen)</li><li>Pases de abordar ida y regreso en el celular</li><li>Entradas del Vaticano y del Coliseo (nominativas)</li><li>Dirección del alojamiento guardada: Via dei Cappellari 35</li><li>Copia digital del pasaporte en el correo</li></ul></div></div></div>
+    <div class="accordion open"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">🎒</span><span class="acc-label">Equipaje · solo mochila (Wizz Air)</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><div class="callout warn"><span class="lead">★ Regla de oro</span>Cada una lleva <strong>1 mochila de 40 × 30 × 20 cm</strong> que quepa debajo del asiento. <strong>No tienen maleta de bodega.</strong> Si en la puerta la mochila es más grande, cobran recargo.</div><ul class="checklist" data-key="equipaje"><li>Medir la mochila en casa</li><li>Líquidos en envases de máximo 100 ml, en bolsa transparente</li><li>Ropa en capas: menos volumen</li><li>Usar puesta la chaqueta más pesada en el avión</li><li>Dejar espacio para compras pequeñas</li></ul></div></div></div>
+    <div class="accordion"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">🧥</span><span class="acc-label">Ropa para noviembre</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><div class="callout tip"><span class="lead">★ Clima</span>Entre <strong>8 y 16°C</strong>, con días de lluvia. Oscurece a las <strong>4:45 PM</strong>: los planes al aire libre van temprano.</div><ul class="checklist" data-key="ropa"><li>Chaqueta abrigada que resista lluvia</li><li>Bufanda grande (sirve para cubrir hombros en iglesias)</li><li>Zapatos cómodos ya usados · los adoquines cansan</li><li>Paraguas pequeño</li><li>Una muda elegante para la cena de despedida</li></ul></div></div></div>
+    <div class="accordion open"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">🧮</span><span class="acc-label">Cómo cuidamos el presupuesto</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><div class="callout tip"><span class="lead">★ La idea</span>Pagar solo lo que de verdad vale lo que cuesta. Muchas de las obras más extraordinarias de Roma están en <strong>iglesias gratuitas</strong>, y casi todo se recorre a pie.</div>
+<p><strong>Presupuesto adicional para las dos</strong> · sin vuelos, alojamiento ni Coliseo (ya pagado):</p>
+<ul class="checklist" data-key="presupuesto"><li>Mercado en Carrefour Express (desayunos, almuerzos empacados, vuelo): €20–25</li><li>Comidas fuera (desayuno del domingo y 3 cenas sencillas): €90–130</li><li>Traslados aeropuerto (Leonardo Express a la llegada + taxi de regreso): €80–85 · en tren las dos veces: ~€60</li><li>Transporte urbano ocasional: €6–12</li><li>Museos Vaticanos: €50 (€25 c/u con reserva oficial)</li><li>Opcional: interior del Panteón (~€5 c/u)</li></ul>
+<p><strong>Total estimado: €225–300 entre las dos.</strong></p>
+<p><strong>💚 Gratis:</strong> Piazza Navona, exterior del Panteón, Trevi, Vittoriano, Columna de Trajano, Basílica y Plaza de San Pedro (con la Piedad), Castel Sant'Angelo y su puente por fuera, San Luigi dei Francesi y Santa Maria sopra Minerva.</p>
+<p style="font-size:.85rem;opacity:.75">Precios aproximados. La tasa turística del Airbnb, si la cobran aparte, no está incluida.</p></div></div></div>
+    <div class="accordion"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">💶</span><span class="acc-label">Dinero y tarjetas</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><div class="callout tip"><span class="lead">⚡ Regla del datáfono</span>Cuando pregunte si cobrar en euros o en pesos: <strong>siempre euros</strong>. Igual en los cajeros.</div><p>Casi todo se paga con tarjeta contactless, hasta el bus. Llevar <strong>€50 en efectivo</strong> para cafés pequeños y propinas.</p><p><strong>Tasa turística:</strong> en Roma se cobra por persona por noche y la pide el alojamiento, a veces en efectivo.</p><p><strong>Propina:</strong> no es obligatoria. El "coperto" (pan y cubierto, €2–3) ya viene en la cuenta.</p></div></div></div>
+    <div class="accordion"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">🚌</span><span class="acc-label">Moverse por Roma</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><p><strong>A pie:</strong> desde el alojamiento todo el centro queda a 5–25 min caminando. Es la mejor forma.</p><p><strong>Bus y metro:</strong> €1,50 por 100 min. Se paga tocando la tarjeta contactless en el validador.</p><p><strong>Taxi:</strong> solo los blancos oficiales. Apps: FreeNow o itTaxi. Aeropuerto ↔ centro: tarifa fija ~€55.</p><p><strong>Leonardo Express:</strong> Fiumicino ↔ Termini, €14, 32 min.</p></div></div></div>
+    <div class="accordion"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">📱</span><span class="acc-label">Apps imprescindibles</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><ul class="checklist" data-key="apps"><li>Google Maps (con mapa de Roma descargado offline)</li><li>Google Translate (italiano offline)</li><li>FreeNow (taxis)</li><li>Trenitalia (Leonardo Express)</li><li>WhatsApp con los contactos de la familia</li></ul></div></div></div>
+    <div class="accordion"><button class="acc-btn" onclick="toggleAcc(this)"><span class="acc-icon">🛡</span><span class="acc-label">Seguridad · carteristas</span><span class="acc-chev">⌄</span></button>
+      <div class="acc-body"><div class="acc-body-inner"><p>Roma es segura. El único riesgo real son los carteristas: buses 40 y 64, Trevi, Coliseo, metro Termini.</p><ul class="checklist" data-key="safety"><li>Bolso cruzado y adelante</li><li>Celular nunca en el bolsillo de atrás</li><li>No aceptar pulseras, flores ni "ayuda" en la calle</li><li>Pasaporte original en el alojamiento si no se necesita ese día</li></ul></div></div></div>
+  </div>
+</div>
+
+</div></section>
+<section class="view legacy" id="v-frases"><div class="wrap sec"><div>
+  <div class="pre-content">
+    <div class="day-nav"><button onclick="goHome()">🗺 Mapa</button><span class="day-num">Frases</span><span style="width:60px"></span></div>
+    <div class="day-hero"><span class="badge">PRE-VIAJE</span><h1>Frases que salvan</h1><div class="feel">empezar con Buongiorno cambia todo</div></div>
+    <h2>🇮🇹 Italiano · para Roma</h2>
+    <div class="phrases-table">
+      <div class="ph-row"><div>Español</div><div>Italiano</div><div>Cómo suena</div></div>
+      <div class="ph-row"><div>Buenos días</div><div class="ph-it">Buongiorno</div><div class="ph-sound">buon-yórno</div></div>
+      <div class="ph-row"><div>Buenas tardes / noches</div><div class="ph-it">Buonasera</div><div class="ph-sound">buona-séra</div></div>
+      <div class="ph-row"><div>Por favor</div><div class="ph-it">Per favore</div><div class="ph-sound">per-favóre</div></div>
+      <div class="ph-row"><div>Gracias</div><div class="ph-it">Grazie</div><div class="ph-sound">grá-tsie</div></div>
+      <div class="ph-row"><div>Perdón</div><div class="ph-it">Scusi</div><div class="ph-sound">scú-si</div></div>
+      <div class="ph-row"><div>Una mesa para dos</div><div class="ph-it">Un tavolo per due</div><div class="ph-sound">un-tá-volo-per-dúe</div></div>
+      <div class="ph-row"><div>¿Cuánto cuesta?</div><div class="ph-it">Quanto costa?</div><div class="ph-sound">cuán-to-cósta</div></div>
+      <div class="ph-row"><div>La cuenta</div><div class="ph-it">Il conto</div><div class="ph-sound">il-cón-to</div></div>
+      <div class="ph-row"><div>Agua sin gas</div><div class="ph-it">Acqua naturale</div><div class="ph-sound">ácua-naturále</div></div>
+      <div class="ph-row"><div>¿Dónde está el baño?</div><div class="ph-it">Dov'è il bagno?</div><div class="ph-sound">do-vé-il-báño</div></div>
+      <div class="ph-row"><div>Mi mamá / mi hija</div><div class="ph-it">Mia mamma / mia figlia</div><div class="ph-sound">mía-mámma / mía-fília</div></div>
+      <div class="ph-row"><div>¡Qué bonito!</div><div class="ph-it">Che bello!</div><div class="ph-sound">que-béllo</div></div>
+      <div class="ph-row"><div>Ayuda</div><div class="ph-it">Aiuto</div><div class="ph-sound">a-yú-to</div></div>
+    </div>
+  </div>
+</div>
+
+</div></section>
+<section class="view legacy" id="v-emergencias"><div class="wrap sec"><div class="eyebrow">NÚMEROS CLAVE 24/7</div><h1>Emergencias</h1><p class="muted">Toquen el número para llamar. Desde Italia, emergencias generales: 112.</p><div class="em-grid">
+    <div class="em-item"><div class="em-lbl">Emergencias UE</div><div class="em-val"><a href="tel:112">112</a></div></div>
+    <div class="em-item"><div class="em-lbl">Policía Italia</div><div class="em-val"><a href="tel:113">113</a></div></div>
+    <div class="em-item"><div class="em-lbl">Ambulancia</div><div class="em-val"><a href="tel:118">118</a></div></div>
+    <div class="em-item"><div class="em-lbl">Taxi Roma</div><div class="em-val"><a href="tel:+39063570">06 3570</a></div></div>
+    <div class="em-item"><div class="em-lbl">Emb. Colombia Roma</div><div class="em-val" style="font-size:0.85rem"><a href="tel:+390685460000">+39 06 8546 0000</a></div></div>
+  </div></div></section>
+</main>
+
+<div id="lightbox" onclick="this.classList.remove('on')"></div>
+<div id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const MAPS_Q = {
+ "Roma Trastevere station": "Stazione Roma Trastevere",
+ "FIORE Piazza Pollarola 29 Roma": "FIORE, Piazza Pollarola 29, Roma",
+ "Frigidarium Via del Governo Vecchio 112 Roma": "Frigidarium, Via del Governo Vecchio 112, Roma",
+ "Corner Pizza Piazza del Teatro di Pompeo 20 Roma": "Corner Pizza, Piazza del Teatro di Pompeo 20, Roma",
+ "Fontana delle Tartarughe": "Fontana delle Tartarughe, Piazza Mattei, Roma",
+ "Pasticceria Boccione": "Pasticceria Boccione, Via del Portico d'Ottavia 1, Roma",
+ "Portico d'Ottavia": "Portico d'Ottavia, Roma",
+ "Teatro di Marcello": "Teatro di Marcello, Roma",
+ "La Prezzemolina Via del Colosseo 1 Roma": "La Prezzemolina, Via del Colosseo 1, Roma",
+ "Arch of Constantine": "Arco di Costantino, Roma",
+ "Piazza del Campidoglio": "Piazza del Campidoglio, Roma",
+ "Palatine Hill": "Palatino, Roma",
+ "Campo de' Fiori": "Campo de' Fiori, Roma",
+ "Colosseum": "Colosseum, Rome",
+ "St Peter's Square Vatican": "Piazza San Pietro, Città del Vaticano",
+ "St Peter's Basilica Vatican": "Basilica di San Pietro, Città del Vaticano",
+ "Via dei Cappellari 35 Roma": "Via dei Cappellari 35, 00186 Roma",
+ "Roma Termini": "Stazione Roma Termini",
+ "Fiumicino Airport": "Aeroporto di Roma-Fiumicino Terminal 1",
+ "Vatican Museums": "Vatican Museums",
+ "Trevi Fountain Rome": "Fontana di Trevi, Roma",
+ "Roman Forum": "Foro Romano, Roma",
+ "Pizzarium Bonci Rome": "Pizzarium Bonci, Via della Meloria 43, Roma",
+ "Piazza Navona": "Piazza Navona, Roma",
+ "Pantheon Rome": "Pantheon, Roma",
+ "Osteria da Fortunata Rome": "Osteria da Fortunata, Via del Pellegrino 11, Roma",
+ "La Taverna dei Fori Imperiali Rome": "La Taverna dei Fori Imperiali, Via della Madonna dei Monti 9, Roma",
+ "Carrefour Express Via del Biscione 79 Roma": "Carrefour Express, Via del Biscione 79, Roma",
+ "Trajan's Column": "Colonna Traiana, Roma",
+ "Ponte Sant'Angelo": "Ponte Sant'Angelo, Roma",
+ "Castel Sant'Angelo": "Castel Sant'Angelo, Lungotevere Castello 50, Roma",
+ "Altare della Patria Rome": "Vittoriano, Piazza Venezia, Roma",
+ "Parco del Colle Oppio": "Parco del Colle Oppio, Roma"
+};
+const mq=q=>MAPS_Q[q]||q;
+const WEATHER = {
+  1: { icon:'🌦', temp:'8-16°C', desc:'fresco · puede llover · oscurece 4:45 PM' },
+  2: { icon:'⛅️', temp:'8-16°C', desc:'fresco · chaqueta y bufanda' },
+  3: { icon:'🌦', temp:'8-15°C', desc:'fresco · llevar paraguas pequeño' },
+  4: { icon:'⛅️', temp:'8-15°C', desc:'fresco · día de regreso' }
+};
+const STAY = {
+  name: 'Alojamiento · Campo de\' Fiori',
+  provider: 'Airbnb',
+  address: 'Via dei Cappellari 35, 00186 Roma · barrio Regola',
+  mapsUrl: 'https://maps.google.com/?q=Via+dei+Cappellari+35,+00186+Roma',
+  tip: '<strong>Check-out: 10:00 AM.</strong> A 2 min de Campo de\' Fiori y 5 min de Piazza Navona. La Via dei Cappellari es una callecita medieval angosta: los taxis a veces no entran, se bajan en Campo de\' Fiori o Corso Vittorio Emanuele y caminan.'
+};
+const DAYS = [
+  {
+    id: 1, date: 'domingo 22 noviembre', title: 'Capítulo I · La Roma barroca: fuentes, arte y leyendas', feel: 'De los antiguos dioses a las grandes plazas de Roma', city: 'Roma',
+    heroPhoto: 'Fotos/cap1-navona-atardecer.webp',
+    narrative: { title: 'Prólogo · Una ciudad que ha vivido muchas vidas', body: `<p><strong>Ma, Sofi:</strong></p><p>Imaginen una ciudad donde una misma caminata permite viajar casi dos mil años en el tiempo.</p><p>En Roma, los emperadores levantaron templos y estadios. Muchos siglos después, los artistas transformaron esos espacios en iglesias, plazas y fuentes que hoy admiramos. Lo extraordinario es que una época no borró completamente a la anterior: construyó encima de ella.</p><p>Hoy van a descubrir esa Roma.</p><p>Primero encontrarán una plaza donde se recuerda a un filósofo condenado hace más de cuatro siglos. Después caminarán sobre un antiguo estadio romano, conocerán el templo que sobrevivió a los emperadores y terminarán frente a una fuente monumental que todavía recibe agua de un acueducto de la Antigüedad.</p><p>Y entre una historia y otra habrá tiempo para un gelato, fotografías, callecitas bonitas y una leyenda de amor.</p><p>Bienvenidas a Roma. Hoy no tienen que conquistarlo todo; solo empezar a enamorarse de la ciudad.</p>` },
+    quickStats: [
+      { lbl: 'Aterrizan', val: '8:25 AM · Fiumicino' },
+      { lbl: 'Check-in', val: '3:00 PM · con Luca' },
+      { lbl: 'Paseo a pie', val: '3:45 – 7:15 PM' }
+    ],
+    notices: [
+      { type: 'tip', title: '★ Su casa en Roma', body: 'Via dei Cappellari 35. <strong>Check-in confirmado: 3:00 PM.</strong> El ingreso anticipado que se le pidió a Luca aún depende de su confirmación. Si no las deja entrar antes, pregúntenle si pueden dejar los morrales; si tampoco, desayunen cerca y esperen sin comprometerse con visitas largas. Después del check-in, <strong>descansen antes de salir</strong>.' },
+      { type: 'calm', title: '★ ¿Cómo se sienten después del vuelo?', body: '<strong>Con energía:</strong> el plan completo, y si la fila del Panteón es corta, entran.<br><strong>Cansadas, pero con ganas:</strong> Campo de\' Fiori, Navona y Trevi; el Panteón solo por fuera.<br><strong>Muy agotadas:</strong> descansar, salir solo a cenar cerca y dejar Trevi para la noche del lunes (de Monti a Trevi son unos 15–20 min a pie).' }
+    ],
+    accommodation: STAY,
+    blocks: [
+      { type: 'airport', timeStart: '5:55 AM', timeEnd: '8:25 AM', title: 'Vuelo Madrid → Roma · Wizz Air W4 6208', subtitle: 'aterrizan en Fiumicino a las 8:25',
+        bookingRef: 'vuelo_ida',
+        desc: 'Como solo llevan mochila, salen directo del avión hacia el tren. El primer gran consejo de esta guía: <strong>no gasten toda su energía antes de comenzar el recorrido</strong>.' },
+      { type: 'transport', timeStart: '8:45 AM', timeEnd: '9:20 AM', title: 'Fiumicino → Roma Trastevere · tren FL1', subtitle: '€8 por persona · unos 27 min',
+        from: 'Fiumicino Airport', to: 'Via dei Cappellari 35 Roma',
+        steps: ['Al salir del avión, seguir las indicaciones <strong>Train / Treni</strong> hasta la estación del aeropuerto.', 'Comprar el billete del <strong>tren regional FL1 hacia Roma Trastevere</strong> (€8 c/u, unos 27 min).', '<strong>No tomar el Leonardo Express</strong>: ese va a Termini.'],
+        meta: ['💶 €8 c/u', '⏱ 27 min'] },
+      { type: 'transport', timeStart: '9:20 AM', timeEnd: '10:00 AM', title: 'Roma Trastevere → casa · bus y caminata', subtitle: 'confirmar la ruta en la app al llegar',
+        from: 'Roma Trastevere station', to: 'Via dei Cappellari 35 Roma',
+        steps: ['En Roma Trastevere, consultar la conexión de autobús hacia <strong>Largo di Torre Argentina</strong> o <strong>Corso Vittorio Emanuele II</strong>.', 'Billete urbano: unos €1,50. Confirmar la tarifa y la ruta en la aplicación antes de abordar.', 'Caminar los últimos minutos hasta Via dei Cappellari 35 y seguir las instrucciones de acceso de Luca.'],
+        info: { title: 'Ruta en domingo', tag: 'transport', sub: 'puede cambiar', sections: [ { lbl: 'Ojo', text: 'La ruta urbana puede cambiar los domingos. Revisar la conexión en vivo al llegar a Roma Trastevere.' } ] },
+        meta: ['💶 ~€1,50 c/u'] },
+      { type: 'stay', timeStart: '10:00 AM', timeEnd: '3:30 PM', title: 'Llegar, instalarse y descansar', subtitle: 'check-in confirmado a las 3:00 PM',
+        attachAccommodation: true,
+        desc: 'Si Luca no autoriza la entrada anticipada, pregúntenle si pueden dejar los morrales. Después del check-in, descansen antes de salir: la tarde es larga y bonita.' },
+      { type: 'food', tag: 'food', timeStart: '12:30 PM', timeEnd: '1:30 PM', title: 'Almuerzo sencillo · FIORE', subtitle: 'pizza y supplì cerca de Campo de\' Fiori',
+        place: 'FIORE Piazza Pollarola 29 Roma',
+        desc: 'Piazza Pollarola 29. Pizza y comida callejera; las opiniones destacan la pizza y los <strong>supplì</strong>, bolitas de arroz fritas con relleno, típicas de Roma. Horario dominical publicado: 11:30–22:30.',
+        meta: ['💶 €6–10 c/u'] },
+      { type: 'icon', timeStart: '3:45 PM', timeEnd: '4:00 PM', title: 'Campo de\' Fiori', subtitle: 'parada 1 · siglos XVI–XVII · 15 min · gratis',
+        place: 'Campo de\' Fiori',
+        info: { title: 'Campo de\' Fiori', tag: 'icon', sub: 'la plaza del filósofo', sections: [
+          { lbl: 'La historia', text: 'Durante siglos, esta plaza fue un lugar de comercio, reuniones y acontecimientos públicos. En el centro está <strong>Giordano Bruno</strong>, un filósofo que defendió ideas sobre el universo que entraron en conflicto con la autoridad religiosa. Fue condenado por la Inquisición romana y ejecutado aquí en el año 1600. La estatua se levantó en 1889 y se convirtió en un símbolo de la libertad de pensamiento.' },
+          { lbl: 'El secreto', text: 'Fíjense hacia dónde mira Bruno: su figura está orientada hacia el Vaticano.' },
+          { lbl: 'La foto', text: 'Las dos con la estatua de Bruno y las fachadas de la plaza detrás.' },
+          { lbl: 'Hoy domingo', text: 'El mercado no funciona los domingos: verán la plaza en su ambiente de terrazas.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'food', tag: 'food', timeStart: '4:05 PM', timeEnd: '4:25 PM', title: 'Un gelato en una calle de película · Frigidarium', subtitle: 'parada 2 · una pequeña pausa italiana',
+        place: 'Frigidarium Via del Governo Vecchio 112 Roma',
+        info: { title: 'Frigidarium', tag: 'food', sub: 'Via del Governo Vecchio 112', sections: [
+          { lbl: 'Por qué', text: 'Heladería artesanal conocida por sus conos bañados en chocolate; las reseñas destacan la textura cremosa y la buena relación calidad-precio.' },
+          { lbl: 'Qué pedir', text: 'Un gelato pequeño de pistacho, chocolate o el sabor de la casa, con cobertura de chocolate.' },
+          { lbl: 'La foto', text: 'Un retrato espontáneo de las dos con sus helados en Via del Governo Vecchio.' }
+        ]}, meta: ['💶 €3–5 c/u'] },
+      { type: 'icon', timeStart: '4:35 PM', timeEnd: '5:05 PM', title: 'Piazza Navona, el estadio que se convirtió en plaza', subtitle: 'parada 3 · año 86 d. C. → siglo XVII · 30 min · gratis',
+        place: 'Piazza Navona',
+        info: { title: 'Piazza Navona', tag: 'icon', sub: 'de estadio romano a plaza barroca', sections: [
+          { lbl: 'La historia', text: 'Hace casi dos mil años, donde hoy ven fuentes y cafés, los romanos presenciaban competiciones atléticas. El emperador <strong>Domiciano</strong> construyó aquí un estadio hacia el año 86 d. C.; su forma alargada todavía se reconoce en el contorno de la plaza. En el siglo XVII, <strong>Bernini</strong> terminó aquí (1651) la Fuente de los Cuatro Ríos: el Nilo, el Danubio, el Ganges y el Río de la Plata.' },
+          { lbl: 'El secreto', text: 'Frente a la fuente está Sant\'Agnese in Agone, asociada a <strong>Borromini</strong>. Una leyenda dice que una figura de Bernini levanta el brazo para protegerse de la fachada de su rival. No puede ser cierta: la fuente se terminó antes de que comenzara esa fachada.' },
+          { lbl: 'La foto', text: 'Desde un extremo, con el obelisco y la fuente al fondo. Prueben también una panorámica para mostrar la forma del antiguo estadio.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'icon', timeStart: '5:15 PM', timeEnd: '6:00 PM', title: 'El Panteón, el templo que desafió al tiempo', subtitle: 'parada 4 · siglo II d. C. · 35–45 min',
+        place: 'Pantheon Rome',
+        info: { title: 'Panteón', tag: 'icon', sub: 'el templo que sobrevivió a los emperadores', sections: [
+          { lbl: 'La historia', text: 'Construido bajo el emperador <strong>Adriano</strong> (118–125 d. C.) sobre un templo anterior de Marco Agripa. Su cúpula mide más de 43 metros y es de hormigón romano, sin acero. El óculo no tiene cristal: cuando llueve, el agua entra y sale por el drenaje del suelo. En el año 609 se convirtió en iglesia, y eso lo salvó. Aquí está enterrado <strong>Rafael</strong>, que murió en 1520 con 37 años.' },
+          { lbl: '¿Vale la pena entrar?', text: 'Sí, por su amor al arte y la historia. <strong>€7 por persona.</strong> Horario 9:00–19:00, último ingreso 18:30, taquillas hasta las 18:00. Las misas pueden cambiar el acceso. Si la fila es larga, admírenlo por fuera y sigan.' },
+          { lbl: 'Qué buscar', text: 'La cúpula, el óculo, las enormes columnas y la tumba de Rafael.' },
+          { lbl: 'La foto', text: 'Desde la Piazza della Rotonda, con las columnas y la fuente en primer plano.' }
+        ]}, meta: ['💶 €7 c/u · opcional', 'exterior gratis'] },
+      { type: 'icon', timeStart: '6:15 PM', timeEnd: '6:45 PM', title: 'Fontana di Trevi, una promesa de regreso', subtitle: 'parada 5 · siglo XVIII · 30 min · iluminada',
+        place: 'Trevi Fountain Rome',
+        info: { title: 'Fontana di Trevi', tag: 'icon', sub: 'teatro de piedra y agua antigua', sections: [
+          { lbl: 'La historia', text: 'Diseñada por Nicola Salvi y terminada en 1762. En el centro, Océano sobre un carro tirado por caballos marinos: uno agitado y otro tranquilo, las dos caras del mar. Marca la llegada del acueducto <strong>Aqua Virgo</strong>, inaugurado en el año 19 a. C.' },
+          { lbl: 'La moneda', text: 'Se lanza por encima del hombro para pedir volver a Roma. Solo desde una zona donde esté permitido.' },
+          { lbl: 'El secreto', text: 'En el costado derecho, cerca de Via della Stamperia, busquen una pequeña pila con dos chorros: la <strong>Fontanella degli Innamorati</strong>. Según la tradición, quienes bebían juntos de ella permanecían unidos. La misión es encontrarla y fotografiarla; no hace falta beber.' },
+          { lbl: 'Entrada', text: 'Verla desde la plaza es gratis. Acercarse al perímetro interior cuesta <strong>€2 por persona</strong>; el domingo funciona de 9:00 a 22:00, último ingreso 21:00.' },
+          { lbl: 'Las tres fotos', text: 'Las dos frente a la fuente iluminada, los caballos y esculturas, y la fuente de los enamorados.' }
+        ]}, meta: ['💚 Plaza gratis', '€2 c/u perímetro'] },
+      { type: 'food', tag: 'food', timeStart: '7:00 PM', timeEnd: '8:00 PM', title: 'Cena sencilla y regreso a casa · Corner Pizza', subtitle: '20–25 min a pie hasta Campo de\' Fiori',
+        place: 'Corner Pizza Piazza del Teatro di Pompeo 20 Roma',
+        desc: 'Piazza del Teatro di Pompeo 20. Pizza romana por porciones para llevar y tiramisú. Horario dominical publicado: 11:00–22:00.<br><br>Si tienen energía, de camino compren el desayuno de los próximos días en el <strong>Carrefour Express de Via del Biscione 79</strong> (abre el domingo hasta las 22:00): pan, yogur, fruta, leche y café. Unos €20–25 entre las dos.',
+        meta: ['💶 €6–10 c/u'] }
+    ],
+    budget: { rows: [['Tren FL1 desde Fiumicino','€16'],['Transporte urbano hasta el centro','€3'],['Almuerzo sencillo','€12–20'],['Gelatos','€6–10'],['Cena económica','€12–20'],['Supermercado para varios días','€20–25'],['Plazas, fuentes y paseos exteriores','Gratis']], total: '€69–94', extra: 'Opcional: Panteón +€14 · perímetro de Trevi +€4', note: 'Para las dos. Sin vuelos ni alojamiento. Precios orientativos.' },
+    mission: { title: 'Una postal para alguien que todavía no conoce Roma', body: 'Hoy tienen una misión pequeña: encontrar una postal de Roma que les guste. Puede ser del Panteón, de la Fontana di Trevi o de una calle bonita. Lo importante es que la escojan juntas.' },
+    letter: { when: 'Para leer al terminar el primer día', title: 'Bienvenidas a Roma', body: '<p class="lt-hi">Ma, Sofi:</p><p>¡Ya están en Roma!</p><p>Nos hace muy felices imaginarlas caminando juntas por esas calles, descubriendo lugares y encontrando historias que después nos van a contar.</p><p>Disfruten mucho estos días. Coman rico, tómense mil fotos, ríanse y no se preocupen por verlo todo. Lo más bonito es que están viviendo esta aventura juntas.</p><p>Las amamos muchísimo.</p>', sign: 'Naty, Estefa y Rafita ❤️' },
+    tomorrowReminder: {
+      intro: 'Mañana conocerán la Roma del Imperio: el Foro, el Palatino y el Coliseo. Antes de dormir:',
+      tasks: [
+        'Tener la <strong>entrada del Coliseo</strong> en el celular y los <strong>documentos de identidad</strong> a mano.',
+        'Mañana salen a las <strong>8:15 AM</strong>: desayuno ligero, porque hay torta en el camino.',
+        'Zapatos cómodos y agua: hay cuestas y piedras.'
+      ]
+    },
+    food: [ { name: 'Supplì', desc: 'Bolita de arroz frita' }, { name: 'Gelato', desc: 'En Frigidarium' }, { name: 'Pizza romana', desc: 'Por porciones' } ],
+    photos: [ { emoji: '🗿', cap: 'Con Giordano Bruno en Campo de\' Fiori' }, { emoji: '🍦', cap: 'Con los helados en Via del Governo Vecchio' }, { emoji: '💧', cap: 'Frente a Trevi iluminada' } ]
+  },
+
+  {
+    id: 2, date: 'lunes 23 noviembre', title: 'Capítulo II · La Roma imperial: césares y gladiadores', feel: 'El poder, las traiciones y los espectáculos del Imperio', city: 'Roma',
+    heroPhoto: 'Fotos/cap2-foro-coliseo.webp',
+    narrative: { title: 'Prólogo · Cuando todos los caminos llevaban a Roma', body: `<p><strong>Ma, Sofi:</strong></p><p>Hoy van a recorrer el corazón de una de las civilizaciones más influyentes de la historia.</p><p>Aquí, Julio César desafió las reglas de la República; Augusto encontró la manera de convertirse en el primer emperador sin presentarse como un rey; Trajano llevó el Imperio a su máxima extensión y Marco Aurelio intentó conciliar la filosofía con las exigencias del poder.</p><p>Pero Roma también tenía otra cara: la de los espectáculos, las rivalidades y los gladiadores que llenaban las gradas del Coliseo.</p><p>Hoy van a conocer los escenarios de esas historias. Algunas las recordarán de los libros, otras de películas como Gladiador y muchas estarán escondidas en detalles que vale la pena mirar con atención.</p><p>La idea no es aprenderse todas las fechas. Es reconocer las historias que siguen vivas entre las ruinas.</p>` },
+    quickStats: [
+      { lbl: 'Salida', val: '8:15 AM' },
+      { lbl: 'Foro + Palatino', val: 'por la mañana' },
+      { lbl: 'Coliseo', val: '2:00 PM · ya pagado' }
+    ],
+    notices: [
+      { type: 'tip', title: '★ Una entrada para tres lugares', body: '<strong>Por la mañana: Foro Romano + Palatino.</strong> Pueden visitarlos antes de la hora del Coliseo, dentro de las condiciones de su entrada.<br><strong>2:00 PM: Coliseo.</strong> Es la hora de ingreso al Coliseo, no la hora de inicio de todo el recorrido. Estén en el acceso indicado 20–30 min antes, con entradas y documentos.' },
+      { type: 'calm', title: '★ Si están cansadas o llueve', body: '<strong>Cansadas:</strong> sáltense el barrio judío y salgan a las 8:45; hagan el Palatino corto (30 min) o déjenlo; vuelvan en bus 87 o taxi.<br><strong>Lluvia:</strong> el Foro y el Palatino son al aire libre: paraguas y zapatos que no resbalen. Prioricen el Coliseo y hagan una pausa larga en un café de Monti.' },
+      { type: 'warn', title: '! Revisar en el tiquete', body: 'Si dice <strong>Only Arena</strong>, dentro del Coliseo verán solo la plataforma de la arena (unos 20 min). Si dice <strong>Full Experience Arena</strong>, también el primer y segundo nivel. Y confirmar si el acceso al Foro y Palatino tiene alguna restricción.' }
+    ],
+    accommodation: STAY,
+    blocks: [
+      { type: 'food', tag: 'food', timeStart: '7:45 AM', timeEnd: '8:15 AM', title: 'Desayuno ligero en el apartamento', subtitle: 'con lo del supermercado',
+        desc: 'Ligero, porque en el camino hay una torta famosa.' },
+      { type: 'walk', timeStart: '8:15 AM', timeEnd: '9:25 AM', title: 'Opcional · El barrio judío, un rincón secreto', subtitle: 'si tienen energía · si no, salgan a las 8:45 directo al Campidoglio',
+        stops: [
+          { name: 'Fuente de las Tortugas', emoji: '🐢', hint: 'Piazza Mattei · 10 min a pie · gratis', maps: 'Fontana delle Tartarughe', info: 'Una fuente renacentista pequeña y preciosa. Las tortugas que trepan por el borde se añadieron después y se atribuyen a Bernini.' },
+          { name: 'Pasticceria Boccione', emoji: '🍰', hint: 'torta de ricota y guindas · para compartir', maps: 'Pasticceria Boccione', info: 'La pastelería más famosa del barrio judío. Prueben la <strong>torta ricotta e visciole</strong> (ricota y guindas). Si está cerrada o hay mucha fila, sigan: el día es largo.' },
+          { name: 'Pórtico de Octavia', emoji: '🏛', hint: 'dedicado a la hermana de Augusto', maps: 'Portico d\'Ottavia', info: 'Augusto lo dedicó a su hermana <strong>Octavia</strong>. Aquí empieza el barrio judío de Roma, uno de los más antiguos de Europa: calles animadas y llenas de lugares para comer.' },
+          { name: 'Teatro de Marcelo y Templo de Apolo', emoji: '🎭', hint: 'paseo gratis entre las ruinas', maps: 'Teatro di Marcello', info: 'Un teatro romano más antiguo que el Coliseo. Lo terminó Augusto y lo dedicó a su sobrino <strong>Marcelo</strong>. Al frente, las columnas del Templo de Apolo; se puede caminar gratis entre estos restos.' }
+        ], meta: ['💚 Gratis', 'torta ~€5–8 c/u (estimado)'] },
+      { type: 'icon', timeStart: '9:30 AM', timeEnd: '9:55 AM', title: 'El Campidoglio: una plaza sobre el poder de Roma', subtitle: '5 min desde el Teatro de Marcelo · 25 min · gratis',
+        place: 'Piazza del Campidoglio',
+        info: { title: 'Campidoglio', tag: 'icon', sub: 'la colina del templo de Júpiter', sections: [
+          { lbl: 'La historia', text: 'La colina Capitolina fue uno de los lugares más sagrados de la Roma antigua: aquí estaba el gran templo de Júpiter. La plaza la rediseñó <strong>Miguel Ángel</strong> en el siglo XVI. En el centro, la réplica de la estatua ecuestre de <strong>Marco Aurelio</strong>, uno de los pocos grandes bronces imperiales que sobrevivieron.' },
+          { lbl: 'El detalle', text: 'Detrás del Palazzo Senatorio hay un mirador sobre el Foro Romano. Antes de entrar a las ruinas, véanlas desde arriba.' },
+          { lbl: 'La foto', text: 'Las dos frente al Foro, con las columnas antiguas al fondo.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'icon', timeStart: '9:55 AM', timeEnd: '10:05 AM', title: 'La Columna de Trajano', subtitle: 'la ambición escrita en piedra · 10 min · gratis',
+        place: 'Trajan\'s Column',
+        info: { title: 'Columna de Trajano', tag: 'icon', sub: 'año 113 d. C.', sections: [
+          { lbl: 'La historia', text: 'Su relieve en espiral cuenta las campañas de Trajano contra los dacios: batallas, marchas, construcciones y ceremonias. Con Trajano el Imperio llegó a su máxima extensión.' },
+          { lbl: 'El secreto', text: 'El emperador aparece muchas veces, pero no siempre combatiendo: casi siempre dirige, organiza o habla con sus soldados. La columna también construía su imagen como gobernante.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'museum', timeStart: '10:10 AM', timeEnd: '11:25 AM', title: 'El Foro Romano: donde la historia cambió de rumbo', subtitle: 'entrada incluida en su tiquete',
+        place: 'Roman Forum',
+        info: { title: 'Foro Romano', tag: 'museum', sub: 'donde la República dio paso al Imperio', sections: [
+          { lbl: 'La historia', text: 'Fue el centro de la vida política, religiosa y pública. Cuando Julio César acumuló un poder extraordinario, parte del Senado temió el fin de la República. Su asesinato en el 44 a. C. no la salvó: desató guerras civiles que terminaron con el ascenso de Augusto.' },
+          { lbl: 'Cuatro cosas para buscar', items: ['<strong>Templo de Saturno:</strong> las ocho columnas en pie; aquí se guardaba el tesoro público.', '<strong>Templo de Julio César:</strong> el lugar de su cremación; a veces hay flores.', '<strong>Curia Julia:</strong> un edificio del Senado. César no murió aquí, sino en la Curia de Pompeyo, cerca de Largo di Torre Argentina.', '<strong>Arco de Tito:</strong> sus relieves muestran soldados llevando objetos del Templo de Jerusalén, entre ellos una menorá.'] },
+          { lbl: 'Una historia para conversar', text: 'Augusto concentró un enorme poder personal, pero mantuvo muchas instituciones y títulos republicanos. Así Roma aceptó un nuevo sistema sin presentarlo como una monarquía.' }
+        ]}, meta: ['✅ Ya pagado'] },
+      { type: 'icon', timeStart: '11:25 AM', timeEnd: '11:35 AM', title: 'Un ángulo diferente del Coliseo', subtitle: 'la foto desde dentro del Foro',
+        place: 'Colosseum',
+        desc: 'Al terminar el Foro, cerca del <strong>Arco de Tito</strong>, caminen hacia el Coliseo por dentro del Foro: desde ahí hay una perspectiva distinta del Coliseo, lejos de la fila de la entrada. Es una buena opción para <strong>la foto de la misión de Rafita</strong>.',
+        meta: ['📸 Misión de Rafita'] },
+      { type: 'museum', timeStart: '11:35 AM', timeEnd: '12:30 PM', title: 'El Palatino: la colina de los emperadores', subtitle: 'entrada incluida · una hora basta',
+        place: 'Palatine Hill',
+        info: { title: 'Palatino', tag: 'museum', sub: 'de Rómulo a Augusto', sections: [
+          { lbl: 'La historia', text: 'Según la leyenda, Rómulo fundó Roma en esta colina en el 753 a. C. Siglos después, Augusto vivió aquí y los emperadores construyeron grandes palacios. De <em>Palatium</em> viene la palabra «palacio».' },
+          { lbl: 'Lo mejor', text: 'Los miradores sobre el Foro y el Circo Máximo, donde se corrían las carreras de carros.' },
+          { lbl: 'Consejo', text: 'No intenten recorrer cada rincón: lleguen descansadas al Coliseo. Hay cuestas y escaleras.' }
+        ]}, meta: ['✅ Ya pagado'] },
+      { type: 'food', tag: 'food', timeStart: '12:30 PM', timeEnd: '1:15 PM', title: 'Almuerzo romano · La Prezzemolina', subtitle: 'pizza al taglio y supplì',
+        place: 'La Prezzemolina Via del Colosseo 1 Roma',
+        desc: 'Via del Colosseo 1. Pizza por porciones cerca del Coliseo: prueben la pizza romana de masa fina y un supplì.',
+        meta: ['💶 €7–12 c/u'] },
+      { type: 'transport', timeStart: '1:30 PM', timeEnd: '2:00 PM', title: 'Llegada al Coliseo y controles', subtitle: '20–30 min antes · con entradas y documentos',
+        place: 'Colosseum',
+        desc: 'Ir al acceso indicado en el tiquete. Hay control de seguridad tipo aeropuerto.' },
+      { type: 'museum', timeStart: '2:00 PM', timeEnd: '3:30 PM', title: 'El Coliseo: el espectáculo más famoso del Imperio', subtitle: 'entrada reservada con arena · ya pagada',
+        bookingRef: 'coliseo', place: 'Colosseum',
+        info: { title: 'Coliseo', tag: 'museum', sub: 'inaugurado en el año 80 d. C.', sections: [
+          { lbl: 'La historia', text: 'Se inauguró durante el gobierno de Tito. Combates de gladiadores, cacerías de animales y espectáculos para miles de espectadores, que además mostraban el poder del emperador y reforzaban su relación con el pueblo.' },
+          { lbl: 'La historia detrás de Gladiador', text: 'Marco Aurelio y Cómodo existieron; Máximo es ficticio. Cómodo fue emperador entre 180 y 192 d. C. y sí participó en espectáculos de arena, pero no murió peleando contra Máximo: fue asesinado en una conspiración palaciega.' },
+          { lbl: 'Tres detalles', items: ['<strong>La arena:</strong> el espacio central de los espectáculos.', '<strong>El hipogeo:</strong> los subterráneos por donde aparecían personas, animales y escenografías.', '<strong>Las gradas:</strong> el lugar de cada espectador reflejaba la jerarquía social.'] },
+          { lbl: 'Foto imprescindible', text: 'Las dos juntas en el Coliseo, con la arena detrás.' }
+        ]}, meta: ['✅ Ya pagado'] },
+      { type: 'icon', timeStart: '3:30 PM', timeEnd: '4:15 PM', title: 'El Arco de Constantino: el puente hacia el cristianismo', subtitle: 'a pocos pasos del Coliseo · gratis',
+        place: 'Arch of Constantine',
+        desc: 'Inaugurado en el año 315 d. C. por la victoria de Constantino sobre Majencio. Durante su gobierno se reconoció legalmente el cristianismo: es el enlace perfecto con el martes, cuando conocerán San Pedro y el Vaticano.',
+        meta: ['💚 Gratis'] },
+      { type: 'free', timeStart: '4:30 PM', timeEnd: '7:00 PM', title: 'Regreso tranquilo y descanso', subtitle: 'bus 87 o taxi si están cansadas',
+        desc: 'Del Coliseo al apartamento son unos 25–30 min a pie. Si no les quedan fuerzas: bus 87 hasta Corso Rinascimento o un taxi.' },
+      { type: 'food', tag: 'food', timeStart: '7:00 PM', timeEnd: '8:30 PM', title: 'Cena sencilla cerca del apartamento', subtitle: 'y a descansar',
+        desc: 'Algo sencillo cerca de casa: Osteria da Fortunata (Via del Pellegrino 11) o lo que compraron en el supermercado.',
+        meta: ['💶 €12–20 entre las dos'] }
+    ],
+    budget: { rows: [['Desayuno','Supermercado'],['Foro, Palatino y Coliseo','Ya pagado'],['Gueto, Campidoglio, Columna y Arco','Gratis'],['Torta en Boccione','€10–16 (estimado)'],['Almuerzo','€14–24'],['Agua o café','€4–8'],['Cena sencilla','€12–20']], total: '€40–68', note: 'Para las dos. Precios orientativos.' },
+    mission: { title: 'Una foto para nuestro pequeño romano', body: 'Hoy tienen que tomarse una fotografía juntas frente al Coliseo. Algún día se la mostraremos a Rafita y le contaremos que, antes de nacer, su abuelita y su tía Sofi recorrieron los lugares donde vivieron algunos de los personajes más importantes de la historia romana.<br><br><strong>Un ángulo diferente:</strong> desde dentro del Foro, cerca del Arco de Tito.' },
+    letter: { when: 'Para leer al terminar el día', title: 'La Roma de los emperadores', body: '<p class="lt-hi">Ma, Sofi:</p><p>Hoy recorrieron lugares que hemos visto tantas veces en libros, películas y documentales. Qué emoción pensar que ahora también forman parte de sus propios recuerdos.</p><p>Nos encanta imaginar a mamá contándole historias a Sofi, a las dos descubriendo detalles que no conocían y tomando fotografías para mostrárnoslas después.</p><p>Ojalá hayan tenido tiempo de disfrutar cada lugar sin afanes, de reírse y de sentirse afortunadas por estar viviendo esto juntas.</p><p>Nosotras seguimos la aventura desde aquí, esperando sus fotos y sus historias.</p><p>Las amamos,</p>', sign: 'Naty, Estefa y Rafita ❤️' },
+    tomorrowReminder: {
+      intro: 'Mañana es <strong>día Vaticano</strong>. Antes de dormir:',
+      tasks: [
+        'Mañana: <strong>Museos Vaticanos a las 12:30</strong> (ya están compradas). Tengan las entradas en el celular.',
+        'Ropa con <strong>hombros y rodillas cubiertas</strong> para la Basílica y la Sixtina.',
+        'Mañana a las 12:00 abre el <strong>check-in online de Iberia</strong> para el vuelo del miércoles.'
+      ]
+    },
+    food: [ { name: 'Torta ricotta e visciole', desc: 'En Boccione' }, { name: 'Pizza al taglio', desc: 'En La Prezzemolina' }, { name: 'Supplì', desc: 'Croqueta de arroz' } ],
+    photos: [ { emoji: '🐢', cap: 'La Fuente de las Tortugas' }, { emoji: '🏛', cap: 'El Foro desde el Campidoglio' }, { emoji: '🏟', cap: 'Las dos frente al Coliseo, desde el Foro' } ]
+  },
+
+  {
+    id: 3, date: 'martes 24 noviembre', title: 'Capítulo III · La Roma renacentista: arte, fe y eternidad', feel: 'De los primeros cristianos a los grandes maestros del arte', city: 'Roma',
+    heroPhoto: 'Fotos/cap3-san-pedro.webp',
+    narrative: { title: 'Prólogo · La ciudad donde el arte quiso tocar el cielo', body: `<p><strong>Ma, Sofi:</strong></p><p>Ayer caminaron por la Roma de los emperadores, los senadores y los gladiadores. Hoy van a descubrir cómo esa misma ciudad se convirtió en uno de los grandes centros del cristianismo y del arte occidental.</p><p>La historia comienza con San Pedro, un pescador de Galilea que, según la tradición cristiana, murió en Roma durante las persecuciones de Nerón. Siglos después, sobre el lugar venerado como su tumba se levantó una basílica que terminaría convirtiéndose en una de las iglesias más extraordinarias del mundo.</p><p>Para construirla trabajaron algunos de los mayores artistas de su tiempo: Bramante, Miguel Ángel, Maderno y Bernini.</p><p>Y a pocos pasos encontrarán los frescos con los que Miguel Ángel transformó el techo de la Capilla Sixtina en una de las obras más reconocidas de la historia del arte.</p><p>Hoy las protagonistas no serán las batallas ni los emperadores, sino la fe, la belleza y las personas que dedicaron buena parte de su vida a crear algo que sobreviviera a los siglos.</p><p>Y lo mejor es que van a poder verlo con sus propios ojos.</p><p class="nr-sub">Los personajes de hoy</p><p><strong>San Pedro · siglo I.</strong> Uno de los apóstoles de Jesús, considerado por la Iglesia católica el primer papa.<br><strong>Constantino · siglo IV.</strong> El emperador que impulsó una nueva relación entre el cristianismo y el poder romano.<br><strong>Miguel Ángel · 1475–1564.</strong> Escultor, pintor y arquitecto.<br><strong>Rafael Sanzio · 1483–1520.</strong> Autor de los frescos de las Estancias de Rafael.<br><strong>Julio II · 1443–1513.</strong> El papa que encargó a Miguel Ángel la bóveda de la Sixtina y promovió la reconstrucción de San Pedro.</p>` },
+    quickStats: [
+      { lbl: 'Basílica', val: '9:00 AM · gratis' },
+      { lbl: 'Museos + Sixtina', val: '12:30 PM · reservado' },
+      { lbl: 'Almorzar', val: 'antes de las 11:30' }
+    ],
+    notices: [
+      { type: 'tip', title: '✅ Reserva confirmada', body: '<strong>Museos Vaticanos + Capilla Sixtina · martes 24 · 12:30 PM · 2 personas.</strong> Entrada general, visita por libre. La Sixtina está incluida: no hay que comprar nada más.' },
+      { type: 'calm', title: '★ Si se cansan o llueve', body: '<strong>Hoy casi todo es bajo techo</strong>: buen día si llueve. En los museos no hace falta quedarse cinco horas: sigan las flechas hacia las Estancias de Rafael y la Sixtina, y descansen en los patios. Castel Sant\'Angelo queda opcional.' },
+      { type: 'warn', title: '! Dos visitas que no funcionan igual', body: '<strong>Basílica de San Pedro:</strong> gratis, con control de seguridad y posibles filas.<br><strong>Museos y Sixtina:</strong> se entra por <strong>Viale Vaticano</strong>, a 15–25 min caminando desde la Plaza de San Pedro, no por la puerta de la basílica. <strong>Coman bien antes de las 12:30.</strong>' }
+    ],
+    accommodation: STAY,
+    blocks: [
+      { type: 'food', tag: 'food', timeStart: '7:30 AM', timeEnd: '8:00 AM', title: 'Desayuno en el apartamento', subtitle: 'con lo del supermercado', desc: 'Desayuno con calma. Hoy es un día largo de arte.' },
+      { type: 'transport', timeStart: '8:00 AM', timeEnd: '8:30 AM', title: 'Salida caminando hacia el Vaticano', subtitle: 'por el Ponte Sant\'Angelo · 25–30 min',
+        from: 'Via dei Cappellari 35 Roma', to: 'St Peter\'s Square Vatican',
+        desc: 'Si prefieren no caminar: bus 40 o 64 desde Corso Vittorio Emanuele.' },
+      { type: 'icon', timeStart: '8:30 AM', timeEnd: '9:00 AM', title: 'Plaza de San Pedro: una bienvenida entre 284 columnas', subtitle: 'siglo XVII · gratis',
+        place: 'St Peter\'s Square Vatican',
+        info: { title: 'Plaza de San Pedro', tag: 'icon', sub: 'el abrazo de Bernini', sections: [
+          { lbl: 'La historia', text: 'Diseñada por <strong>Bernini</strong> en el siglo XVII. Sus dos columnatas, con 284 columnas, parecen brazos abiertos que reciben a los visitantes. En el centro, un obelisco egipcio que llegó a Roma en tiempos de Calígula: una conexión con la Roma imperial de ayer.' },
+          { lbl: 'El secreto', text: 'Busquen en el piso un disco marcado <strong>Centro del Colonnato</strong>. Parados sobre él, las cuatro filas de columnas parecen una sola.' },
+          { lbl: 'La foto', text: 'Las dos en el centro de la plaza, con la cúpula de San Pedro al fondo.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'icon', timeStart: '9:00 AM', timeEnd: '10:45 AM', title: 'Basílica de San Pedro: una historia de fe y de arte', subtitle: 'la Piedad, el baldaquino y la cúpula desde adentro · gratis',
+        place: 'St Peter\'s Basilica Vatican',
+        info: { title: 'Basílica de San Pedro', tag: 'icon', sub: 'siglos IV–XVII', sections: [
+          { lbl: 'La historia', text: 'La primera basílica la levantó <strong>Constantino</strong> en el siglo IV sobre el lugar asociado a la tumba de Pedro. Más de mil años después, <strong>Julio II</strong> decidió construir una nueva: las obras empezaron en 1506 y duraron más de un siglo, con Bramante, Miguel Ángel, Maderno y Bernini.' },
+          { lbl: 'Cuatro obras', items: ['<strong>La Piedad de Miguel Ángel (1498–1499):</strong> la esculpió con poco más de veinte años. Busquen su firma en la banda que cruza el pecho de María: es la única obra que firmó.', '<strong>El Baldaquino de Bernini (1624–1633):</strong> bronce monumental sobre el altar papal, con columnas que parecen girar hacia el cielo.', '<strong>La cúpula de Miguel Ángel:</strong> tomó la dirección de las obras en 1546, con más de setenta años, y no la vio terminada.', '<strong>La estatua de San Pedro:</strong> la tradición de tocar o besar su pie derecho lo ha desgastado con los siglos.'] },
+          { lbl: 'Una curiosidad para mamá', text: 'La relación de Miguel Ángel con Julio II fue intensa, llena de desacuerdos y enormes ambiciones. Sin ella, algunas de las obras más famosas del Renacimiento habrían sido muy diferentes.' },
+          { lbl: 'Horario y cúpula', text: 'Abre de 7:00 a 19:00; las celebraciones pueden cambiar las zonas visitables. Subir a la cúpula cuesta aparte y tiene muchas escaleras: hoy, opcional.' },
+          { lbl: 'Vestido', text: 'Hombros y rodillas cubiertas.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'food', tag: 'food', timeStart: '10:45 AM', timeEnd: '11:30 AM', title: 'Almuerzo temprano o refrigerio abundante', subtitle: 'coman bien antes de las 12:30',
+        place: 'Pizzarium Bonci Rome',
+        desc: '<strong>Pizzarium Bonci</strong> (Via della Meloria 43), cerca de la entrada de los museos: pizza al taglio por peso y supplì. Puede haber fila y no es lo más barato; si prefieren gastar menos, una panadería de pizza por porciones cerca de Viale Vaticano.',
+        meta: ['💶 €8–15 c/u'] },
+      { type: 'transport', timeStart: '11:30 AM', timeEnd: '12:00 PM', title: 'Caminata hasta la entrada de los Museos', subtitle: 'Viale Vaticano · no por la basílica',
+        place: 'Vatican Museums', desc: 'Llegar a las 12:00 para el ingreso de las 12:30.' },
+      { type: 'museum', timeStart: '12:30 PM', timeEnd: '5:30 PM', title: 'Museos Vaticanos y Capilla Sixtina', subtitle: 'RESERVADO · 12:30 PM · hasta cinco horas',
+        bookingRef: 'vaticano', place: 'Vatican Museums',
+        info: { title: 'Museos Vaticanos', tag: 'museum', sub: 'un viaje por siglos de arte', sections: [
+          { lbl: 'Cómo recorrerlos', text: 'Son enormes. Sigan una ruta de grandes obras sin intentar verlo todo. El recorrido suele terminar en la Capilla Sixtina: <strong>no dejen las Estancias de Rafael ni las galerías principales para el final</strong>.' },
+          { lbl: 'Cuatro paradas imprescindibles', items: ['<strong>El Laocoonte:</strong> el sacerdote troyano y sus hijos contra las serpientes. Se descubrió en Roma en 1506 e impresionó a Miguel Ángel.', '<strong>Galería de los Mapas:</strong> mapas pintados del siglo XVI de las regiones de Italia.', '<strong>La Escuela de Atenas · Rafael:</strong> Platón y Aristóteles en el centro. Se cree que Heráclito, sentado en primer plano sobre un bloque de mármol, es Miguel Ángel.', '<strong>La Capilla Sixtina:</strong> la bóveda (1508–1512), con la Creación de Adán, y décadas después El Juicio Final (1541). Miren cómo cambió su estilo: más dramático en el segundo.'] },
+          { lbl: 'Para mamá', text: 'Las Estancias de Rafael muestran cómo el Renacimiento reunió la filosofía clásica, el cristianismo y el ideal de belleza.' },
+          { lbl: 'Consejos', text: 'La Sixtina exige silencio y no permite fotos.' }
+        ]}, meta: ['✅ Comprado · €25 c/u'] },
+      { type: 'walk', timeStart: '5:45 PM', timeEnd: '6:15 PM', title: 'Castel Sant\'Angelo y su puente, iluminados', subtitle: 'opcional · si tienen energía · gratis por fuera',
+        stops: [
+          { name: 'Castel Sant\'Angelo', emoji: '🏰', hint: 'de tumba imperial a fortaleza papal', maps: 'Castel Sant\'Angelo', info: 'Mausoleo del emperador Adriano (siglo II), luego fortaleza, residencia y refugio de los papas, unido al Vaticano por el Passetto di Borgo. Su nombre viene de la leyenda del arcángel Miguel, que habría aparecido sobre el edificio en el siglo VI anunciando el fin de una peste. Entrar cuesta €18: hoy, mejor por fuera.' },
+          { name: 'Ponte Sant\'Angelo', emoji: '🌉', hint: 'ángeles de Bernini', maps: 'Ponte Sant\'Angelo', info: 'Adriano lo construyó para llegar a su mausoleo; en el Barroco se decoró con ángeles de la Pasión según un proyecto de Bernini. La Roma imperial y la cristiana en un mismo lugar.' }
+        ], meta: ['💚 Gratis'] },
+      { type: 'food', tag: 'food', timeStart: '6:30 PM', timeEnd: '8:00 PM', title: 'Regreso al apartamento y cena', subtitle: 'y dejar los morrales casi listos',
+        desc: 'Cena sencilla cerca de casa. Mañana se levantan a las 6:45.', meta: ['💶 €12–20 entre las dos'] }
+    ],
+    bookings: [
+      { id: 'vaticano', title: 'Museos Vaticanos + Capilla Sixtina', tag: 'COMPRADO · 12:30 PM', items: { 'Fecha': 'martes 24 de noviembre', 'Hora': '12:30 PM', 'Personas': '2', 'Tipo': 'Entrada general, visita por libre' }, links: [ { label: '🎟 Web oficial', url: 'https://tickets.museivaticani.va' } ] }
+    ],
+    budget: { rows: [['Desayuno en casa','Compra previa'],['Plaza y Basílica de San Pedro','Gratis'],['Museos Vaticanos + Sixtina','Ya comprado (€50)'],['Café o refrigerio','€6–10'],['Almuerzo','€16–30'],['Castel Sant\'Angelo por fuera y puente','Gratis'],['Cena sencilla','€12–20']], total: '€34–60 adicionales', note: 'Para las dos. No incluye subir a la cúpula ni entrar al castillo.' },
+    mission: { title: 'Una oración desde San Pedro', body: 'Cuando estén en la Basílica de San Pedro, busquen un momento tranquilo para hacer una oración por Rafita, por su llegada al mundo y por toda nuestra familia.<br><br>Y si encuentran una estampita de San Pedro o de la Virgen que les guste, pueden guardársela como recuerdo de su primera visita al Vaticano, incluso antes de nacer. No hace falta comprar nada: lo importante es ese momento que compartirán las dos.' },
+    letter: { when: 'Para leer al terminar el día', title: 'Arte, historia y fe', body: '<p class="lt-hi">Ma, Sofi:</p><p>Hoy estuvieron en uno de esos lugares que tantas veces hemos visto en fotografías, libros y películas. Nos emociona imaginar todo lo que habrán descubierto, especialmente las obras de Miguel Ángel y Rafael.</p><p>Ma, sabemos cuánto disfrutas la historia y el arte. Y Sofi, nos encanta pensar que también pudiste conocer lugares tan importantes para la historia de nuestra fe.</p><p>Gracias por llevarnos con ustedes, por compartirnos sus fotos y por hacernos sentir parte de esta aventura, aunque estemos lejos.</p><p>Y gracias por acordarse de Rafita. Qué bonito pensar que ya tiene tantos recuerdos y tanto amor esperándolo, incluso antes de nacer.</p><p>Las amamos muchísimo.</p>', sign: 'Naty, Estefa y Rafita ❤️' },
+    tomorrowReminder: {
+      intro: 'Mañana es <strong>el regreso a Madrid</strong>. Antes de dormir:',
+      tasks: [
+        'Hacer el <strong>check-in online de Iberia</strong> (vuelo IB0648, 12:00) y guardar los dos pases de abordar.',
+        'Revisar en Trenitalia el <strong>FL1 desde Roma Trastevere</strong> que las deje en Fiumicino hacia las 9:45–10:00.',
+        'Dejar los <strong>morrales listos</strong>: mañana se levantan a las 6:45 para despedirse de Trevi.'
+      ]
+    },
+    food: [ { name: 'Pizza al taglio', desc: 'En Bonci' }, { name: 'Supplì', desc: 'Croqueta de arroz' } ],
+    photos: [ { emoji: '🏛', cap: 'En el centro de la plaza, con la cúpula detrás' }, { emoji: '🕊', cap: 'Mamá e hija en San Pedro' }, { emoji: '🌉', cap: 'Ponte Sant\'Angelo iluminado' } ]
+  },
+
+  {
+    id: 4, date: 'miércoles 25 noviembre', title: 'Epílogo · Arrivederci, Roma', feel: 'Las historias que nos llevamos a casa', city: 'Roma → Madrid',
+    heroPhoto: 'Fotos/epilogo-callecita.webp',
+    narrative: { title: 'El mejor arrivederci de Roma', body: `<p><strong>Ma, Sofi:</strong></p><p>No se nos ocurre una mejor manera de despedirse de Roma que regresando a la Fontana di Trevi. Y tenemos tres buenas razones para hacerlo.</p><p>Primero, porque es uno de los lugares más emblemáticos de la ciudad. El domingo la conocieron iluminada y ahora podrán descubrirla con la luz de la mañana.</p><p>Segundo, porque a esa hora, sobre las 7:30 a. m., suele haber mucha menos gente. ¡Es la oportunidad perfecta para tomarse la última gran fotografía del viaje, sin las multitudes que normalmente rodean la fuente!</p><p>Y tercero, porque está relativamente cerca de su Airbnb. Pueden llegar caminando en unos 20–25 minutos. Así que, teniendo una de las fuentes más famosas del mundo tan cerca, ¿cómo no aprovechar para despedirse de ella?</p><p>Eso sí, tienen un vuelo que tomar. Dejen los morrales listos desde la noche anterior, disfruten unos minutos frente a Trevi y regresen puntuales para salir hacia el aeropuerto.</p><p>Y si quieren, lancen una última moneda. Dicen que quien lo hace algún día regresa a Roma.</p><p>Arrivederci, Roma. Ojalá nos volvamos a encontrar. ❤️</p>` },
+    quickStats: [
+      { lbl: 'Trevi', val: '7:35 AM · opcional' },
+      { lbl: 'Salir al aeropuerto', val: '8:30 AM' },
+      { lbl: 'Vuelo', val: 'Iberia IB0648 · 12:00' }
+    ],
+    notices: [
+      { type: 'warn', title: '! La prioridad es el vuelo', body: 'La visita a Trevi es opcional si se retrasan. Objetivo: estar en Fiumicino hacia las <strong>10:00 AM</strong>, dos horas antes. Como ya conocieron la fuente el domingo, no vale la pena arriesgar el vuelo por una foto.' }
+    ],
+    accommodation: STAY,
+    blocks: [
+      { type: 'stay', timeStart: '6:45 AM', timeEnd: '7:10 AM', title: 'Levantarse, desayunar y dejar los morrales listos', subtitle: 'check-out oficial 10:00 AM',
+        attachAccommodation: true, desc: 'Leche, yogures y líquidos que sobren se quedan: no pasan el control del aeropuerto.' },
+      { type: 'transport', timeStart: '7:10 AM', timeEnd: '7:35 AM', title: 'Caminar hacia Trevi', subtitle: '20–25 min a pie',
+        from: 'Via dei Cappellari 35 Roma', to: 'Trevi Fountain Rome' },
+      { type: 'icon', timeStart: '7:35 AM', timeEnd: '7:55 AM', title: 'Fontana di Trevi, ahora con luz de día', subtitle: 'la última foto · casi sin gente',
+        place: 'Trevi Fountain Rome',
+        info: { title: 'Trevi de día', tag: 'icon', sub: 'la última visita', sections: [
+          { lbl: 'Lo que se ve de día', text: 'En el centro, Océano sobre un carro con forma de concha tirado por dos caballos marinos: uno inquieto y otro tranquilo, las distintas fuerzas del mar. La fuente se terminó en 1762, pero el agua llega por el acueducto <strong>Aqua Virgo</strong>, del año 19 a. C.' },
+          { lbl: 'El ritual de despedida', text: 'Si quedó pendiente la moneda: de espaldas, con la mano derecha sobre el hombro izquierdo. Significa que algún día regresarán a Roma.' }
+        ]}, meta: ['💚 Gratis'] },
+      { type: 'transport', timeStart: '7:55 AM', timeEnd: '8:30 AM', title: 'Regresar, recoger los morrales y revisar', subtitle: 'que no quede nada',
+        from: 'Trevi Fountain Rome', to: 'Via dei Cappellari 35 Roma',
+        desc: 'Revisar cajones, cargadores, baño y que los pasaportes vayan en el morral. Dejar las llaves como indique Luca.' },
+      { type: 'transport', timeStart: '8:30 AM', timeEnd: '10:00 AM', title: 'Salir hacia el aeropuerto', subtitle: 'urbano + tren FL1 desde Roma Trastevere',
+        from: 'Via dei Cappellari 35 Roma', to: 'Fiumicino Airport',
+        info: { title: 'Cómo llegar sin gastar demasiado', tag: 'transport', sub: 'tres opciones, para las dos', sections: [
+          { lbl: 'Urbano + FL1', text: 'Desde unos €19. La más económica; requiere conexión. El FL1 cuesta €8 c/u y tarda unos 27 min desde Roma Trastevere.' },
+          { lbl: 'Leonardo Express', text: '€28 + el transporte hasta Termini. Tren directo de 32 min.' },
+          { lbl: 'Taxi oficial', text: 'Unos €55. Más cómodo, sujeto al tráfico.' },
+          { lbl: 'Consejo', text: 'Si no hay una conexión segura para llegar hacia las 9:45–10:00, adelanten la salida o prescindan de Trevi.' }
+        ]}, meta: ['💶 desde €19 las dos'] },
+      { type: 'airport', timeStart: '10:00 AM', timeEnd: '12:00 PM', title: 'Fiumicino · Terminal 1', subtitle: 'vuelo dentro de Europa: sin migración',
+        desc: 'Solo control de seguridad. Con el check-in hecho y solo morrales, van directo.' },
+      { type: 'airport', timeStart: '12:00 PM', timeEnd: '2:35 PM', title: 'Vuelo Roma → Madrid · Iberia IB0648', subtitle: 'llegan a Madrid, Terminal 4',
+        bookingRef: 'vuelo_regreso', desc: 'Aterrizan en la <strong>Terminal 4</strong> de Madrid, no en la 2 de donde salieron.' }
+    ],
+    budget: { rows: [['Transporte urbano + FL1','desde €19'],['Leonardo Express + Termini','€28 + urbano'],['Taxi oficial','~€55']], total: 'según la opción', note: 'Para las dos.' },
+    mission: { title: 'Dos fotografías, una misma aventura', body: 'Busquen la foto que se tomaron el domingo por la noche frente a Trevi y tómense otra hoy, de día. Dos momentos distintos de un mismo viaje.<br><br>Cuando Rafita crezca, podremos enseñarle las dos y contarle que su abuelita y su tía Sofi conocieron Roma juntas, mientras toda la familia esperaba con ilusión su llegada.' },
+    letter: { when: 'La última carta', title: 'Hasta pronto, Roma', body: '<p class="lt-hi">Ma, Sofi:</p><p>Y así llegaron al final de estos días en Roma.</p><p>Nos hace muy felices saber que pudieron vivir esta aventura juntas. Que caminaron por lugares llenos de historia, conocieron obras que seguramente recordarán durante años y encontraron tiempo para disfrutar de las cosas sencillas: una pizza, un helado, una calle bonita o una conversación mientras caminaban.</p><p>Esperamos que regresen con muchas fotografías, pero sobre todo con historias para contarnos.</p><p>Ma, gracias por compartir con Sofi tu amor por la historia y por seguir descubriendo el mundo con tanta curiosidad. Sofi, gracias por acompañar a mamá en estos días y por hacer de este viaje un recuerdo de las dos.</p><p>Nosotras estamos felices de haber podido acompañarlas, aunque fuera desde la distancia, preparando cada detalle.</p><p>Y quién sabe, tal vez algún día volvamos todas a Roma. Esta vez, con Rafita caminando a nuestro lado.</p><p>Buen viaje de regreso. Las amamos muchísimo.</p>', sign: 'Naty, Estefa y Rafita ❤️', ending: 'Fin de esta aventura. Comienzo de muchos recuerdos.<br>Roma · 22–25 de noviembre de 2026' },
+    food: [ { name: 'Último cappuccino', desc: 'En la barra' } ],
+    photos: [ { emoji: '💧', cap: 'Trevi de día, casi sin gente' }, { emoji: '✈', cap: 'Roma desde la ventanilla' } ]
+  }
+];
+</script>
+<script>
+{
+/* ================= configuración ================= */
+const SUPA_URL = 'https://mfkhgozqldnyqplzyrgm.supabase.co', SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ma2hnb3pxbGRueXFwbHp5cmdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzMDY2MTAsImV4cCI6MjExMDg4MjYxMH0.-LOzphYrtDy0bTdHCQfLes3QmMdRYDrQDOLqpEWdmNg';
+const TRIP_START = new Date(2026,10,22);
+const CHAPTERS = {
+  1:{num:'01 · DOMINGO 22 NOV', short:'Capítulo I', dest:'Centro histórico', obj:'Descubrir la Roma de las plazas, las fuentes y el Barroco.', meta:'A pie', img:'Fotos/cap1-navona-atardecer.webp'},
+  2:{num:'02 · LUNES 23 NOV', short:'Capítulo II', dest:'Coliseo', obj:'Entender cómo vivían, gobernaban y se entretenían los romanos.', meta:'Roma imperial · Coliseo 14:00', img:'Fotos/cap2-foro-coliseo.webp'},
+  3:{num:'03 · MARTES 24 NOV', short:'Capítulo III', dest:'Vaticano', obj:'Conocer las obras y las historias que marcaron siglos de arte y fe.', meta:'Arte y Renacimiento · Museos 12:30', img:'Fotos/cap3-san-pedro.webp'},
+  4:{num:'EPÍLOGO · MIÉRCOLES 25 NOV', short:'Epílogo', dest:'Arrivederci, Roma', obj:'Despedirse de Trevi con la luz de la mañana y volver a Madrid sin afanes.', meta:'Trevi 7:35 · Vuelo 12:00', img:'Fotos/epilogo-callecita.webp'}
+};
+const STOP_IMG = {
+  'Piazza Navona':'Fotos/navona.webp', 'Fontana di Trevi':'Fotos/paradas/trevi.jpg',
+  'El Campidoglio':'Fotos/paradas/campidoglio.jpg', 'La Columna de Trajano':'Fotos/paradas/columna-trajano.jpg', 'El Foro Romano':'Fotos/paradas/foro-romano.jpg',
+  'Un ángulo diferente del Coliseo':'Fotos/paradas/coliseo-paseo.jpg', 'El Palatino':'Fotos/paradas/palatino.jpg', 'El Coliseo':'Fotos/paradas/coliseo.jpg',
+  'El Arco de Constantino':'Fotos/paradas/arco-constantino.jpg', 'Plaza de San Pedro':'Fotos/paradas/plaza-san-pedro.jpg', 'Basílica de San Pedro':'Fotos/paradas/la-piedad.jpg',
+  'Museos Vaticanos y Capilla Sixtina':'Fotos/paradas/capilla-sixtina.jpg', "Castel Sant'Angelo":'Fotos/paradas/castel-sant-angelo.jpg', "Ponte Sant'Angelo":'Fotos/paradas/ponte-sant-angelo.jpg'
+};
+
+/* ================= utilidades ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+const mapsDir = q => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(mq(q)) + '&travelmode=walking';
+const mapsTransit = (a, b) => 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(mq(a)) + '&destination=' + encodeURIComponent(mq(b)) + '&travelmode=transit';
+const mapsSearch = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mq(q));
+function mins(t){ const m = String(t||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); if(!m) return null; let h = +m[1] % 12; if(/PM/i.test(m[3])) h += 12; return h*60 + +m[2]; }
+function dur(a, b){ const x = mins(a), y = mins(b); if(x == null || y == null || y <= x) return ''; const d = y - x; return d < 60 ? d + ' min' : Math.floor(d/60) + ' h' + (d%60 ? ' ' + d%60 : ''); }
+function tripDay(){ const t = new Date(); t.setHours(0,0,0,0); const n = Math.floor((t - TRIP_START)/86400000) + 1; return n >= 1 && n <= DAYS.length ? n : 0; }
+function toast(t){ const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 3200); }
+function show(u, cap){ const l = $('#lightbox'); l.innerHTML = `<img src="${esc(u)}" alt=""><p>${esc(cap||'')}<br>tocar para cerrar</p>`; l.classList.add('on'); }
+
+/* ================= del texto del día a fichas ================= */
+const RX_SECRET = /secreto|curiosidad|^el detalle/i;
+const RX_LOOK = /qué buscar|qué ver|cuatro|tres detalles|lo mejor|qué pedir|^qué buscar dentro/i;
+const RX_TIP = /foto|entrada|horario|vale la pena|llegar|consejo|cómo recorrer|vestido|hoy domingo|^ojo|ruta/i;
+function sectionHTML(s){ return (s.text ? `<p>${s.text}</p>` : '') + (s.items ? `<ul>${s.items.map(i => `<li>${i}</li>`).join('')}</ul>` : ''); }
+function splitTitle(t){ const m = t.match(/^(.+?)(?::|, )\s*(.+)$/); return m && m[1].length < 40 ? [m[1], m[2]] : [t, '']; }
+function buildDay(d){
+  const items = [];
+  d.blocks.forEach((b, i) => {
+    const visit = b.type === 'icon' || b.type === 'museum' || (b.type === 'food' && /parada/i.test(b.subtitle||''));
+    if(b.stops){
+      const optional = /opcional/i.test(b.title);
+      items.push({kind:'group', time:b.timeStart, end:b.timeEnd, title:b.title.replace(/^Opcional · /,''), sub:b.subtitle, optional});
+      b.stops.forEach((s, k) => items.push({kind:'stop', time: k === 0 ? b.timeStart : '', name:s.name, line:s.hint, q:s.maps, story:[{lbl:'La historia', text:s.info}], look:[], secret:null, tips:[], chips:[], optional, block:i, grp:'g'+i, grpTitle:b.title.replace(/^Opcional · /,''), grpSub:b.subtitle}));
+    } else if(visit){
+      let [name, line] = splitTitle(b.title.replace(/^Opcional · /,''));
+      const secs = (b.info && b.info.sections) || [];
+      const story = [], look = [], tips = []; let secret = null;
+      secs.forEach(s => {
+        if(!secret && RX_SECRET.test(s.lbl)) secret = s;
+        else if(RX_LOOK.test(s.lbl)) look.push(s);
+        else if(RX_TIP.test(s.lbl)) tips.push(s);
+        else story.push(s);
+      });
+      if(b.desc) story.unshift({lbl:'', text:b.desc});
+      const chips = [];
+      const dd = dur(b.timeStart, b.timeEnd); if(dd) chips.push('⏱ ' + dd);
+      (b.meta||[]).forEach(m => chips.push(m));
+      items.push({kind:'stop', time:b.timeStart, end:b.timeEnd, name, line: line || b.subtitle, sub:b.subtitle, q:b.place, story, look, secret, tips, chips, optional:false, block:i});
+    } else {
+      items.push({kind:'log', time:b.timeStart, end:b.timeEnd, b});
+    }
+  });
+  let n = 0; items.forEach(it => { if(it.kind === 'stop'){ it.n = ++n; it.id = `${d.id}-${slug(it.name)}`; } });
+  items.stops = n;
+  return items;
+}
+const BUILT = {}; const built = d => BUILT[d.id] || (BUILT[d.id] = buildDay(d));
+
+/* ================= estado (local + compartido) ================= */
+let sb = null; let fotos = [];
+const visited = id => !!store.get('v:' + id, false);
+function setVisited(id, v){ store.set('v:' + id, v); share('visita:' + id, v); }
+const found = id => !!store.get('s:' + id, false);
+function setFound(id, v){ store.set('s:' + id, v); share('secreto:' + id, v); }
+function share(clave, valor){ if(!sb) return; sb.from('estado').upsert({clave, valor, por: store.get('quien','') || null, actualizado: new Date().toISOString()}).then(({error}) => { if(error) toast('No se pudo guardar. Revisen la conexión.'); }); }
+function applyRemote(r){
+  const k = r.clave, v = r.valor;
+  if(k.startsWith('visita:')) store.set('v:' + k.slice(7), !!v);
+  else if(k.startsWith('secreto:')) store.set('s:' + k.slice(8), !!v);
+  else if(k.startsWith('mision:')) store.set('m:' + k.slice(7), !!v);
+  else if(k.startsWith('nota:')) store.set('n:' + k.slice(5), v || '');
+  else if(k.startsWith('tarea:')) store.set('t:' + k.slice(6), !!v);
+  else if(k.startsWith('cl:')){ try { localStorage.setItem('cl-' + k.slice(3), JSON.stringify(v)); } catch(e){} }
+}
+function refresh(){ const a = document.activeElement; if(a && a.tagName === 'TEXTAREA') return; route(true); }
+
+/* ================= inicio ================= */
+function renderHome(){
+  const td = tripDay();
+  $('#chaps').innerHTML = DAYS.map(d => {
+    const c = CHAPTERS[d.id], it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
+    const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length;
+    return `<button class="chap" onclick="go('capitulo-${d.id}')">
+      <div class="ph"><img src="${c.img}" alt="" loading="lazy"><span class="num">${c.num}${td === d.id ? ' · HOY' : ''}</span></div>
+      <div class="bd"><div class="dest">${c.dest}</div><div class="obj">${c.obj}</div>
+      <div class="meta">${nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : ''}${nk && nr ? ' · ' : ''}${nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''} · ${c.meta}</div>
+      ${v ? `<div class="prog"><i style="width:${Math.round(v/st.length*100)}%"></i></div>` : ''}</div></button>`;
+  }).join('');
+  renderNow();
+  renderBoard();
+  ['Sofía','Alexandra'].forEach((w, k) => { $('#n' + (k+1)).innerHTML = [...w].map(ch => `<span>${ch}</span>`).join(''); });
+}
+function renderNow(){
+  const td = tripDay(), box = $('#ahora');
+  if(!td){ box.innerHTML = ''; return; }
+  const d = DAYS[td-1], c = CHAPTERS[td], it = built(d), now = new Date(), m = now.getHours()*60 + now.getMinutes();
+  const timed = it.filter(x => (x.kind === 'stop' || x.kind === 'log' || x.kind === 'group') && mins(x.time) != null);
+  let cur = null, nxt = null;
+  for(let i = 0; i < timed.length; i++){
+    const s = mins(timed[i].time), e = mins(timed[i].end) ?? s + 30;
+    if(m >= s && m < e){ cur = timed[i]; nxt = timed[i+1] || null; break; }
+    if(m < s){ nxt = timed[i]; break; }
+  }
+  const label = x => x.kind === 'log' ? x.b.title : x.kind === 'group' ? x.title : x.name;
+  const dest = x => x.kind === 'log' ? (x.b.place || x.b.to) : x.kind === 'group' ? null : x.q;
+  const slot = (x, cls, lbl) => x ? `<div class="slot ${cls}"><div class="lbl">${lbl}</div><div class="what">${esc(label(x))}</div><div class="t">${esc(x.time)}${x.end && x.end !== x.time ? ' – ' + esc(x.end) : ''}</div>
+      <div class="acts">${dest(x) ? `<a class="btn coral" href="${mapsDir(dest(x))}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${x.kind === 'stop' ? `<button class="btn ghost" onclick="go('capitulo-${td}','p-${x.id}')">Ver la parada</button>` : ''}</div></div>` : '';
+  box.innerHTML = `<div class="now"><div class="eyebrow">¿QUÉ HACEMOS AHORA? · HOY</div><div class="dname">${c.short} · ${c.dest}</div>
+    ${slot(cur, '', 'AHORA MISMO')}${slot(nxt, 'next', cur ? 'DESPUÉS' : 'LO PRÓXIMO')}
+    ${!cur && !nxt ? '<div class="t">El plan de hoy ya terminó. ¡A descansar! 💛</div>' : ''}
+    <div class="acts" style="margin-top:12px"><button class="btn ghost" onclick="go('capitulo-${td}')">Abrir el capítulo de hoy →</button></div></div>`;
+}
+function renderBoard(){
+  $('#tablero').innerHTML = DAYS.map(d => {
+    const it = built(d), st = it.filter(x => x.kind === 'stop'), v = st.filter(x => visited(x.id)).length;
+    const sc = st.filter(x => x.secret), f = sc.filter(x => found(x.id)).length, ph = fotos.filter(x => x.dia === d.id).length;
+    return `<div class="prog-row"><b>${CHAPTERS[d.id].dest}</b><div class="bar"><i style="width:${st.length ? Math.round(v/st.length*100) : 0}%"></i></div><span class="small">${v}/${st.length}${sc.length ? ` · 🔑 ${f}/${sc.length}` : ''} · 📸 ${ph}</span></div>`;
+  }).join('');
+  $('#album-inicio').innerHTML = album(fotos.slice(0, 9));
+}
+function album(list){
+  if(!sb) return '<p class="empty">Las fotos compartidas funcionan en la versión publicada de la guía.</p>';
+  if(!list.length) return '<p class="empty">Todavía no hay fotos. ¡Las primeras las suben mamá y Sofía!</p>';
+  return `<div class="album">${list.map(f => { const u = pub(f.ruta); return `<button onclick="show('${esc(u)}','${esc(f.nota || '')}${f.autor ? ' · ' + esc(f.autor) : ''}')"><img src="${esc(u)}" loading="lazy" alt="Foto del viaje"><span>${esc(f.nota || '')}${f.autor ? ' · ' + esc(f.autor) : ''}</span></button>`; }).join('')}</div>`;
+}
+
+/* ================= capítulo ================= */
+function renderChapter(id){
+  const d = DAYS.find(x => x.id === id), c = CHAPTERS[id], it = built(d), w = (typeof WEATHER !== 'undefined' && WEATHER[id]) || null;
+  const stops = it.filter(x => x.kind === 'stop'), secrets = stops.filter(x => x.secret);
+  let h = `<div class="hero"><img src="${c.img}" alt=""><div class="txt"><div class="num">${c.num}</div><h1>${c.dest}</h1><div class="obj">${c.obj}</div></div></div>
+    <div class="facts"><span class="chip warm">${placesLabel(stops)}</span>${(d.quickStats||[]).map(s => `<span class="chip">${esc(s.lbl)}: ${esc(s.val)}</span>`).join('')}${w ? `<span class="chip">${w.icon} ${w.temp}</span>` : ''}</div>`;
+  (d.notices||[]).forEach(n => { h += `<div class="notice ${n.type}"><b class="t">${n.title}</b>${n.body}</div>`; });
+  if(d.narrative && d.narrative.body){
+    h += `<details class="more" style="margin-top:16px"><summary>📖 ${esc(d.narrative.title)}</summary><div class="in">${d.narrative.body}</div></details>`;
+  }
+  // plan del día
+  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2">El plan del día</div><div class="muted">Toquen una parada para ir a su ficha.</div></div><div class="box"><ul class="plan">`;
+  it.forEach(x => {
+    if(x.kind === 'log'){
+      const b = x.b, link = b.from && b.to ? mapsTransit(b.from, b.to) : (b.place ? mapsDir(b.place) : '');
+      const extra = (b.desc ? `<p>${b.desc}</p>` : '') + (b.steps ? `<ol>${b.steps.map(s => `<li>${s}</li>`).join('')}</ol>` : '') + ((b.info && b.info.sections) || []).map(s => `<p><b>${esc(s.lbl)}.</b> ${s.text || ''}${s.items ? s.items.join(' · ') : ''}</p>`).join('') + ((b.meta||[]).length ? `<p>${b.meta.join(' · ')}</p>` : '') + (link ? `<a class="btn soft" style="margin-top:4px" href="${link}" target="_blank" rel="noopener">📍 Abrir en Google Maps</a>` : '');
+      h += `<li><span class="tm">${esc(x.time)}</span><details><summary><span class="ti">${b.title}<small>${b.subtitle || ''}</small></span></summary><div class="logx">${extra}</div></details></li>`;
+    } else if(x.kind === 'group'){
+      h += `<li><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
+    } else {
+      h += `<li class="stop${visited(x.id) ? ' ok' : ''}"><span class="tm">${esc(x.time)}</span><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></li>`;
+    }
+  });
+  h += `</ul></div></div>`;
+  // fichas: los lugares clave tienen card propia; los puntos de paso se agrupan en un recorrido
+  const cards = [];
+  stops.forEach(s => {
+    if(isKey(s.name)) cards.push({type:'major', s});
+    else {
+      const last = cards[cards.length-1];
+      if(last && last.type === 'route' && last.grp === (s.grp || null)) last.pts.push(s);
+      else cards.push({type:'route', grp: s.grp || null, title: s.grpTitle || null, sub: s.grpSub || null, pts:[s]});
+    }
+  });
+  cards.forEach((c, k) => { c.n = k + 1; c.id = c.type === 'major' ? c.s.id : c.pts[0].id + '-r'; });
+  const tot = String(cards.length).padStart(2,'0');
+  h += `<div class="sec"><div class="sec-head"><div class="eyebrow">LOS LUGARES DEL DÍA</div><div class="h2">Qué estamos viendo</div></div>`;
+  cards.forEach((c, k) => {
+    const next = cards[k+1], nextName = next ? (next.type === 'major' ? next.s.name : (next.title || next.pts.map(p => p.name).join(' y '))) : '';
+    const cont = next ? `<div class="nextstop">Siguiente: <a href="#" onclick="jump('p-${next.id}');return false">${esc(nextName)} →</a></div>` : '';
+    if(c.type === 'major'){
+      const s = c.s, img = imgFor(s.name);
+      h += `<article class="stop-card" id="p-${c.id}">${img ? `<div class="ph"><img src="${img}" alt="" loading="lazy"></div>` : ''}<div class="bd">
+        <div class="k"><span class="eyebrow">LUGAR ${String(c.n).padStart(2,'0')} DE ${tot} · IMPRESCINDIBLE</span></div>
+        <h3>${esc(s.name)}</h3><p class="line">${s.line || ''}</p>
+        <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>
+        ${story(s)}
+        ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${s.look.map(sectionHTML).join('')}</div>` : ''}
+        ${secretBox(s)}
+        <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts">${s.q ? `<a class="btn coral" href="${mapsDir(s.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${visitBtn(s)}</div>${tips(s)}${cont}</div>
+        <div class="step memo"><div class="st">NUESTRO RECUERDO</div><div id="rec-${c.id}"></div></div>
+      </div></article>`;
+    } else {
+      const img = c.pts.map(p => imgFor(p.name)).find(Boolean);
+      const title = c.title || c.pts.map(p => p.name).join(' · ');
+      const qs = c.pts.map(p => p.q).filter(Boolean);
+      const route = qs.length > 1 ? 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(mq(qs[0])) + '&destination=' + encodeURIComponent(mq(qs[qs.length-1])) + (qs.length > 2 ? '&waypoints=' + qs.slice(1,-1).map(q => encodeURIComponent(mq(q))).join('|') : '') + '&travelmode=walking' : (qs[0] ? mapsDir(qs[0]) : '');
+      h += `<article class="stop-card route" id="p-${c.id}">${img ? `<div class="ph short"><img src="${img}" alt="" loading="lazy"></div>` : ''}<div class="bd">
+        <div class="k"><span class="eyebrow">LUGAR ${String(c.n).padStart(2,'0')} DE ${tot} · RECORRIDO${c.pts.length > 1 ? ' · ' + c.pts.length + ' PUNTOS' : ''}</span>${c.pts[0].optional ? '<span class="opt">OPCIONAL</span>' : ''}</div>
+        <h3 class="sm">${esc(title)}</h3>${c.sub ? `<p class="line">${c.sub}</p>` : ''}
+        ${route ? `<div class="acts" style="margin-bottom:6px"><a class="btn coral" href="${route}" target="_blank" rel="noopener">🗺 ${qs.length > 1 ? 'Ruta a pie completa' : 'Cómo llegar'}</a></div>` : ''}
+        ${c.pts.map((p, j) => `<div class="pt" id="p-${p.id}">
+          <div class="pt-h"><span class="pt-n">${j+1}</span><div><div class="pt-name">${esc(p.name)}</div><div class="pt-line">${p.time ? esc(p.time) + ' · ' : ''}${p.line || ''}</div></div></div>
+          ${p.chips.length ? `<div class="facts" style="margin:6px 0 0 34px">${p.chips.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
+          <div class="pt-b">
+            ${p.look.length ? `<div class="pt-look"><b>No perderse:</b> ${p.look.map(sectionHTML).join('')}</div>` : ''}
+            ${secretBox(p, true)}
+            <div class="acts" style="margin-top:8px">${p.q ? `<a class="btn soft" href="${mapsDir(p.q)}" target="_blank" rel="noopener">📍 Cómo llegar</a>` : ''}${visitBtn(p)}</div>
+            ${tips(p)}
+            ${story(p)}
+          </div></div>`).join('')}
+        <div class="step">${cont}</div>
+        <div class="step memo"><div class="st">NUESTRO RECUERDO DE ESTE RECORRIDO</div><div id="rec-${c.id}"></div></div>
+      </div></article>`;
+    }
+  });
+  h += `</div>`;
+  window.__CARDS = cards;
+  if(secrets.length){
+    h += `<div class="sec"><div class="secrets-day"><div class="eyebrow" style="color:#7A5B2E">🔑 LOS SECRETOS QUE DESCUBRIMOS HOY</div>${secrets.map(s => `<label class="check"><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"><span><b>${esc(s.name)}:</b> ${esc(String(s.secret.text || '').replace(/<[^>]+>/g,'').split(/(?<=[.:])\s/)[0])}</span></label>`).join('')}</div></div>`;
+  }
+  if(d.mission){
+    h += `<div class="sec"><div class="mission"><div class="mk">🎯 LA MISIÓN DE RAFITA</div><div class="mt">${d.mission.title}</div><div>${d.mission.body}</div><label class="check" style="margin-top:8px"><input type="checkbox" ${store.get('m:' + id, false) ? 'checked' : ''} onchange="store.set('m:${id}',this.checked);share('mision:${id}',this.checked)"> ¡Misión cumplida!</label></div></div>`;
+  }
+  if(d.letter){
+    h += `<div class="sec"><div class="letter"><div class="when">💌 ${esc((d.letter.when || 'Una carta desde casa').toUpperCase())}</div><div class="lt">${d.letter.title}</div>${d.letter.body.replace(/ class="lt-hi"/g,'')}<div class="sign">${d.letter.sign}</div>${d.letter.ending ? `<div class="end">${d.letter.ending}</div>` : ''}</div></div>`;
+  }
+  if(d.budget){
+    h += `<div class="sec"><details class="more box" style="padding:4px 18px"><summary>💶 Presupuesto del día · ${d.budget.total}</summary><div class="in"><table class="bt">${d.budget.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td>${d.budget.total}</td></tr></table>${d.budget.extra ? `<p class="small" style="white-space:normal;margin-top:8px">${d.budget.extra}</p>` : ''}${d.budget.note ? `<p class="small" style="white-space:normal">${d.budget.note}</p>` : ''}</div></details></div>`;
+  }
+  if(d.tomorrowReminder){
+    const tr = d.tomorrowReminder;
+    h += `<div class="sec"><div class="box"><div class="eyebrow">🔔 ANTES DE DORMIR</div><p style="margin:6px 0 8px">${tr.intro}</p>${tr.tasks.map((t, k) => `<label class="check" style="font-weight:500;align-items:flex-start;padding:4px 0"><input type="checkbox" ${store.get('t:' + id + '-' + k, false) ? 'checked' : ''} onchange="store.set('t:${id}-${k}',this.checked);share('tarea:${id}-${k}',this.checked)"><span>${t}</span></label>`).join('')}</div></div>`;
+  }
+  const nd = DAYS.find(x => x.id === id + 1);
+  h += nd ? `<button class="nextchap" onclick="go('capitulo-${nd.id}')"><span><small>SIGUIENTE</small><b>${CHAPTERS[nd.id].short} · ${CHAPTERS[nd.id].dest}</b></span><span aria-hidden="true">→</span></button>`
+          : `<button class="nextchap" onclick="go('inicio')"><span><small>FIN DEL VIAJE</small><b>Volver al inicio</b></span><span aria-hidden="true">🏠</span></button>`;
+  $('#capitulo').innerHTML = h;
+  (window.__CARDS || []).forEach(c => renderRecuerdo({id:c.id, name: c.type === 'major' ? c.s.name : (c.title || c.pts.map(p => p.name).join(' · '))}, id));
+}
+const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','El Palatino','El Coliseo','Basílica de San Pedro','Museos Vaticanos'];
+function placesLabel(st){ const nk = st.filter(x => isKey(x.name)).length, nr = st.filter((x, i) => !isKey(x.name) && !(i > 0 && !isKey(st[i-1].name) && (st[i-1].grp || null) === (x.grp || null))).length; return [nk ? nk + (nk === 1 ? ' imprescindible' : ' imprescindibles') : '', nr ? nr + (nr === 1 ? ' recorrido' : ' recorridos') : ''].filter(Boolean).join(' · '); }
+function isKey(n){ return KEY.some(k => n.indexOf(k) === 0); }
+function imgFor(n){ return STOP_IMG[n] || Object.keys(STOP_IMG).filter(k => n.indexOf(k) === 0).map(k => STOP_IMG[k])[0] || ''; }
+function story(s){ const st = s.story.filter(x => x.text || x.items); return st.length ? `<details class="more"><summary>📖 Descubrir su historia</summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>` : ''; }
+function secretBox(s, small){ return s.secret ? `<div class="${small ? '' : 'step'}"><div class="secret"><div class="sk">🔑 EL SECRETO DE ESTE LUGAR</div><div class="sx">${s.secret.text || (s.secret.items||[]).join(' ')}</div><label><input type="checkbox" ${found(s.id) ? 'checked' : ''} onchange="setFound('${s.id}',this.checked)"> ¡Lo encontramos!</label></div></div>` : ''; }
+function tips(s){ return s.tips.map(t => `<div class="tipbox"><b>💡 ${esc(t.lbl)}:</b> ${t.text || ''}${t.items ? t.items.join(' · ') : ''}</div>`).join(''); }
+function visitBtn(s){ return `<button class="btn ${visited(s.id) ? 'done' : 'soft'}" onclick="toggleVisit('${s.id}')">${visited(s.id) ? '✓ Visitada' : 'Marcar visitada'}</button>`; }
+function toggleVisit(id){ setVisited(id, !visited(id)); route(true); }
+
+/* ================= recuerdos: fotos y anécdota por parada ================= */
+const pub = ruta => sb ? sb.storage.from('fotos').getPublicUrl(ruta).data.publicUrl : '';
+function renderRecuerdo(s, dia){
+  const box = document.getElementById('rec-' + s.id); if(!box) return;
+  const nota = store.get('n:' + s.id, '');
+  if(!sb){ box.innerHTML = `<div class="off">Aquí aparecerán las fotos que suban mamá y Sofía (en la versión publicada de la guía).</div>`; return; }
+  const mine = fotos.filter(f => f.ruta.indexOf(`dia-${dia}/${s.id}/`) === 0);
+  const q = store.get('quien', '');
+  box.innerHTML = `<div class="who"><span>¿Quién sube?</span>${['Ma','Sofi'].map(n => `<button type="button" class="${q === n ? 'on' : ''}" onclick="store.set('quien','${n}');renderRecuerdo(window.__S['${s.id}'],${dia})">${n}</button>`).join('')}</div>
+    <label class="up"><input type="file" accept="image/*" multiple hidden onchange="subir(this.files,'${s.id}',${dia})">📷 Subir fotos de ${esc(s.name)}</label>
+    <div class="status" id="st-${s.id}"></div>
+    ${mine.length ? `<div class="album" style="margin-bottom:10px">${mine.map(f => { const u = pub(f.ruta); return `<button onclick="show('${esc(u)}','${esc(f.autor || '')}')"><img src="${esc(u)}" loading="lazy" alt="Foto de ${esc(s.name)}"><span>${esc(f.autor || '')}</span></button>`; }).join('')}</div>` : ''}
+    <textarea placeholder="Una anécdota de este lugar…" oninput="store.set('n:${s.id}',this.value);clearTimeout(window.__nt);window.__nt=setTimeout(()=>share('nota:${s.id}',this.value),900)">${esc(nota)}</textarea>`;
+  window.__S = window.__S || {}; window.__S[s.id] = s;
+}
+async function shrink(file){
+  try {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas'); c.width = Math.round(bmp.width*k); c.height = Math.round(bmp.height*k);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    return await new Promise(r => c.toBlob(b => r(b || file), 'image/jpeg', .85));
+  } catch(e){ return file; }
+}
+async function subir(files, sid, dia){
+  const st = document.getElementById('st-' + sid), s = window.__S[sid];
+  if(!store.get('quien', '')){ st.textContent = 'Primero toquen quién está subiendo: Ma o Sofi.'; return; }
+  const list = [...files]; let ok = 0;
+  for(const f of list){
+    st.textContent = `Subiendo ${ok+1} de ${list.length}…`;
+    const b = await shrink(f), ext = b.type === 'image/jpeg' ? 'jpg' : ((f.name.split('.').pop() || 'jpg').toLowerCase());
+    const ruta = `dia-${dia}/${sid}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.${ext}`;
+    const up = await sb.storage.from('fotos').upload(ruta, b, {contentType: b.type || f.type || 'image/jpeg'});
+    if(up.error){ st.textContent = 'Una foto no se pudo subir. Revisen la conexión e intenten otra vez.'; continue; }
+    const ins = await sb.from('fotos').insert({dia, autor: store.get('quien',''), nota: s ? s.name : null, ruta});
+    if(!ins.error){ ok++; fotos.unshift({dia, autor: store.get('quien',''), nota: s ? s.name : '', ruta}); }
+  }
+  if(ok){ st.textContent = `¡Listo! ${ok} ${ok === 1 ? 'foto guardada' : 'fotos guardadas'} ❤️`; if(s) setTimeout(() => renderRecuerdo(s, dia), 400); }
+}
+
+/* ================= navegación ================= */
+let VIEW = null;
+function go(view, anchor){ VIEW = view; const h = '#' + view; try { if(location.hash !== h) history.pushState(null, '', h); } catch(e){} route(); if(anchor) setTimeout(() => jump(anchor), 60); else window.scrollTo(0, 0); }
+function jump(id){ const e = document.getElementById(id); if(e) e.scrollIntoView({behavior:'smooth', block:'start'}); }
+function route(keep){
+  const h = VIEW || (location.hash || '#inicio').slice(1), y = window.scrollY;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  const m = h.match(/^capitulo-(\d)$/);
+  if(m){ $('#v-capitulo').classList.add('on'); renderChapter(+m[1]); }
+  else if(['manual','frases','emergencias'].includes(h)){ $('#v-' + h).classList.add('on'); }
+  else { $('#v-inicio').classList.add('on'); renderHome(); }
+  if(keep) window.scrollTo(0, y);
+}
+window.addEventListener('popstate', () => { VIEW = null; route(); window.scrollTo(0,0); });
+Object.assign(window, {go, jump, show, setFound, toggleVisit, share, store, subir, renderRecuerdo});
+
+/* checklists del manual: estado local y compartido */
+document.querySelectorAll('.legacy ul.checklist').forEach(list => {
+  const key = list.dataset.key, saved = (() => { try { return JSON.parse(localStorage.getItem('cl-' + key) || '[]'); } catch(e){ return []; } })();
+  list.querySelectorAll('li').forEach((li, i) => { if(saved[i]) li.classList.add('done'); li.onclick = () => { li.classList.toggle('done'); const st = [...list.querySelectorAll('li')].map(l => l.classList.contains('done')); try { localStorage.setItem('cl-' + key, JSON.stringify(st)); } catch(e){} share('cl:' + key, st); }; });
+});
+document.querySelectorAll('.legacy .acc-btn').forEach(b => b.onclick = () => b.parentElement.classList.toggle('open'));
+
+/* ================= arranque ================= */
+route();
+if(window.supabase && SUPA_URL.indexOf('/*') !== 0 && SUPA_URL.indexOf('http') === 0){
+  sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  Promise.all([sb.from('estado').select('*'), sb.from('fotos').select('*').order('creado', {ascending:false})]).then(([e, f]) => {
+    (e.data || []).forEach(applyRemote); fotos = f.data || []; refresh();
+  });
+  sb.channel('viaje-roma')
+    .on('postgres_changes', {event:'*', schema:'public', table:'estado'}, p => { if(p.new){ applyRemote(p.new); refresh(); } })
+    .on('postgres_changes', {event:'INSERT', schema:'public', table:'fotos'}, p => { if(p.new && !fotos.some(x => x.ruta === p.new.ruta)){ fotos.unshift(p.new); refresh(); } })
+    .subscribe();
+  route(true);
+}
+setInterval(() => { if(!document.hidden && (location.hash || '#inicio') === '#inicio') renderNow(); }, 60000);
+}
+</script>
+</body>
+</html>
