@@ -689,6 +689,23 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .res-r{display:flex;gap:8px;margin-top:8px;font-size:.92rem;line-height:1.45}
 .res-q{margin-top:10px;background:#FBF4E6;border-left:3px solid var(--yellow);border-radius:8px;padding:8px 10px;font-family:Caveat,cursive;font-size:1.25rem;line-height:1.3}
 .res-q small{display:block;font-family:Inter,sans-serif;font-size:.7rem;font-weight:700;color:var(--ink-2)}
+/* ¿Ya fueron? como pastilla con casilla cuadrada (no se confunde con el sello redondo) */
+.vcorner{flex-direction:row;gap:6px;padding:7px 12px 7px 8px;border-radius:999px}
+.vcorner .vc{width:22px;height:22px;border-radius:6px;border-width:2px}
+.vcorner small{font-size:.74rem}
+.vcorner.due{background:#FFF4E8;animation:duep 1.8s ease-in-out infinite}
+.vcorner.due small{color:var(--coral-d)}
+@keyframes duep{0%,100%{box-shadow:0 0 0 0 rgba(200,115,92,.55)}60%{box-shadow:0 0 0 9px rgba(200,115,92,0)}}
+/* secretos y misión de amor con un poco de vida */
+.sec-chip{position:relative;overflow:visible}
+.sec-chip:not(.ok):not(.mi){background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.75) 50%,transparent 70%);background-size:250% 100%;animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%{background-position:150% 0}55%,100%{background-position:-60% 0}}
+.sec-chip.mi:not(.ok){animation:floaty 2.6s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-3px)}}
+.sec-chip .fl{position:absolute;right:8px;top:-4px;font-style:normal;font-size:.75rem;opacity:0;animation:heart 2.8s ease-out infinite;pointer-events:none}
+.sec-chip .fl.f2{right:26px;animation-delay:1.4s}
+@keyframes heart{0%{opacity:0;transform:translateY(4px) scale(.7)}25%{opacity:1}100%{opacity:0;transform:translateY(-22px) scale(1.1)}}
+@media (prefers-reduced-motion:reduce){.vcorner.due,.sec-chip,.sec-chip .fl{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1787,7 +1804,7 @@ function story(s){ const pro = proFor(s); const st = (pro ? [{text: pro.text}] :
   let hook = plain.split(/(?<![\s(][adAD]\.)(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"])/)[0]; if(hook.length > 210) hook = hook.slice(0, 207).replace(/\s\S*$/,'') + '…';
   return `<details class="story-d"><summary><span class="sk2">📖 SU HISTORIA · ${mn} MIN DE LECTURA</span>${pro ? `<span class="faces">${pro.who.map(face).join('')}</span>` : ''}<span class="hook">“${esc(hook)}”</span><span class="pv">${esc(plain.slice(hook.length, hook.length + 220))}</span><span class="sh">Seguir leyendo aquí <i>⌄</i></span></summary><div class="in">${st.map(x => (x.lbl ? `<p><b>${esc(x.lbl)}</b></p>` : '') + sectionHTML(x)).join('')}</div></details>`; }
 window.__SEC = {};
-function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id), mi = /misión/i.test(s.secret.lbl || ''); return `<button class="chip sec-chip${mi ? ' mi' : ''}${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">${mi ? '💛' : '🔑'} ${ok ? (mi ? '¡Misión cumplida!' : '¡Secreto encontrado!') : (mi ? 'Misión de amor' : 'Secreto')}<span class="sc-v">ver</span></button>`; }
+function secretChip(s){ if(!s.secret) return ''; window.__SEC[s.id] = s; const ok = found(s.id), mi = /misión/i.test(s.secret.lbl || ''); return `<button class="chip sec-chip${mi ? ' mi' : ''}${ok ? ' ok' : ''}" onclick="verSecreto('${s.id}')">${mi ? '💛' : '🔑'} ${ok ? (mi ? '¡Misión cumplida!' : '¡Secreto encontrado!') : (mi ? 'Misión de amor' : 'Secreto')}<span class="sc-v">ver</span>${mi && !ok ? '<i class="fl">💛</i><i class="fl f2">💛</i>' : ''}</button>`; }
 function verSecreto(id){ const s = window.__SEC[id]; if(!s) return; const el = document.getElementById('idea');
   el.innerHTML = `<div class="ic" onclick="event.stopPropagation()"><div class="ihead"><div class="ik">${/misión/i.test(s.secret.lbl || '') ? '💛 MISIÓN DE AMOR' : '🔑 SECRETO'} · ${esc(s.name.split(' · ')[0]).toUpperCase()}</div><div class="sec-x">${s.secret.text || (s.secret.items||[]).join(' ')}</div></div>${/misión/i.test(s.secret.lbl || '') && /Innamorati/.test(s.secret.text || '') ? `<a class="btn ink" style="margin:4px 14px 10px" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Fontanella degli Innamorati, Fontana di Trevi, Roma')}" target="_blank" rel="noopener">📍 Ver dónde está en Google Maps</a>` : ''}<label class="sec-l"><input type="checkbox" ${found(id) ? 'checked' : ''} onchange="setFound('${id}',this.checked);route(true)"> ${/misión/i.test(s.secret.lbl || '') ? '¡Lo hicimos!' : '¡Lo encontramos!'}</label><button class="btn ghost" style="margin:0 14px 14px" onclick="document.getElementById('idea').classList.remove('on')">Cerrar</button></div>`;
   el.classList.add('on'); }
@@ -1816,7 +1833,7 @@ function idea(key){
   if(pinFor(x.name)) loadPinit(() => { try { window.PinUtils.build(); } catch(e){} });
 }
 window.idea = idea;
-function visitCorner(s){ const on = visited(s.id); return `<button class="vcorner${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}" aria-label="${on ? 'Desmarcar visitado' : 'Marcar como visitado'}"><span class="vc">✓</span><small>${on ? 'Visitado' : '¿Ya fueron?'}</small></button>`; }
+function visitCorner(s){ const on = visited(s.id), dd = +String(s.id).split('-')[0], td = tripDay(), due = !on && td && (td > dd || (td === dd && mins(s.time) != null && romeMin() >= mins(s.time))); return `<button class="vcorner${on ? ' on' : ''}${due ? ' due' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}" aria-label="${on ? 'Desmarcar visitado' : 'Marcar como visitado'}"><span class="vc">✓</span><small>${on ? 'Visitado' : due ? '¿Ya llegaron? Márquenlo' : '¿Ya fueron?'}</small></button>`; }
 function visitBtn(s){ const on = visited(s.id); return `<button class="visit${on ? ' on' : ''}" onclick="toggleVisit('${s.id}')" aria-pressed="${on}"><span class="vc">✓</span><span class="vt">${on ? '¡Ya estuvimos aquí!' : '¿Ya estuvieron aquí?'}<small>${on ? 'toquen para desmarcar' : 'toquen para marcarlo'}</small></span></button>`; }
 function renderAlbumView(){
   const box = $('#album-full'); if(!box) return;
