@@ -208,6 +208,15 @@ details.more .in p{margin:0 0 10px}
 .pill-d.key.ok .pl{color:var(--ink-2)}
 .pill-d.ok .pl{text-decoration:line-through;color:var(--ink-2)}
 .pill-d.now{outline:3px solid var(--coral);outline-offset:1px}
+.pill-d.next{outline:3px dashed var(--ink);outline-offset:1px}
+.pill-d.next::after{content:'PRÓXIMO';font-size:.6rem;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--ink);border-radius:99px;padding:1px 6px;margin-top:2px}
+.strip-wrap{position:relative}
+.strip-wrap::after{content:'';position:absolute;right:0;top:0;bottom:12px;width:44px;background:linear-gradient(90deg,rgba(246,240,229,0),var(--ivory));pointer-events:none}
+.sarr{position:absolute;z-index:2;top:38px;width:34px;height:34px;border-radius:50%;border:0;background:var(--ink);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;box-shadow:var(--sh)}
+.sarr.l{left:-6px}.sarr.r{right:-6px}
+.swipe-hint{position:absolute;right:4px;bottom:-6px;z-index:3;background:var(--ivory);padding:0 6px;border-radius:6px;font-family:Caveat,cursive;font-weight:700;font-size:1.15rem;color:var(--coral-d);animation:nudge 1.4s ease-in-out infinite;transition:opacity .3s}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.swipe-hint{animation:none}}
 .pill-d.now::after{content:'AHORA';font-size:.6rem;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--coral);border-radius:99px;padding:1px 6px;margin-top:2px}
 .plan li{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .plan li:first-child{border-top:0}
@@ -1038,7 +1047,15 @@ const mapsTransit = (a, b) => 'https://www.google.com/maps/dir/?api=1&origin=' +
 const mapsSearch = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mq(q));
 function mins(t){ const m = String(t||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); if(!m) return null; let h = +m[1] % 12; if(/PM/i.test(m[3])) h += 12; return h*60 + +m[2]; }
 function dur(a, b){ const x = mins(a), y = mins(b); if(x == null || y == null || y <= x) return ''; const d = y - x; return d < 60 ? d + ' min' : Math.floor(d/60) + ' h' + (d%60 ? ' ' + d%60 : ''); }
-function tripDay(){ const t = new Date(); t.setHours(0,0,0,0); const n = Math.floor((t - TRIP_START)/86400000) + 1; return n >= 1 && n <= DAYS.length ? n : 0; }
+/* siempre la hora de Roma, también si la guía se abre desde Colombia */
+function rome(){
+  try {
+    const o = {}; new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Rome', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hourCycle:'h23'}).formatToParts(new Date()).forEach(x => o[x.type] = x.value);
+    return {y:+o.year, mo:+o.month, d:+o.day, min:(+o.hour % 24)*60 + +o.minute};
+  } catch(e){ const t = new Date(); return {y:t.getFullYear(), mo:t.getMonth()+1, d:t.getDate(), min:t.getHours()*60 + t.getMinutes()}; }
+}
+const romeMin = () => rome().min;
+function tripDay(){ const r = rome(); const n = Math.round((Date.UTC(r.y, r.mo-1, r.d) - Date.UTC(2026,10,22))/86400000) + 1; return n >= 1 && n <= DAYS.length ? n : 0; }
 function toast(t){ const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 3200); }
 function show(u, cap){ const l = $('#lightbox'); l.innerHTML = `<img src="${esc(u)}" alt=""><p>${esc(cap||'')}<br>tocar para cerrar</p>`; l.classList.add('on'); }
 
@@ -1123,7 +1140,7 @@ function renderNow(target, inCap){
   const td = tripDay(), box = $(target ? '#' + target : '#ahora');
   if(!box) return;
   if(!td){ box.innerHTML = ''; return; }
-  const d = DAYS[td-1], c = CHAPTERS[td], it = built(d), now = new Date(), m = now.getHours()*60 + now.getMinutes();
+  const d = DAYS[td-1], c = CHAPTERS[td], it = built(d), m = romeMin();
   const timed = it.filter(x => (x.kind === 'stop' || x.kind === 'log' || x.kind === 'group') && mins(x.time) != null);
   let cur = null, nxt = null;
   for(let i = 0; i < timed.length; i++){
@@ -1169,19 +1186,21 @@ function renderChapter(id){
     h += `<details class="story-d prologo" style="margin-top:16px"><summary><span>📖 La historia de este capítulo<small>${esc(d.narrative.title)}</small></span><span class="sh">toquen para leer ↓</span></summary><div class="in">${d.narrative.body}</div></details>`;
   }
   // plan del día
+  window.__nextK = null;
   { const ICON = {airport:'✈️', transport:'🚆', stay:'🏠', food:'🍝', free:'🌿', walk:'🚶', group:'🚶'};
-    const isToday = tripDay() === id, nm = new Date().getHours()*60 + new Date().getMinutes();
+    const isToday = tripDay() === id, nm = romeMin();
     let curK = -1;
     const pills = it.map((x, k) => {
       if(x.kind === 'stop' && !x.time) return '';
       const t = mins(x.time), e = mins(x.end) ?? (t != null ? t + 30 : null);
       if(isToday && t != null && nm >= t && nm < e && curK < 0) curK = k;
+      if(isToday && t != null && nm < t && window.__nextK == null) window.__nextK = k;
       const lbl = x.kind === 'log' ? x.b.title : x.kind === 'group' ? x.title : x.name;
       const ic = x.kind === 'stop' ? (isKey(x.name) ? '⭐' : '📍') : (ICON[x.kind === 'group' ? 'group' : x.b.type] || '•');
       const tgt = x.kind === 'stop' ? 'p-' + x.id : 'pl-' + k;
       return `<button class="pill-d${x.kind === 'stop' ? (isKey(x.name) ? ' key' : ' st') : ''}${x.kind === 'stop' && visited(x.id) ? ' ok' : ''}" data-k="${k}" onclick="jump('${tgt}')"><span class="pi">${ic}</span><b>${esc(String(x.time||'').replace(/\s/g,''))}</b><span class="pl">${esc(String(lbl).split(/ · |: |, /)[0])}</span></button>`;
     }).join('');
-    h += `<div class="sec glance"><div class="eyebrow">EL DÍA EN UN VISTAZO</div><div class="muted" style="font-size:.85rem">Deslicen con el dedo · toquen un momento para ir a él</div><div class="strip-d" id="strip-d">${pills}</div></div>`;
+    h += `<div class="sec glance"><div class="eyebrow">EL DÍA EN UN VISTAZO</div><div class="muted" style="font-size:.85rem">Toquen un momento para ir a él</div><div class="strip-wrap"><button class="sarr l" onclick="document.getElementById('strip-d').scrollBy({left:-220,behavior:'smooth'})" aria-label="Anterior">‹</button><div class="strip-d" id="strip-d">${pills}</div><button class="sarr r" onclick="document.getElementById('strip-d').scrollBy({left:220,behavior:'smooth'})" aria-label="Siguiente">›</button><span class="swipe-hint">desliza →</span></div></div>`;
     window.__curK = curK;
   }
   h += `<div class="sec"><div class="sec-head"><div class="eyebrow">EXPLORAR ROMA</div><div class="h2" id="pl-top">El plan del día</div><div class="muted">Toquen una parada para ir a su ficha.</div></div><div class="box"><ul class="plan">`;
@@ -1193,7 +1212,7 @@ function renderChapter(id){
     } else if(x.kind === 'group'){
       h += `<li id="pl-${k}"><span class="tm">${esc(x.time)}</span><span class="ti">${x.optional ? 'Opcional · ' : ''}${x.title}<small>${x.sub || ''}</small></span></li>`;
     } else {
-      const thumb = imgFor(x.name), nowM = new Date().getHours()*60 + new Date().getMinutes(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30);
+      const thumb = imgFor(x.name), nowM = romeMin(), isNow = tripDay() === id && mins(x.time) != null && nowM >= mins(x.time) && nowM < (mins(x.end) ?? mins(x.time) + 30);
       h += `<li class="stop${visited(x.id) ? ' ok' : ''}${isNow ? ' nowrow' : ''}"><span class="tm">${esc(x.time)}</span><span class="row-ck">${thumb ? `<img class="th" src="${thumb}" alt="" loading="lazy">` : ''}<button class="tick${visited(x.id) ? ' on' : ''}" onclick="toggleVisit('${x.id}')" aria-label="${visited(x.id) ? 'Desmarcar' : 'Marcar'} ${esc(x.name)} como visitado">✓</button><button class="go" onclick="jump('p-${x.id}')"><span class="ti">${esc(x.name)}${isNow ? ' <em class="nowtag">Actividad actual</em>' : ''}<small>${x.optional ? 'opcional · ' : ''}${esc(x.line || '')}</small></span></button></span></li>`;
     }
   });
@@ -1288,8 +1307,15 @@ function renderChapter(id){
           : `<button class="nextchap" onclick="go('inicio')"><span><small>FIN DEL VIAJE</small><b>Volver al inicio</b></span><span aria-hidden="true">🏠</span></button>`;
   $('#capitulo').innerHTML = h;
   renderNow('ahora-cap', true);
-  { const s = document.getElementById('strip-d'), c = s && s.querySelector(`[data-k="${window.__curK}"]`);
-    if(c){ c.classList.add('now'); s.scrollLeft = c.offsetLeft - 16; } }
+  { const s = document.getElementById('strip-d');
+    if(s){
+      let c = s.querySelector(`[data-k="${window.__curK}"]`);
+      if(c) c.classList.add('now');
+      else { c = s.querySelector(`[data-k="${window.__nextK}"]`); if(c) c.classList.add('next'); }
+      if(c) s.scrollLeft = c.offsetLeft - s.offsetLeft - 40;
+      const hint = s.parentElement.querySelector('.swipe-hint');
+      setTimeout(() => s.addEventListener('scroll', () => { if(hint) hint.style.opacity = 0; }, {once:true}), 600);
+    } }
   (window.__CARDS || []).forEach(c => renderRecuerdo({id:c.id, name: c.type === 'major' ? c.s.name : (c.title || c.pts.map(p => p.name).join(' · '))}, id));
 }
 const KEY = ['Piazza Navona','El Panteón','Fontana di Trevi','El Foro Romano','El Palatino','El Coliseo','Basílica de San Pedro','Museos Vaticanos'];
