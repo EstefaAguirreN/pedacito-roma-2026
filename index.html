@@ -620,7 +620,7 @@ body{background-color:var(--ivory);background-image:url("data:image/svg+xml;utf8
 .ms-k{font-size:.66rem}
 .ms-t{font-size:1.06rem;margin:2px 0 3px}
 .ms-s{font-size:.76rem;line-height:1.35}
-.mcells{margin-top:8px;padding:8px 2px;border-radius:14px}
+.mcells{margin-top:12px;padding:8px 2px;border-radius:14px}
 .mc{flex-direction:row;align-items:center;text-align:left;gap:6px;padding:0 6px}
 .mc .mi{font-size:1.05rem}
 .mc b{font-size:1rem}
@@ -1483,7 +1483,7 @@ function renderChapter(id){
       const tile = (ic, v, l) => `<div class="dt"><span class="di">${ic}</span><b>${v}</b><small>${l}</small></div>`;
       const MI = MISION[id], ico = l => /aterriz|vuelo/i.test(l) ? '✈️' : /check/i.test(l) ? '🛏️' : /paseo/i.test(l) ? '🚶‍♀️' : /salida|salir/i.test(l) ? '🚪' : /foro/i.test(l) ? '🏛️' : /coliseo/i.test(l) ? '🏟️' : /basílica/i.test(l) ? '⛪' : /museo/i.test(l) ? '🖼️' : /almorz/i.test(l) ? '🍝' : /trevi/i.test(l) ? '⛲' : '🕒';
       const cell = (ic, v, l) => `<div class="mc"><span class="mi">${ic}</span><div><b>${v}</b><small>${l}</small></div></div>`;
-      return `${MI ? `<div class="mision"><div class="ms-ph"><img src="${MI.img}" alt=""></div><div class="ms-tx"><div class="ms-k">LA MISIÓN DE HOY</div><div class="ms-t">${MI.t}</div><div class="ms-s">${MI.s}</div></div></div>` : ''}
+      return `${MI && false ? `<div class="mision"><div class="ms-ph"><img src="${MI.img}" alt=""></div><div class="ms-tx"><div class="ms-k">LA MISIÓN DE HOY</div><div class="ms-t">${MI.t}</div><div class="ms-s">${MI.s}</div></div></div>` : ''}
         <div class="mcells">${cell('📍', stops.length + (stops.length === 1 ? ' parada' : ' paradas'), nk + (nk === 1 ? ' imprescindible' : ' imprescindibles'))}${hrs ? cell('👣', hrs, 'de paseo a pie · ' + lv[0].toLowerCase()) : cell('📶', lv[0], lv[1] || '')}${w ? cell(w.icon, w.temp.replace('-', '–'), /oscurece/.test(w.desc) ? w.desc.split(' · ').find(x => /oscurece/.test(x)) : w.desc.split(' · ')[0]) : ''}</div>
         ${(d.quickStats||[]).length ? `<div class="mom-k">LOS MOMENTOS IMPORTANTES</div><div class="moms">${d.quickStats.map(s => `<div class="mom"><span class="mi">${ico(s.lbl)}</span><b>${esc((v => v.includes(' – ') ? v.split(' – ')[0] + (/[AP]M$/.test(v) && !/[AP]M/.test(v.split(' – ')[0]) ? ' ' + v.slice(-2) : '') : v)(s.val.split(' · ')[0]))}</b><small>${esc(s.lbl)}${s.val.split(' · ')[1] ? ' · ' + esc(s.val.split(' · ')[1]) : ''}</small></div>`).join('')}</div>` : ''}
         `; })()}
