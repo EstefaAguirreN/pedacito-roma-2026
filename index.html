@@ -742,6 +742,17 @@ details.story-d .in p{font-size:1.02rem;line-height:1.65}
 .go-big b{display:block;font-size:1.05rem}.go-big small{display:block;font-size:.76rem;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .go-big .ga{font-size:1.6rem;line-height:1;opacity:.85}
 .go-big:active{transform:scale(.98)}
+.six{margin-top:14px;background:#F3F2EF;border-left:4px solid #A9B1B8;border-radius:14px;padding:12px 14px}
+.six>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.six>summary::-webkit-details-marker{display:none}
+.six .ek{grid-column:1/-1;font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#6B7680}
+.six summary b{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.15rem;line-height:1.25}
+.six .lx{font-size:.75rem;font-weight:700;color:#2F6B85;background:#DCEAF0;border-radius:999px;padding:4px 10px}
+.six .lx i{font-style:normal;display:inline-block;transition:transform .2s}.six[open] .lx i{transform:rotate(180deg)}
+.six-h{margin:16px 0 2px;font-weight:700;font-size:.95rem}.six-h small{display:block;font-weight:500;color:var(--ink-2);font-size:.78rem}
+.six-tip{font-size:.9rem;line-height:1.5;margin:10px 0 0}
+.six-k{margin-top:14px;background:#fff;border-radius:10px;padding:10px 12px;font-size:.88rem}.six-k ul{margin:4px 0 0;padding-left:18px}
+.six .lk{flex-basis:62%}.six .lk-ph img{height:130px}
 </style>
 </head>
 <body>
@@ -1387,6 +1398,38 @@ const EARLY = {3: `<details class="early" open><summary><span class="ek">⏰ IMP
   <p><b>Por qué llegar con tiempo a los Museos:</b> la entrada no está en la Plaza, sino en <b>Viale Vaticano</b>, rodeando la muralla (unos 15 minutos caminando). También hay control de seguridad. Por eso el plan es comer antes de las 11:30 y estar en la entrada hacia las 12:00, con las entradas a la mano.</p>
   <p class="ex-r">🕗 Salida 8:00 · ⛪ Basílica 9:00 · 🍝 Comer 10:45 · 🚶 Hacia los Museos 11:30 · 🎟️ Museos 12:30</p></div></details>`};
 const goBig = s => `<a class="go-big" href="${mapsDir(s.q)}" target="_blank" rel="noopener"><span class="gi">📍</span><span><b>Cómo llegar</b><small>${esc(s.name.split(' · ')[0])} · abre Google Maps</small></span><span class="ga">›</span></a>`;
+const SIX = {
+  techo: [
+    {n:'Toda la bóveda', i:'sixtina/boveda.jpg', f:'CAPPELLA SISTINA Ceiling.jpg', d:'Nueve escenas del Génesis en la franja central. Se leen desde el altar hacia la entrada: la luz, el sol y la luna, Adán, Eva, el pecado original, el Diluvio y Noé.'},
+    {n:'La Creación de Adán', i:'sixtina/adan.jpg', f:'Michelangelo - Creation of Adam (cropped).jpg', d:'En el centro del techo: los dos dedos que casi se tocan. La imagen más famosa de la capilla.'},
+    {n:'La Sibila de Delfos', i:'sixtina/sibila.jpg', f:'Michelangelo - Delphic Sibyl.jpg', d:'Una de las profetisas sentadas en los bordes, con los ojos muy abiertos.'},
+    {n:'El profeta Jonás', i:'sixtina/jonas.jpg', f:'Sistine jonah.jpg', d:'Justo encima del altar, echado hacia atrás. Miguel Ángel pintó todo de pie en un andamio, con la cabeza inclinada, durante cuatro años.'}
+  ],
+  juicio: [
+    {n:'El Juicio Final completo', i:'sixtina/juicio.jpg', f:'Last Judgement (Michelangelo).jpg', d:'Toda la pared del altar. Lo pintó más de veinte años después del techo, ya mayor. Cristo en el centro con el brazo levantado y la Virgen a su lado.'},
+    {n:'San Bartolomé y su piel', i:'sixtina/bartolome.jpg', f:'St Bartholomew from The Last Judgement.jpg', d:'Sentado bajo Cristo, sostiene su propia piel. La cara de esa piel es un autorretrato de Miguel Ángel.'},
+    {n:'Minos con orejas de burro', i:'sixtina/minos.jpg', f:'Michelangelo, giudizio universale, dettagli 50.jpg', d:'Abajo a la derecha, con una serpiente. Es el rostro de Biagio da Cesena, un funcionario del papa que criticó los desnudos: Miguel Ángel lo pintó en el infierno.'},
+    {n:'Caronte, el barquero', i:'sixtina/caronte.jpg', f:'CarontediMichelagelo.jpg', d:'Abajo a la derecha, con el remo levantado, saca a los condenados de su barca.'}
+  ],
+  paredes: [
+    {n:'La entrega de las llaves', i:'sixtina/llaves.jpg', f:'Perugino - Entrega de las llaves a San Pedro (Capilla Sixtina, 1481-82).jpg', d:'De Perugino, en la pared lateral: Cristo le entrega las llaves a San Pedro, con una gran plaza de fondo. Las paredes son del siglo XV, de Botticelli, Perugino y Ghirlandaio: a un lado la vida de Moisés y al otro la de Cristo.'}
+  ],
+  despues: [
+    {n:'La Transfiguración · Rafael', i:'sixtina/pinacoteca.jpg', f:'Transfiguration Raphael.jpg', d:'En la Pinacoteca, cerca de la salida: la última gran obra de Rafael. Allí también hay obras de Leonardo y Caravaggio.'},
+    {n:'La escalera en espiral', i:'sixtina/escalera.jpg', f:'Vatican Museums Spiral Staircase 2012.jpg', d:'Por donde se sale de los Museos. La foto clásica es desde arriba, mirando hacia abajo.'},
+    {n:"Castel Sant'Angelo iluminado", i:'paradas/castel-sant-angelo.jpg', d:'De camino a casa, opcional: el castillo y su puente con los ángeles de Bernini, iluminados al anochecer.'}
+  ]
+};
+const sixRow = arr => `<div class="lk-row">${arr.map(lookTile).join('')}</div>`;
+function sixHTML(){ return `<details class="six"><summary><span class="ek">🎨 GUÍA PARA LA CAPILLA SIXTINA</span><b>Qué mirar, en orden, y qué ver después</b><span class="lx">ver <i>⌄</i></span></summary><div class="six-in">
+  <p class="six-tip">💺 Siéntense en las bancas de los costados para mirar el techo sin cansar el cuello. Adentro no se permiten fotos y piden silencio: por eso aquí tienen las imágenes para saber qué buscar. Toquen cada una para verla en grande.</p>
+  <div class="six-h">1 · El techo <small>Miguel Ángel, 1508–1512</small></div>${sixRow(SIX.techo)}
+  <div class="six-h">2 · El Juicio Final, en la pared del altar <small>Miguel Ángel, 1536–1541</small></div>${sixRow(SIX.juicio)}
+  <div class="six-h">3 · Las paredes laterales <small>siglo XV, antes de Miguel Ángel</small></div>${sixRow(SIX.paredes)}
+  <div class="six-k"><b>Bueno saber</b><ul><li>Aquí se elige al papa: en esta capilla se reúnen los cardenales en el cónclave.</li><li>Hombros y rodillas cubiertos, igual que en la Basílica.</li><li>No hay afán: pueden quedarse el tiempo que quieran.</li></ul></div>
+  <div class="six-h">Y después de la Sixtina</div>
+  <p class="six-tip">Al salir, sigan las flechas de <b>«Uscita / Exit»</b>: el camino de regreso pasa por las galerías de la Biblioteca Vaticana. Hay una puerta de la Sixtina directo a la Basílica, pero es para grupos con guía: no cuenten con ella (la Basílica ya la vieron en la mañana).</p>${sixRow(SIX.despues)}
+  </div></details>`; }
 const MISION = {
   1:{t:'Descubrir las muchas Romas que viven dentro de una misma ciudad.', s:'De Campo de’ Fiori a la Fontana di Trevi, entre historias antiguas y arte barroco.', img:'Fotos/paradas/trevi.jpg'},
   2:{t:'Caminar por el lugar donde se decidía el destino de un imperio.', s:'Del Campidoglio al Coliseo, entre templos, palacios y gladiadores.', img:'Fotos/paradas/coliseo.jpg'},
@@ -1699,7 +1742,7 @@ function renderChapter(id){
         <div class="facts" style="margin:0 0 6px">${s.time ? `<span class="chip warm">🕒 ${esc(s.time)}</span>` : ''}${s.chips.map(x => `<span class="chip">${x}</span>`).join('')}${secretChip(s)}</div>
         ${s.q ? goBig(s) : ''}
         ${story(s)}
-        ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${lookHTML(s)}</div>` : ''}
+        ${s.look.length ? `<div class="step"><div class="st">QUÉ NO DEBEMOS PERDERNOS</div>${lookHTML(s)}</div>` : ''}${s.name.includes('Capilla Sixtina') ? sixHTML() : ''}
         <div class="step"><div class="st">CÓMO CONTINUAR</div><div class="acts arow">${ideaBtn(s)}</div>${tips(s)}${cont}</div>
       </div></article>`;
     } else {
